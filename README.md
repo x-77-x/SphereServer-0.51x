@@ -10,7 +10,7 @@ by default the hitpoints will drain until they are equal with STR. so add...
 MAXHITS=1000
 MAXSTAM=1000
 MAXMANA=1000
-???
+and correct the regen???
 
 so if players and npcs are over their maxhits, hp drains to equal their maxhits
 and if players and npcs are under their maxhits, they heal to equal their maxhits
