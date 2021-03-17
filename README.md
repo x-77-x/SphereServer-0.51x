@@ -33,11 +33,11 @@ so
 
 -Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
 		thats way too long, also poison needs to be dehardcoded so the different posion levels damages can be adjusted
-FIXED!!!    
+[ FIXED!!! ]    
 
 -yell distance! ! it would be nice to adjust the distance when players yell in game 20 squares, 50 squares, ect...
 		players can communicate cross map by yelling =P
-FIXED!!!
+[ FIXED!!! ]
 
 
 -colored SYSMESSAGE, that lil sphere im using has it... looks like this
