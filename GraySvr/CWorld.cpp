@@ -1005,7 +1005,7 @@ void CWorld::Speak( const CObjBaseTemplate * pSrc, const TCHAR * pText, COLOR_TY
 		switch ( mode )
 		{
 		case TALKMODE_YELL:
-			iHearRange = pSrc->GetVisualRange() * 2;
+			iHearRange = pSrc->GetVisualRange() * 200;
 			break;
 		case TALKMODE_BROADCAST:
 			iHearRange = 0xFFFF;
@@ -1109,7 +1109,7 @@ void CWorld::SpeakUNICODE( const CObjBaseTemplate * pSrc, const NCHAR * pText, C
 		switch ( mode )
 		{
 		case TALKMODE_YELL:
-			iHearRange = pSrc->GetVisualRange() * 2;
+			iHearRange = pSrc->GetVisualRange() * 200;
 			break;
 		case TALKMODE_BROADCAST:
 			iHearRange = 0xFFFF;
