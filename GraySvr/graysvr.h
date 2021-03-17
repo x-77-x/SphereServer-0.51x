@@ -30,11 +30,11 @@ extern size_t DEBUG_ValidateAlloc( const void * pThis );
 #include "../common/cgraymap.h"
 
 #define GRAY_TITLE			"Sphere"	// "Sphere"
-#define GRAY_VERSION		"0.52"
+#define GRAY_VERSION		"0.51x"
 #define GRAY_MAIN_SERVER	"menace.ne.mediaone.net"
 #define GRAY_GAME_SERVER
 #define GRAY_LOG_SERVER
-#define GRAY_URL			"www.sphereserver.com"	// default url.
+#define GRAY_URL			"77"	// default url.
 
 class CCharBase;
 class CClient;
