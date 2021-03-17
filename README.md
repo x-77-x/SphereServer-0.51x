@@ -47,16 +47,16 @@ players can communicate cross map by yelling =P
 
 
 [ISSUE 07]
--colored SYSMESSAGE, that lil sphere im using has it... looks like this
+-COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
 SRC.SYSMESSAGE #0033,3, You have gained a reward!
 
 
 [ISSUE 08]
--TAG.NAME.HUE 021   nice to be able to change the color of NPCs name
+-COLORED NAMES, TAG.NAME.HUE 021   nice to be able to change the color of NPCs name
 
 
 [ISSUE 09]
--Tracking - make sure "tracking players" actually track players only, ect... (i remember something wrong with tracking)
+-TRACKING - make sure "tracking players" actually track players only, ect... (i remember something wrong with tracking)
 
 
 [ISSUE 10]
