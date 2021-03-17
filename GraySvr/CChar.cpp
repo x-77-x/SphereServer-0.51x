@@ -3990,7 +3990,7 @@ void CChar::SetPoison( int iSkill, CChar * pCharSrc )
 	SysMessage( "You have been poisoned!" );
 
 	// Might be a physical vs. Magical attack.
-	CItem * pPoison = Spell_Effect_Create( SPELL_Poison, LAYER_FLAG_Poison, iSkill, 2*60*TICK_PER_SEC, pCharSrc );
+	CItem * pPoison = Spell_Effect_Create( SPELL_Poison, LAYER_FLAG_Poison, iSkill, 1*7*TICK_PER_SEC, pCharSrc );
 	pPoison->m_itSpell.m_charges = iSkill/50;	// how long to last.
 	UpdateStatsFlag();
 }
