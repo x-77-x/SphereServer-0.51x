@@ -110,15 +110,15 @@ since there is no runebooks in 51a, a newbied bag that will only accept runes wo
 
 
 --characters--
-ON=@LOGIN
+ONTRIGGER=LOGIN
 
-ON=@LOGOUT
+ONTRIGGER=LOGOUT
 
-ON=@GetHit
+ONTRIGGER=GetHit
 
-a trigger so NPCS will look at eachother ON=@SeeNewNPC ?  a way to get npcs to fight (besides berserker brain)
+a trigger so NPCS will look at eachother ONTRIGGER=SeeNewNPC ?  a way to get npcs to fight (besides berserker brain)
 
-ON=@NotoSend
+ONTRIGGER=NotoSend
 another nice one that will change the color of a moused over character
 	ON=@NotoSend//2 ALLY 5 ENEMY 6 RED	
 	IF (<SRC.TAG0.MILITARY>)
