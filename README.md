@@ -31,90 +31,92 @@ so
 
 
 [ISSUE 04]
+-COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
+SRC.SYSMESSAGE #0033,3, You have gained a reward!
+
+
+[ISSUE 05]
+-when you run from an npc with a bow, he shoots a shitton of arrow animations,  you get hit multiple times
+
+
+[ISSUE 06]
+-COLORED NAMES, TAG.NAME.HUE 021   nice to be able to change the color of NPCs name
+
+
+[ISSUE 07]
+-Show damage above npc when attacked  (like LiL Sphere)
+
+
+[ISSUE 08]
+-no shooting arrows through multis floors!
+example... put a npc on the roof of a tower, you can shoot him from the 1st floor
+
+
+[ISSUE 09]
+-walk and shoot would be nice, half accuracy when moving?
+
+
+[ISSUE 10]
 -Provocation - you can use provoc on player in guarded area, then call guards on them after it makes you attack them
 check area for guards?  maybe cant be used on other players?  not really sure how provoc is supposed to work,
 but i know i disabled it 18 years ago for a reason
 
-[ISSUE 05]
+
+[ISSUE 11]
 -Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
 thats way too long, also poison needs to be dehardcoded so the different posion levels damages can be adjusted
 [ FIXED!!! ]    
 
-[ISSUE 06]
+
+[ISSUE 12]
 -yell distance! ! it would be nice to adjust the distance when players yell in game 20 squares, 50 squares, ect...
 players can communicate cross map by yelling =P
 [ FIXED!!! ]
 
 
-[ISSUE 07]
--COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
-SRC.SYSMESSAGE #0033,3, You have gained a reward!
-
-
-[ISSUE 08]
--COLORED NAMES, TAG.NAME.HUE 021   nice to be able to change the color of NPCs name
-
-
-[ISSUE 09]
+[ISSUE 13]
 -TRACKING - make sure "tracking players" actually track players only, ect... (i remember something wrong with tracking)
 
 
-[ISSUE 10]
--Show damage above npc when attacked  (like LiL Sphere)
-
-
-[ISSUE 11]
--no shooting arrows through multis floors!
-example... put a npc on the roof of a tower, you can shoot him from the 1st floor
-
-
-[ISSUE 12]
+[ISSUE 14]
 -see whos online?  maybe a way to see whos online?  .online command
 maybe just use the hardcoded .admin menu and remove account information, maybe just a simple list with only characters names
 
 
-[ISSUE 13]
+[ISSUE 15]
 -the greatest thing about the new sphere is [FUNCTION  f_xxx]
 you can make your own functions and solve just about any problem with a function
 and TAG.YOURMOM=1 same as VAR. i think, but permanent, great way to tag characters and items for scripting
 
 
-[ISSUE 14]
--when you run from an npc with a bow, he shoots a shitton of arrow animations,  you get hit multiple times
-
-
-[ISSUE 15]
+[ISSUE 16]
 -SECURITY!!! im sure all those antique injection hacks still work
 
 
-[ISSUE 16]
+[ISSUE 17]
 -tighten up loose ends, make sure all the skills do what they are supposed to =)
 
 
-[ISSUE 17]
+[ISSUE 18]
 -tillerman, arent you supposed to pin a map and drop it on the tiller man and hes supposed to go there?
 
 
-[ISSUE 18]
+[ISSUE 19]
 -colored multis??? new sphere you can go debug mode and set the color on a multi and it will change color in game
 after 17 years i just realized you can dye a ship deed and the multi will be affected, but only the parts are colored =)
 
 
-[ISSUE 19]
+[ISSUE 20]
 -weapon speed? i dont think speed= works, you adjust the speed by the weapon weight, which kinda makes sense =P
 guess its not really a problem
 
 
-[ISSUE 20]
+[ISSUE 21]
 -books?  the books in SPHEREBook.scp never worked, the pages are empty when you add them in game
 
 
-[ISSUE 21]
--explosion potions, be able to set the low and high damage. you can raise the more 2, but the range is so big
-
-
 [ISSUE 22]
--walk and shoot would be nice, half accuracy when moving?
+-explosion potions, be able to set the low and high damage. you can raise the more 2, but the range is so big
 
 
 [ISSUE 23]
