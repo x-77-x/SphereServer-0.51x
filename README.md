@@ -146,11 +146,9 @@ ONTRIGGER=NotoSend
 another nice one that will change the color of a moused over character
 	ON=@NotoSend//2 ALLY 5 ENEMY 6 RED	
 	IF (<SRC.TAG0.MILITARY>)
-		IF !(<SRC.TAG0.ARMYNUMBER>==<TAG0.ARMYNUMBER>)
-		//IF !<GUILD>
+	 IF !<GUILD>
 		ARGN1=5
-		ELIF (<SRC.TAG0.ARMYNUMBER>==<TAG0.ARMYNUMBER>)
-		//ELIF <GUILD>
+		ELIF <GUILD>
 		ARGN1=2
 		ENDIF
 	ENDIF
