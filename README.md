@@ -106,7 +106,7 @@ guess its not really a problem
 
 
 [ISSUE 20]
--books?  the books in SPHEREBook.scp never worked, the pages are empty in game
+-books?  the books in SPHEREBook.scp never worked, the pages are empty when you add them in game
 
 
 [ISSUE 21]
