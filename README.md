@@ -13,7 +13,7 @@ MAXMANA=1000
 and correct the regen???
 
 so if players and npcs are over their maxhits, hp drains to equal their maxhits
-and if players and npcs are under their maxhits, they heal to equal their maxhits
+and if players and npcs are under their maxhits, they heal to equal their maxhits not STR
 
 AND FOR PLAYERS i want players to have x2 for hitpoints, stamina, mana
 so 
