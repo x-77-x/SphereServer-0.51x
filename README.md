@@ -58,19 +58,19 @@ example... put a npc on the roof of a tower, you can shoot him from the 1st floo
 <b>[ISSUE 10]</b><BR>
 -Provocation - you can use provoc on player in guarded area, then call guards on them after it makes you attack them
 check area for guards?  maybe cant be used on other players?  not really sure how provoc is supposed to work,
-but i know i disabled it 18 years ago for a reason
+but i know i disabled it 18+ years ago for a reason
 
 
 <b>[ISSUE 11]</b><BR>
 -Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
 thats way too long, also poison needs to be dehardcoded so the different posion levels damages can be adjusted
-<BR><b>[ FIXED!!! ]</b>    
+	<BR><font color="red"><b>[ FIXED!!! ]</b></font>    
 
 
 <b>[ISSUE 12]</b><BR>
 -yell distance! ! it would be nice to adjust the distance when players yell in game 20 squares, 50 squares, ect...
 players can communicate cross map by yelling =P
-<BR>[ FIXED!!! ]
+<BR><font color="red"><b>[ FIXED!!! ]</b></font> 
 
 
 <b>[ISSUE 13]</b><BR>
