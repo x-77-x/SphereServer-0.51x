@@ -120,8 +120,10 @@ guess its not really a problem
 
 <b>[ISSUE 23]</b><BR>
 NEW TRIGGERS
+	
 --items--
-ONTRIGGER=CLICK  (single click)  colored  NAME.HUE!?
+
+ONTRIGGER=CLICK  (single click) colored  NAME.HUE!?
 
 ONTRIGGER=DROPON_SELF
 	heres a nice lil bag script in the new sphere that will let you only drop runes in a bag
