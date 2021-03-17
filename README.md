@@ -138,3 +138,7 @@ another nice one that will change the color of a moused over character
   0.53 is what lead up to 55i version alot of people used, this was BEFORE that... servers that used TUS, GreyServer, 0.48e. 0.51a... 1998 to 2000
   
   https://web.archive.org/web/19991013081655/http://menasoft.com:80/
+
+https://web.archive.org/web/20001009023001/http://menace.ne.mediaone.net/spheres1.htm
+
+https://web.archive.org/web/20000706193639/http://menace.ne.mediaone.net/
