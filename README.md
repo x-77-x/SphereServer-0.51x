@@ -34,17 +34,16 @@ so
 -COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
 SRC.SYSMESSAGE #0033,3, You have gained a reward!
 
-
 [ISSUE 05]
--when you run from an npc with a bow, he shoots a shitton of arrow animations,  you get hit multiple times
-
-
-[ISSUE 06]
 -COLORED NAMES, TAG.NAME.HUE 021   nice to be able to change the color of NPCs name
 
 
-[ISSUE 07]
+[ISSUE 06]
 -Show damage above npc when attacked  (like LiL Sphere)
+
+
+[ISSUE 07]
+-when you run from an npc with a bow, he shoots a shitton of arrow animations,  you get hit multiple times
 
 
 [ISSUE 08]
