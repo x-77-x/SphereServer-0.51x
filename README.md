@@ -1,5 +1,5 @@
 # SphereServer-0.51x
-Update to the Recovered 0.51a (0.52) Source
+Potential Update to the Recovered 0.51a (0.52) Source
 
 SPHERESERVER 0.51x  WISHLIST  (3/17/21)
 -----------------------------
