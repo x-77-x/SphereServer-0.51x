@@ -20,6 +20,7 @@ so
 125 STR = 250 hitpoints
 125 DEX = 250 stamina
 125 INT = 250 mana
+(this is optional of course)
 
 
 <b>[ISSUE 02]</b><BR>
