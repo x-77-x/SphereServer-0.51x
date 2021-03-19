@@ -34,6 +34,7 @@ so
 <b>[ISSUE 04]</b><BR>
 -COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
 SRC.SYSMESSAGE #0033,3, You have gained a reward!
+-COLORED SPEECH?!
 
 <b>[ISSUE 05]</b><BR>
 -COLORED NAMES, TAG.NAME.HUE 021   nice to be able to change the color of NPCs name
