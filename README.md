@@ -125,6 +125,8 @@ NEW TRIGGERS
 	
 --items--
 
+ONTRIGGER=DROPON_ITEM   in source, but not finished
+
 ONTRIGGER=CLICK  (single click) colored  NAME.HUE!?
 
 ONTRIGGER=DROPON_SELF
