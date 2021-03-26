@@ -54,7 +54,7 @@ example... put a npc on the roof of a tower, you can shoot him from the 1st floo
 
 
 <b>[ISSUE 09]</b><BR>
--walk and shoot would be nice, half accuracy when moving?
+-walk and shoot would be nice, shoot and run, but half accuracy when moving?
 
 
 <b>[ISSUE 10]</b><BR>
