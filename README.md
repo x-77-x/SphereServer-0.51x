@@ -52,36 +52,35 @@ SRC.SYSMESSAGE #0033,3, You have gained a reward!
 
 ![alt text](http://dragonsoftime.com/junk/showdamage.png)
 
+
 <b>[ISSUE 07]</b><BR>
+-walk and shoot would be nice, shoot and run, but half accuracy when moving?
+	
+<b>[ISSUE 08]</b><BR>
+-colored multis??? new sphere you can go debug mode and set the color on a multi and it will change color in game
+after 17 years i just realized you can dye a ship deed and the multi will be affected, but only the parts are colored =)
+
+![alt text](http://dragonsoftime.com/junk/coloredmultis.png)
+
+<b>[ISSUE 09]</b><BR>
+-sphere script loading times are abnormally slow compared to the 51a release version
+
+	
+OTHER STUFF...
+	
+<b>[ISSUE 10]</b><BR>
 -when you run from an npc with a bow, he shoots a shitton of arrow animations,  you get hit multiple times
 
 
-<b>[ISSUE 08]</b><BR>
+<b>[ISSUE 11]</b><BR>
 -no shooting arrows through multis floors!
 example... put a npc on the roof of a tower, you can shoot him from the 1st floor
 
-
-<b>[ISSUE 09]</b><BR>
--walk and shoot would be nice, shoot and run, but half accuracy when moving?
-
-
-<b>[ISSUE 10]</b><BR>
+	
+<b>[ISSUE 12]</b><BR>
 -Provocation - you can use provoc on player in guarded area, then call guards on them after it makes you attack them
 check area for guards?  maybe cant be used on other players?  not really sure how provoc is supposed to work,
 but i know i disabled it 18+ years ago for a reason
-
-
-<b>[ISSUE 11]</b><BR>
--Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
-thats way too long, also poison needs to be dehardcoded so the different posion levels damages can be adjusted
-	<BR><b>[ FIXED!!! ]</b>   
-
-
-<b>[ISSUE 12]</b><BR>
--yell distance! ! it would be nice to adjust the distance when players yell in game 20 squares, 50 squares, ect...
-players can communicate cross map by yelling =P
-<BR><b>[ FIXED!!! ]</b> 
-
 
 <b>[ISSUE 13]</b><BR>
 -TRACKING - make sure "tracking players" actually track players only, ect... (i remember something wrong with tracking)
@@ -111,23 +110,14 @@ and TAG.YOURMOM=1 same as VAR. i think, but permanent, great way to tag characte
 
 
 <b>[ISSUE 19]</b><BR>
--colored multis??? new sphere you can go debug mode and set the color on a multi and it will change color in game
-after 17 years i just realized you can dye a ship deed and the multi will be affected, but only the parts are colored =)
-
-![alt text](http://dragonsoftime.com/junk/coloredmultis.png)
-
-<b>[ISSUE 20]</b><BR>
--sphere script loading times are abnormally slow compared to the 51a release version
-
-<b>[ISSUE 21]</b><BR>
 -books?  the books in SPHEREBook.scp never worked, the pages are empty when you add them in game
 
 
-<b>[ISSUE 22]</b><BR>
+<b>[ISSUE 20]</b><BR>
 -explosion potions, be able to set the low and high damage. you can raise the more 2, but the range is so big
 
 
-<b>[ISSUE 23]</b><BR>
+<b>[ISSUE 21]</b><BR>
 NEW TRIGGERS !!!???
 	
 --items--
@@ -137,7 +127,7 @@ ONTRIGGER=DROPON_ITEM   in source, but not finished
 ONTRIGGER=CLICK  (single click) colored  NAME.HUE!?
 
 ONTRIGGER=DROPON_SELF
-	heres a nice lil bag script in the new sphere that will let you only drop runes in a bag
+	heres a nice lil bag script in the new sphere that will let you only drop runes in a bag...
 	ON=@DROPON_SELF
 	IF !(<ARGO.TYPE>==t_rune)
 	SRC.SYSMESSAGE You may only place runes inside this bag.
@@ -147,9 +137,9 @@ ONTRIGGER=DROPON_SELF
 since there is no runebooks in 51a, a newbied bag that will only accept runes would be nice
 
 --characters--
-ONTRIGGER=LOGIN
+ONTRIGGER=LOGIN  (like lil Sphere)
 
-ONTRIGGER=LOGOUT
+ONTRIGGER=LOGOUT  (like lil Sphere)
 
 ONTRIGGER=GetHit
 
@@ -165,6 +155,17 @@ another nice one that will change the color of a moused over character
 		ARGN1=2
 		ENDIF
 	ENDIF
+	
+<b>[ISSUE 22]</b><BR>
+-Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
+thats way too long, also poison needs to be dehardcoded so the different posion levels damages can be adjusted
+	<BR><b>[ FIXED!!! ]</b>   
+
+
+<b>[ISSUE 23]</b><BR>
+-yell distance! ! it would be nice to adjust the distance when players yell in game 20 squares, 50 squares, ect...
+players can communicate cross map by yelling =P
+<BR><b>[ FIXED!!! ]</b> 
   
   
   SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add those features
