@@ -17,6 +17,7 @@ and if players and npcs are under their maxhits, they heal to equal their maxhit
 	
 ![alt text](http://dragonsoftime.com/junk/maxstats2.png)
 
+(optional)
 AND FOR PLAYERS i want players to have x2 for hitpoints, stamina, mana
 so 
 125 STR = 250 hitpoints
