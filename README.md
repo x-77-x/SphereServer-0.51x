@@ -14,6 +14,8 @@ and correct the regen???
 
 so if players and npcs are over their maxhits, hp drains to equal their maxhits
 and if players and npcs are under their maxhits, they heal to equal their maxhits not STR
+	
+![alt text](http://dragonsoftime.com/junk/maxstats.png)
 
 AND FOR PLAYERS i want players to have x2 for hitpoints, stamina, mana
 so 
@@ -26,23 +28,27 @@ so
 <b>[ISSUE 02]</b><BR>
 -sphere to run in the notification area next to the clock!!!
 
+![alt text](http://dragonsoftime.com/junk/taskbar.png)
 
 <b>[ISSUE 03]</b><BR>
--sphere script loading times are abnormally slow compared to the 51a release version
-
-
-<b>[ISSUE 04]</b><BR>
 -COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
 SRC.SYSMESSAGE #0033,3, You have gained a reward!
 -COLORED SPEECH?! SRC.SAY #0033,3, I talk in color!
 
-<b>[ISSUE 05]</b><BR>
+<b>[ISSUE 04]</b><BR>
 -COLORED NAMES, TAG.NAME.HUE 021   nice to be able to change the color of NPCs name when single clicked
 
+![alt text](http://dragonsoftime.com/junk/colorednames.png)
+
+<b>[ISSUE 05]</b><BR>
+-COLORED ITEM NAMES
+	
+![alt text](http://dragonsoftime.com/junk/coloreditems.png)	
 
 <b>[ISSUE 06]</b><BR>
 -Show damage above npc when attacked  (like LiL Sphere)
 
+![alt text](http://dragonsoftime.com/junk/showdamage.png)
 
 <b>[ISSUE 07]</b><BR>
 -when you run from an npc with a bow, he shoots a shitton of arrow animations,  you get hit multiple times
@@ -106,11 +112,10 @@ and TAG.YOURMOM=1 same as VAR. i think, but permanent, great way to tag characte
 -colored multis??? new sphere you can go debug mode and set the color on a multi and it will change color in game
 after 17 years i just realized you can dye a ship deed and the multi will be affected, but only the parts are colored =)
 
+![alt text](http://dragonsoftime.com/junk/coloredmultis.png)
 
 <b>[ISSUE 20]</b><BR>
--weapon speed? i dont think speed= works, you adjust the speed by the weapon weight, which kinda makes sense =P
-guess its not really a problem
-
+-sphere script loading times are abnormally slow compared to the 51a release version
 
 <b>[ISSUE 21]</b><BR>
 -books?  the books in SPHEREBook.scp never worked, the pages are empty when you add them in game
@@ -121,7 +126,7 @@ guess its not really a problem
 
 
 <b>[ISSUE 23]</b><BR>
-NEW TRIGGERS
+NEW TRIGGERS !!!???
 	
 --items--
 
