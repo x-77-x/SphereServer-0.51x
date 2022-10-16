@@ -167,7 +167,10 @@ thats way too long, also poison needs to be dehardcoded so the different posion 
 -yell distance! ! it would be nice to adjust the distance when players yell in game 20 squares, 50 squares, ect...
 players can communicate cross map by yelling =P
 <BR><b>[ FIXED!!! ]</b> 
-  
+
+<b>[ISSUE 24]</b><BR>
+-magic resistance... no matter your skill, you take full spell damage
+
   
   SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add those features
   and add a few new things and tidy up the 0.51a source for those who still have old server files...
