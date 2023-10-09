@@ -3376,7 +3376,7 @@ muststeal:
 	ITRIG_TYPE trigger;
 	if ( pChar != NULL )
 	{
-		if ( ! pChar->NPC_IsOwnedBy( this ))
+		if (pChar != this && ! pChar->NPC_IsOwnedBy( this ))
 			goto muststeal;
 		trigger = pItem->IsEquipped() ? ITRIG_UNEQUIP : ITRIG_PICKUP_PACK;
 	}

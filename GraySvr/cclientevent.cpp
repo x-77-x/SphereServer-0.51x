@@ -316,7 +316,7 @@ void CClient::Event_Item_Drop() // Item is dropped
 		if ( pObjTop->IsChar())
 		{
 			CChar * pChar = dynamic_cast <CChar*>( pObjTop );
-			if ( ! pChar->NPC_IsOwnedBy( m_pChar ))
+			if ( pChar != m_pChar && ! pChar->NPC_IsOwnedBy( m_pChar ))
 			{
 				// Slyly dropping item in someone elses pack.
 				// or just dropping on their trade window.
@@ -1885,11 +1885,11 @@ void CClient::Event_SetName( CObjUID uid )
 	// Set the name in the character status window.
 	ASSERT( m_pChar );
 	CChar * pChar = uid.CharFind();
-	if ( pChar == NULL ) 
+	if ( pChar == NULL)
 		return;
 
 	// Do we have the right to do this ?
-	if ( ! pChar->NPC_IsOwnedBy( m_pChar ))
+	if ( ! pChar->NPC_IsOwnedBy( m_pChar ) )
 		return;
 
 	if ( g_Serv.IsObscene( m_bin.CharName.m_name ))

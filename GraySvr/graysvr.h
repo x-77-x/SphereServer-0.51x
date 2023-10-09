@@ -1229,6 +1229,7 @@ private:
 #endif
 
 	int  Setup_FillCharList( CEventCharDef * pCharList, const CChar * pCharFirst );
+	bool Check_HasMaxChars(const CChar* pCharFirst);
 
 	bool Check_Snoop_Container( const CItemContainer * pItem );
 	bool CanInstantLogOut() const;
