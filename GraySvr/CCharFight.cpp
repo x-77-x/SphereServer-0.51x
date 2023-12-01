@@ -1764,10 +1764,9 @@ int CChar::OnTakeDamage( int iDmg, CChar * pSrc, DAMAGE_TYPE uType )
 
 	if (iDmg > 0)
 	{
-		CChar* target = m_Act_Targ.CharFind();
 		CGString sMsg;
 		sMsg.Format("-%d", iDmg);
-		target->Speak(sMsg, COLOR_RED, TALKMODE_SAY);
+		this->Speak(sMsg, COLOR_RED, TALKMODE_SAY);
 	}
 
 	UpdateStats( STAT_STR, -iDmg );
