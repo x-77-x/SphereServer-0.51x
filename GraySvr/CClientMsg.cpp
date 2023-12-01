@@ -1532,6 +1532,7 @@ bool CClient::Check_HasMaxChars(const CChar * pCharFirst)
 				return TRUE;
 		}
 	}
+	return FALSE;
 }
 
 void CClient::addCharList3()
