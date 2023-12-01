@@ -216,6 +216,7 @@ void CClient::Announce( bool fArrive ) const
 					m_pChar->GetTopPoint().GetRegion( REGION_TYPE_AREA )->GetName());
 			}
 			pClient->SysMessage( sMsg );
+			m_pChar->OnTrigger((fArrive ? CTRIG_Login : CTRIG_Logout), pClient, m_pChar->GetUID());
 		}
 	}
 

@@ -1811,6 +1811,9 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 
 	ASSERT( sk == SKILL_NONE || IsSkillBase(sk) || IsSkillNPC(sk));
 
+	bool ret = true;
+	if(sk > SKILL_NONE && sk < SKILL_QTY)
+		this->OnTrigger(CTRIG_Skill_Start, this, sk);
 	// Some skill can start right away. Need no targetting.
 	switch ( sk )
 	{
@@ -1840,7 +1843,8 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 			if ( pReag == NULL || pReag->m_type != ITEM_REAGENT)
 			{
 				SysMessage( "That is not a magical reagent." );
-				return( false );
+				ret = ( false );
+				break;
 			}
 
 			m_atAlchemy.m_Potion = POTION_WATER;
@@ -1869,7 +1873,8 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 			{
 				// Nonstandard reagent message
 				SysMessage( "You don't know how to make anything from that....(yet!)");
-				return false;
+				ret = (false);
+				break;
 			}
 			if (m_atAlchemy.m_Potion == 0)
 			{
@@ -1877,7 +1882,8 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 					SysMessage( "You don't have enough to make anything with that.");
 				else
 					SysMessage( "You are not good enough to make anything out of that.");
-				return false;
+				ret = (false);
+				break;
 			}
 			m_atAlchemy.m_Stroke_Count = 0; // counts up.
 			wWaitTime = 1;
@@ -1888,8 +1894,11 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 		// m_Act_Targ = Our begging target..
 		{
 			CChar * pChar = m_Act_Targ.CharFind();
-			if ( pChar == NULL )
-				return( false );
+			if (pChar == NULL)
+			{
+				ret = (false);
+				break;
+			}
 
 			SysMessagef("You grovel at %s's feet", pChar->GetName());
 			iDifficulty = pChar->Stat_Get(STAT_INT);
@@ -1906,7 +1915,8 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 		if ( ! m_Act_p.IsValid())
 		{
 			SysMessage( "You must be near a forge to smith" );
-			return( false );
+			ret = (false);
+			break;
 		}
 		wWaitTime = 1;
 		m_atCreate.m_Stroke_Count = GetRandVal( 4 ) + 2;
@@ -1951,11 +1961,18 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 		// Must have a musical instrument.
 		{
 			CChar * pChar = m_Act_Targ.CharFind();
-			if ( pChar == NULL )
-				return( false );
+			if (pChar == NULL)
+			{
+				ret = (false);
+				break;
+			}
 			iDifficulty = Use_PlayMusic( NULL, GetRandVal(55));
-			if ( iDifficulty < -1 )	// no instrument fail immediate
-				return( false );
+			if (iDifficulty < -1)	// no instrument fail immediate
+			{
+				ret = (false);
+				break;
+			}
+
 			if ( ! iDifficulty )
 			{
 				iDifficulty = pChar->Stat_Get(STAT_INT);
@@ -1973,25 +1990,29 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 			if ( pRegion && ! pRegion->IsFlag( REGION_FLAG_SHIP ) )
 			{
 				SysMessage("You can't fish from where you are standing.");
-				return( false );
+				ret = (false);
+				break;
 			}
 
 			if ( GetTopPoint().GetDist( m_Act_p ) > 6 )	// cast works for long distances.
 			{
 				SysMessage("That is too far away." );
-				return( false );
+				ret = (false);
+				break;
 			}
 			// resource check
 			CItem * pResBit = g_World.CheckNaturalResource( m_Act_p, ITEM_WATER );
 			if ( pResBit == NULL )
 			{
 				SysMessage( "Try fishing in water." );
-				return( false );
+				ret = (false);
+				break;
 			}
 			if ( pResBit->GetAmount() == 0 )
 			{
 				SysMessage( "There are no fish here." );
-				return( false );
+				ret = (false);
+				break;
 			}
 
 			UpdateAnimate( ANIM_ATTACK_2H_DOWN );
@@ -2018,7 +2039,8 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 				if ( pItem->m_pDef->Can( CAN_I_LIGHT ))
 				{
 					SysMessage( "You are too well lit to hide" );
-					return( false );
+					ret = (false);
+					break;
 				}
 			}
 		}
@@ -2032,8 +2054,11 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 		{
 			// How do I make them move fast ? or with proper speed ???
 			CChar * pChar = m_Act_Targ.CharFind();
-			if ( pChar == NULL )
-				return( false );
+			if (pChar == NULL)
+			{
+				ret = (false);
+				break;
+			}
 			UpdateAnimate( ANIM_ATTACK_WEAPON );
 			iDifficulty = pChar->Stat_Get(STAT_INT);
 			wWaitTime = 1*TICK_PER_SEC;
@@ -2042,8 +2067,11 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 
 	case SKILL_INSCRIPTION:
 		// Can we even attempt to make this scroll ?
-		if ( ! Spell_CanCast( m_atMagery.m_Spell, true, this, true ))
-			return( false );
+		if (!Spell_CanCast(m_atMagery.m_Spell, true, this, true))
+		{
+			ret = (false);
+			break;
+		}
 		Sound( 0x249 );
 		iDifficulty = Spell_GetBaseDifficulty( m_atMagery.m_Spell );
 		wWaitTime = g_Serv.m_SkillDefs[sk]->m_wDelay;
@@ -2061,42 +2089,49 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 				pLock->m_type != ITEM_DOOR_LOCKED ))
 			{
 				SysMessage( "Use the lock pick on a locked item" );
-				return false;
+				ret = (false);
+				break;
 			}
 			if ( ! CanTouch( pLock ))
 			{
 				SysMessage( "You can't reach that." );
-				return false;
+				ret = (false);
+				break;
 			}
 			iDifficulty = pLock->m_itContainer.m_lock_complexity/10;
 			wWaitTime = 3*TICK_PER_SEC;
 		}
-		return false;
+		//return false;
+		break;
 
 	case SKILL_LUMBERJACKING:
 		{
 			if ( m_Act_p.m_x == 0xFFFF )
 			{
 				SysMessage( "Try chopping a tree!" );
-				return( false );
+				ret = (false);
+				break;
 			}
 			// 3D distance check and LOS
 			if ( ! CanTouch(m_Act_p) || GetTopPoint().GetDist3D( m_Act_p ) > 3 )
 			{
 				SysMessage( "That's too far away to chop." );
-				return( false );
+				ret = (false);
+				break;
 			}
 			// resource check
 			CItem * pResBit = g_World.CheckNaturalResource( m_Act_p, ITEM_TREE );
 			if ( pResBit == NULL )
 			{
 				SysMessage( "Try chopping a tree." );
-				return( false );
+				ret = (false);
+				break;
 			}
 			if ( pResBit->GetAmount() == 0 )
 			{
 				SysMessage( "There are no logs left here to chop." );
-				return( false );
+				ret = (false);
+				break;
 			}
 			wWaitTime = 1;
 			iDifficulty = GetRandVal(85);
@@ -2113,8 +2148,11 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 		// m_Act_Targ = dest of spell.
 
 		iDifficulty = Spell_StartCast();
-		if ( iDifficulty < 0 )
-			return( false );
+		if (iDifficulty < 0)
+		{
+			ret = (false);
+			break;
+		}
 
 		if ( IsPriv( PRIV_GM ))
 			wWaitTime = 1;
@@ -2127,18 +2165,21 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 			if ( m_Act_p.m_x == 0xFFFF )
 			{
 				SysMessage( "Try mining in rock!" );
-				return( false );
+				ret = (false);
+				break;
 			}
 			if ( GetTopPoint().GetDist( m_Act_p ) > 2 )
 			{
 				SysMessage("That is too far away." );
-				return( false );
+				ret = (false);
+				break;
 			}
 			// Verify so we have a line of sight.
 			if ( ! CanSeeLOS( m_Act_p, NULL, 2 ))
 			{
 				SysMessage("You have no line of sight to that location");
-				return( false );
+				ret = (false);
+				break;
 			}
 
 			// resource check
@@ -2146,12 +2187,14 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 			if ( pResBit == NULL )
 			{
 				SysMessage( "Try mining in rock." );
-				return( false );
+				ret = (false);
+				break;
 			}
 			if ( pResBit->GetAmount() == 0 )
 			{
 				SysMessage( "There is no ore here to mine." );
-				return( false );
+				ret = (false);
+				break;
 			}
 			wWaitTime = 1;
 			iDifficulty = GetRandVal(100);
@@ -2161,8 +2204,11 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 
 	case SKILL_MUSICIANSHIP:
 		iDifficulty = Use_PlayMusic( m_Act_Targ.ItemFind(), GetRandVal(90));
-		if ( iDifficulty < -1 )	// no instrument fail immediate
-			return( false );
+		if (iDifficulty < -1)	// no instrument fail immediate
+		{
+			ret = (false);
+			break;
+		}
 		wWaitTime = 2*TICK_PER_SEC;
 		break;
 
@@ -2171,8 +2217,11 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 
 		// Basic skill check.
 		iDifficulty = Use_PlayMusic( NULL, GetRandVal(40));
-		if ( iDifficulty < -1 )	// no instrument fail immediate
-			return( false );
+		if (iDifficulty < -1)	// no instrument fail immediate
+		{
+			ret = (false);
+			break;
+		}
 
 		if ( ! iDifficulty )
 		{
@@ -2195,12 +2244,18 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 		{
 		CChar * pCharProv = m_Act_TargPrv.CharFind();
 		CChar * pCharTarg = m_Act_Targ.CharFind();
-		if ( pCharProv == NULL || pCharTarg == NULL )
-			return( false );
+		if (pCharProv == NULL || pCharTarg == NULL)
+		{
+			ret = (false);
+			break;
+		}
 
 		iDifficulty = Use_PlayMusic( NULL, GetRandVal(40));
-		if ( iDifficulty < -1 )	// no instrument fail immediate
-			return( false );
+		if (iDifficulty < -1)	// no instrument fail immediate
+		{
+			ret = (false);
+			break;
+		}
 		if ( ! iDifficulty )
 		{
 			iDifficulty = pCharProv->Stat_Get(STAT_INT);	// Depend on evil of the creature.
@@ -2213,8 +2268,11 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 	case SKILL_SNOOPING:
 		// m_Act_Targ = the item to snoop.
 		iDifficulty = Skill_Snoop( true, false );
-		if ( iDifficulty == -1 )
-			return( false );
+		if (iDifficulty == -1)
+		{
+			ret = (false);
+			break;
+		}
 		wWaitTime = 2*TICK_PER_SEC;
 		break;
 
@@ -2227,8 +2285,11 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 	case SKILL_STEALING:
 		// m_Act_Targ = the item to steal.
 		iDifficulty = Skill_Steal( true, false );
-		if ( iDifficulty == -1 )
-			return( false );
+		if (iDifficulty == -1)
+		{
+			ret = (false);
+			break;
+		}
 		wWaitTime = 2*TICK_PER_SEC;
 		break;
 
@@ -2244,17 +2305,22 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 		// Related to INT ?
 		{
 			CChar * pChar = m_Act_Targ.CharFind();
-			if ( pChar == NULL )
-				return( false );
+			if (pChar == NULL)
+			{
+				ret = (false);
+				break;
+			}
 			if ( pChar == this )
 			{
 				SysMessage( "You are your own master." );
-				return( false );
+				ret = (false);
+				break;
 			}
 			if ( pChar->m_pNPC == NULL )
 			{
 				SysMessage( "You can't tame a player." );
-				return( false );
+				ret = (false);
+				break;
 			}
 			if ( ! IsPriv( PRIV_GM )) // if its a gm doing it, just check that its not
 			{
@@ -2262,14 +2328,16 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 				if ( pChar->IsStat( STATF_Pet ))
 				{
 					SysMessagef( "%s is already tame.", pChar->GetName());
-					return( false );
+					ret = (false);
+					break;
 				}
 				// Too smart or not an animal.
 				if ( pChar->m_pNPC->m_Brain != NPCBRAIN_ANIMAL ||
 					pChar->GetCreatureType() != NPCBRAIN_ANIMAL )
 				{
 					SysMessagef( "%s cannot be tamed.", pChar->GetName());
-					return( false );
+					ret = (false);
+					break;
 				}
 			}
 			iDifficulty = max( pChar->Stat_Get(STAT_INT), pChar->Stat_Get(STAT_STR));
@@ -2313,24 +2381,30 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 		iDifficulty = GetRandVal(80);
 		{
 			CItem * pBandage = m_Act_TargPrv.ItemFind();
-			if ( pBandage == NULL ||
-				pBandage->m_type != ITEM_BANDAGE )
-				return( false );
+			if (pBandage == NULL ||
+				pBandage->m_type != ITEM_BANDAGE)
+			{
+				ret = (false);
+				break;
+			}
 			CChar * pChar = m_Act_Targ.CharFind();
 			if ( pChar == NULL )
 			{
 				SysMessage("Try healing a living creature.");
-				return(false);
+				ret = (false);
+				break;
 			}
 			if ( ! CanTouch(pChar))
 			{
 				SysMessage("You must be able to reach the target");
-				return(false);
+				ret = (false);
+				break;
 			}
 			if ( pChar->m_StatHealth >= pChar->Stat_Get(STAT_STR) )
 			{
 				SysMessage("Your target is already fully healed");	
-				return( false );
+				ret = (false);
+				break;
 			}
 			wWaitTime = 2*TICK_PER_SEC;
 		}
@@ -2344,7 +2418,8 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 			if ( pTrap == NULL || pTrap->m_type != ITEM_TRAP )
 			{
 				SysMessage( "You should use this skill to disable traps" );
-				return( false );
+				ret = (false);
+				break;
 			}
 			iDifficulty = GetRandVal(95);
 			wWaitTime = 2*TICK_PER_SEC;
@@ -2356,7 +2431,8 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 		if ( m_StatMana >= Stat_Get(STAT_INT))
 		{
 			SysMessage( "You are at peace." );
-			return( false );
+			ret = (false);
+			break;
 		}
 
 		m_atTaming.m_Stroke_Count = 0;
@@ -2375,8 +2451,11 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 	case NPCACT_THROWING:
 		{
 		CChar * pChar = m_Act_Targ.CharFind();
-		if ( pChar == NULL )
-			return false;
+		if (pChar == NULL)
+		{
+			ret = (false);
+			break;
+		}
 		m_Act_p = pChar->GetTopPoint();
 		UpdateStats( STAT_DEX, -( 4 + GetRandVal(6)));
 		UpdateAnimate( ANIM_MON_MISC_BREATH );
@@ -2390,20 +2469,40 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 		if ( IsSkillBase( sk ))
 		{
 			SysMessage( "Skill not implemented" );
-			return( false );
+			ret = (false);
+			break;
 		}
 		iDifficulty = 0;
 	}
 
-	if ( iDifficulty > 0 )
+	if (ret)
 	{
-		if ( ! Skill_CheckSuccess( sk, iDifficulty ))
-			iDifficulty = - iDifficulty; // will result in Failure.
-	}
+		if (iDifficulty > 0)
+		{
+			if (!Skill_CheckSuccess(sk, iDifficulty))
+				iDifficulty = -iDifficulty; // will result in Failure.
+		}
 
-	// instant fail ?
-	if ( ! wWaitTime && iDifficulty < 0 )
-		return( false );
+		// instant fail ?
+		if (!wWaitTime && iDifficulty < 0)
+		{
+			ret = (false);
+		}
+
+	}
+	
+	if (sk > SKILL_NONE && sk < SKILL_QTY)
+	{
+		if (!ret)
+		{
+			this->OnTrigger(CTRIG_Skill_Fail, this, sk);
+			return ret;
+		}
+		else
+		{
+			this->OnTrigger(CTRIG_Skill_Success, this, sk);
+		}
+	}
 
 	// Starting success anyhow.
 	switch ( sk)
@@ -2432,7 +2531,7 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 		Emote( Skill_GetName(true));
 	}
 
-	return( true );
+	return( ret );
 }
 
 //----------------------------------------------------------------------

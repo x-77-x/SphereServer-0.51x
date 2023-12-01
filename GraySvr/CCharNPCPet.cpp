@@ -487,7 +487,7 @@ bool CChar::NPC_CheckHirelingStatus()
 		CChar* owner = NPC_GetOwner();
 		if (owner != NULL)
 		{
-			CItem* pMemory = Memory_AddObjTypes(NPC_GetOwner(), MEMORY_SPEAK);
+			CItem* pMemory = Memory_AddObjTypes(owner, MEMORY_SPEAK);
 			ASSERT(pMemory);
 			pMemory->m_itEqMemory.m_Action = NPC_MEM_ACT_SPEAK_HIRE;
 		}

@@ -3605,6 +3605,16 @@ enum CTRIG_TYPE
 	CTRIG_GetHit,			// I just got hit.
 	CTRIG_Hit,				// I just hit someone. (TARG)
 	CTRIG_Death,			//+I just got killed.
+	CTRIG_Login,
+	CTRIG_Logout,
+
+	CTRIG_Skill_Start,
+	CTRIG_Skill_Fail,
+	CTRIG_Skill_Success,
+
+	CTRIG_Call_Guards,
+
+	CTRIG_Region_Change,
 
 	CTRIG_QTY,
 };
@@ -4115,10 +4125,11 @@ public:
 
 private:
 	bool OnTrigger( const TCHAR * pTrigName, CTextConsole * pSrc, int iArg = 0 );
-	bool OnTrigger( CTRIG_TYPE trigger, CTextConsole * pSrc, int iArg = 0 )
+public:
+	bool OnTrigger(CTRIG_TYPE trigger, CTextConsole* pSrc, int iArg = 0)
 	{
-		ASSERT( trigger < CTRIG_QTY );
-		return( OnTrigger( sm_szTrigName[trigger], pSrc, iArg ));
+		ASSERT(trigger < CTRIG_QTY);
+		return(OnTrigger(sm_szTrigName[trigger], pSrc, iArg));
 	}
 
 private:
