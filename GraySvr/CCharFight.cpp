@@ -1762,6 +1762,14 @@ int CChar::OnTakeDamage( int iDmg, CChar * pSrc, DAMAGE_TYPE uType )
 		pBlood->MoveTo( GetTopPoint());
 	}
 
+	if (iDmg > 0)
+	{
+		CChar* target = m_Act_Targ.CharFind();
+		CGString sMsg;
+		sMsg.Format("-%d", iDmg);
+		target->Speak(sMsg, COLOR_RED, TALKMODE_SAY);
+	}
+
 	UpdateStats( STAT_STR, -iDmg );
 	if ( m_StatHealth <= 0 )
 	{
@@ -1780,6 +1788,7 @@ int CChar::OnTakeDamage( int iDmg, CChar * pSrc, DAMAGE_TYPE uType )
 	{
 		UpdateAnimate( ANIM_GET_HIT );
 	}
+
 	return( iDmg );
 }
 
@@ -1812,7 +1821,6 @@ int CChar::OnTakeDamageHitPoint( int iDmg, CChar * pSrc, DAMAGE_TYPE uType )
 	// ??? If not humanoid ??
 	if ( m_pDef->Can( CAN_C_NONHUMANOID ))
 	{
-		// ??? we may want some sort of message ?
 		return( iDmg );
 	}
 
@@ -1967,6 +1975,7 @@ int CChar::OnTakeDamageHitPoint( int iDmg, CChar * pSrc, DAMAGE_TYPE uType )
 
 	// iDmg = ( iDmg * GW_GetSCurve( iMaxCoverage - iDmg, 10 )) / 100;
 	iDmg -= GetRandVal( iMaxCoverage );
+
 	return( iDmg );
 }
 
