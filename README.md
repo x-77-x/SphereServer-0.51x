@@ -66,7 +66,7 @@ after 17 years i just realized you can dye a ship deed and the multi will be aff
 
 <b>[ISSUE 09]</b><BR>
 -sphere script loading times are abnormally slow compared to the 51a release version
-
+	<BR><b>[ FIXED!!! ]</b>   
 	
 OTHER STUFF...
 	
