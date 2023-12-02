@@ -153,8 +153,8 @@ void CClient::xInit_DeCrypt_FindKey( const BYTE * pCryptData, int len )
 	// What key would it take to derive the expected data.
 	// for 127.0.0.1 = m_RxCryptMaskLo=0xeca9aaab, m_RxCryptMaskHi=0x2b323c21
 
-	static DWORD dwMasterKeyLo = 0;
-	static DWORD dwMasterKeyHi = 0;
+	static UINT dwMasterKeyLo = 0;
+	static UINT dwMasterKeyHi = 0;
 
 	for ( int i=0; i<len && n < 64; i++, n++ )
 	{

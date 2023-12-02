@@ -164,11 +164,11 @@ public:
 		connection.sin_family = AF_INET;
 		connection.sin_addr.s_addr = INADDR_ANY;
 		connection.sin_port = htons( uPort );
-		struct sockaddr_in localconnection;
+		/*struct sockaddr_in localconnection;
 		localconnection.sin_family = AF_INET;
 		localconnection.sin_addr.s_addr = INADDR_LOOPBACK;
-		localconnection.sin_port = htons(uPort);
-		return( Bind( &connection ) && Bind( &localconnection ) );
+		localconnection.sin_port = htons(uPort);*/
+		return(Bind(&connection));//&& Bind(&localconnection) );
 	}
 	int Listen( int iMaxBacklogConnections = SOMAXCONN )
 	{

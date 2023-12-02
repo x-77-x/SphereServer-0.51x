@@ -683,7 +683,7 @@ UINT PT_atou( LPCTSTR pszStr )
 
 //***************************************************************************
 
-const _TCHAR * CAssocStr::Find( DWORD dwVal ) const
+const _TCHAR * CAssocStr::Find(UINT dwVal ) const
 {
 	for ( int i=0; this[i].m_pszLabel != NULL; i++ )
 	{
@@ -693,7 +693,7 @@ const _TCHAR * CAssocStr::Find( DWORD dwVal ) const
 	return( this[i].m_pszLabel );
 }
 
-const _TCHAR * CAssocStr::Find( _TCHAR * pszOut, DWORD dwVal, const _TCHAR * pszDef ) const
+const _TCHAR * CAssocStr::Find( _TCHAR * pszOut, UINT dwVal, const _TCHAR * pszDef ) const
 {
 	//
 	// PURPOSE:

@@ -60,7 +60,7 @@ void CContainer::OnRemoveOb( CGObListRec* pObRec )	// Override this = called whe
 	OnWeightChange( -pItem->GetWeight());
 }
 
-CItem * CContainer::ContentFindType( ITEM_TYPE iType, DWORD dwArg, int iDecendLevels ) const
+CItem * CContainer::ContentFindType( ITEM_TYPE iType, UINT dwArg, int iDecendLevels ) const
 {
 	// send all the items in the container.
 	CItem* pItem=GetContentHead();

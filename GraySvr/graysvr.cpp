@@ -90,7 +90,9 @@ const TCHAR * g_Stat_Name[STAT_QTY] =
 const CPointMap g_pntLBThrone(1323,1624,0); // This is OSI's origin for degree, sextant minute coordinates
 
 const TCHAR * g_szServerDescription =
-#ifdef _WIN32
+#ifdef _WIN64
+GRAY_TITLE " Version " GRAY_VERSION " [WIN64] by " GRAY_URL;
+#elif _WIN32
 GRAY_TITLE " Version " GRAY_VERSION " [WIN32] by " GRAY_URL;
 #else
 GRAY_TITLE " Version " GRAY_VERSION " [LINUX] by " GRAY_URL;
@@ -225,7 +227,7 @@ void Assert_CheckFail( const TCHAR * pExp, const TCHAR *pFile, unsigned uLine )
 	// These get left in in relesae code .
 	g_Log.Event( LOGL_CRIT, "Assert:'%s' file '%s', line %d\n", pExp, pFile, uLine );
 	// if ( g_Serv.m_fSecure )	{}
-	throw( CGrayError( LOGL_CRIT, 0, pExp ));
+	//throw( CGrayError( LOGL_CRIT, 0, pExp ));
 }
 #endif // VISUAL_SPHERE
 
@@ -247,9 +249,9 @@ class CGrayException : public CGrayError
 	// NULL pointer access etc.
 public:
 	unsigned int m_uCode;
-	DWORD m_dwAddress;
+	uintptr_t m_dwAddress;
 public:
-	CGrayException( unsigned int uCode, DWORD dwAddress )
+	CGrayException( unsigned int uCode, uintptr_t dwAddress )
 		: CGrayError( LOGL_CRIT, 0, _TEXT("fault"))
 	{
 		m_uCode = uCode;
@@ -263,10 +265,10 @@ void _cdecl Exception_Win32( unsigned int id, struct _EXCEPTION_POINTERS* pData 
 	// id = 0xc0000094 for divide by zero.
 	// STATUS_ACCESS_VIOLATION is 0xC0000005.
 
-	DWORD dwCodeStart = (DWORD)(PVOID) globalstartsymbol;
+	uintptr_t dwCodeStart = (uintptr_t)(PVOID) globalstartsymbol;
 	//	_asm mov dwCodeStart, CODE
 
-	throw( CGrayException( id, (DWORD)( pData->ExceptionRecord->ExceptionAddress ) - dwCodeStart ));
+	throw( CGrayException( id, (uintptr_t)( pData->ExceptionRecord->ExceptionAddress ) - dwCodeStart ));
 }
 #endif // VISUAL_SPHERE
 

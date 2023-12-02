@@ -141,7 +141,7 @@ struct CUOVersionBlock	// skew list. (verdata.mul)
 	// First 4 bytes of this file = the qty of records.
 private:
 	DWORD m_file;		// file type id. VERFILE_TYPE (ex.tiledata = 0x1E)
-	DWORD m_block;		// tile number. ( items = itemid + 0x200 )
+	UINT m_block;		// tile number. ( items = itemid + 0x200 )
 public:
 	DWORD m_filepos;	// pos in this file to find the patch block.
 	DWORD m_length;
@@ -149,7 +149,7 @@ public:
 	WORD  m_wVal3;		// stuff that would have been in CUOIndexRec
 	WORD  m_wVal4;
 public:
-	DWORD GetIndex() const	// a single sortable index.
+	UINT GetIndex() const	// a single sortable index.
 	{
 		return( VERDATA_MAKE_INDEX( m_file, m_block ));
 	}
@@ -157,7 +157,7 @@ public:
 	{
 		return( (VERFILE_TYPE) m_file );
 	}
-	DWORD GetBlockIndex() const
+	UINT GetBlockIndex() const
 	{
 		return( m_block );
 	}
@@ -228,14 +228,14 @@ struct CUOStaticItemRec	// 7 byte block = static items on the map (statics0.mul)
 
 struct CUOTerrainTypeRec	// size = 0x1a = 26 (tiledata.mul)
 {	// First half of tiledata.mul file is for terrain tiles.
-	DWORD m_flags;	// 0xc0=water, 0x40=dirt or rock, 0x60=lava, 0x50=cave, 0=floor
+	UINT m_flags;	// 0xc0=water, 0x40=dirt or rock, 0x60=lava, 0x50=cave, 0=floor
 	WORD m_index;	// just counts up.  0 = unused.
 	char m_name[20];
 } PACK_NEEDED;
 
 struct CUOTerrainTypeBlock
 {
-	DWORD m_dwUnk;
+	UINT m_dwUnk;
 	CUOTerrainTypeRec m_Tiles[UOTILE_BLOCK_QTY];
 } PACK_NEEDED;
 
@@ -278,11 +278,11 @@ struct CUOItemTypeRec	// size = 37 (tiledata.mul)
 #define UFLAG4_STAIRS		0x40000000	//
 #define UFLAG4_WALKABLE		0x80000000	// We can walk here.
 
-	DWORD m_flags;
+	UINT m_flags;
 	BYTE m_weight;		// 255 = unmovable.
 	BYTE m_layer;		// LAYER_TYPE for UFLAG1_EQUIP, UFLAG3_EQUIP2 or UFLAG1_* = 0 (candle?), number of frames for _ANIM
-	DWORD m_dwUnk6;		// qty in the case of UFLAG2_STACKABLE, Gump in the case of equipable.
-	DWORD m_dwAnim;		// equipable items animation index. (50000 = male offset, 60000=female)
+	UINT m_dwUnk6;		// qty in the case of UFLAG2_STACKABLE, Gump in the case of equipable.
+	UINT m_dwAnim;		// equipable items animation index. (50000 = male offset, 60000=female)
 	WORD m_wUnk14;
 	BYTE m_height;		// z height but may not be blocking. ex.UFLAG2_WINDOW
 	char m_name[20];	// sometimes legit not to have a name
@@ -290,7 +290,7 @@ struct CUOItemTypeRec	// size = 37 (tiledata.mul)
 
 struct CUOItemTypeBlock
 {
-	DWORD m_dwUnk;
+	UINT m_dwUnk;
 	CUOItemTypeRec m_Tiles[UOTILE_BLOCK_QTY];
 } PACK_NEEDED;
 
@@ -302,7 +302,7 @@ struct CUOMultiItemRec // (Multi.mul)
 	short m_dx;		// signed delta.
 	short m_dy;
 	short m_dz;
-	DWORD m_visible;	// 0 or 1
+	UINT m_visible;	// 0 or 1
 } PACK_NEEDED;
 
 struct CUOFontImageHeader // (FONTS.MUL)
@@ -324,7 +324,7 @@ struct CUOAnimGroup // ANIM.MUL
 {
 	// AnimationGroup
 	WORD m_Palette[256];
-	DWORD m_FrameCount;
+	UINT m_FrameCount;
 	// DWORD m_FrameOffset[1];
 } PACK_NEEDED;
 
@@ -341,7 +341,7 @@ struct CUOSoundFrame // SOUND.MUL
 	// Contains sampled sounds from the game.
 	// All sounds seem to be 16 bit stereo and sampled at 11025hz.
 	char m_name[16];
-	DWORD m_format[4];	// unknown format data.
+	UINT m_format[4];	// unknown format data.
 	// WORD m_data[1];	// the sampled sound data.
 };
 
@@ -355,7 +355,7 @@ struct CUOHueEntry	// HUE.MUL
 
 struct CUOHueGroup // HUE.MUL
 {
-	DWORD m_Header;
+	UINT m_Header;
 	CUOHueEntry m_Entries[8]; 
 };
 
@@ -444,6 +444,8 @@ enum COLOR_CODE
 	COLOR_TRANSLUCENT	= 0x4fff, // almost invis
 
 	COLOR_UNDERWEAR		= 0x8000,	// Only can be used on humans.
+
+	COLOR_WHISPER		= 0x03b1,
 };
 
 #define SOUND_QTY	0x300

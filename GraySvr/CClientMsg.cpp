@@ -134,7 +134,7 @@ void CClient::addItem_OnGround( CItem * pItem ) // Send items (on ground)
 {
 	ASSERT(pItem);
 	// Get base values.
-	DWORD dwUID = pItem->GetUID();
+	UINT dwUID = pItem->GetUID();
 	WORD wID = pItem->GetDispID();
 	COLOR_TYPE wColor = pItem->GetColor();
 	WORD wAmount = ( pItem->GetAmount() > 1 ) ? pItem->GetAmount() : 0;
@@ -1016,7 +1016,7 @@ void CClient::addChar( const CChar * pChar )
 		}
 	}
 	pCmd->Char.equip[0].m_UID = 0;	// terminator.
-	len += sizeof( DWORD );
+	len += sizeof(UINT);
 
 	cmd.Char.m_len = len;
 	xSendPkt( &cmd, len );
@@ -2020,7 +2020,7 @@ void CClient::addScroll( const TCHAR * pszText )
 	xSendPkt( &cmd, length );
 }
 
-void CClient::addScrollFile( CScript &s, SCROLL_TYPE type, DWORD scrollID, const TCHAR * pszHeader )
+void CClient::addScrollFile( CScript &s, SCROLL_TYPE type, UINT scrollID, const TCHAR * pszHeader )
 {
 	CCommand cmd;
 	cmd.Scroll.m_Cmd = XCMD_Scroll;
@@ -2057,7 +2057,7 @@ void CClient::addScrollFile( CScript &s, SCROLL_TYPE type, DWORD scrollID, const
 	xSendPkt( &cmd, length );
 }
 
-void CClient::addScrollFile( const TCHAR * pszSec, SCROLL_TYPE type, DWORD scrollID )
+void CClient::addScrollFile( const TCHAR * pszSec, SCROLL_TYPE type, UINT scrollID )
 {
 	//
 	// type = 0 = TIPS
@@ -2396,12 +2396,12 @@ bool CClient::addBBoardMessage( const CItemContainer * pBoard, BYTE flag, CObjUI
 	cmd.BBoard.m_UID = pBoard->GetUID();	// 4-7 = UID for the bboard.
 
 	int len = 4;
-	PACKDWORD(cmd.BBoard.m_data+0,pMsgItem->GetUID());
+	PACKUINT(cmd.BBoard.m_data+0,pMsgItem->GetUID());
 
 	if ( m_bin.BBoard.m_flag == 4 )
 	{
 		// just the header has this ? (replied to message?)
-		PACKDWORD(cmd.BBoard.m_data+4,0);
+		PACKUINT(cmd.BBoard.m_data+4,0);
 		len += 4;
 	}
 
@@ -2444,7 +2444,7 @@ bool CClient::addBBoardMessage( const CItemContainer * pBoard, BYTE flag, CObjUI
 	{
 		// request for full message body
 		//
-		PACKDWORD(&(cmd.BBoard.m_data[len]),0);
+		PACKUINT(&(cmd.BBoard.m_data[len]),0);
 		len += 4;
 
 		// Pack the text into seperate lines.
@@ -2540,7 +2540,7 @@ void CClient::addGumpTextDisp( const CObjBase * pObj, GUMP_TYPE gump, const TCHA
 
 	cmd.GumpTextDisp.m_Cmd = XCMD_GumpTextDisp;
 	cmd.GumpTextDisp.m_len = len;
-	cmd.GumpTextDisp.m_UID = pObj ? ((DWORD)( pObj->GetUID())) : UID_CLEAR;
+	cmd.GumpTextDisp.m_UID = pObj ? ((UINT)( pObj->GetUID())) : UID_CLEAR;
 	cmd.GumpTextDisp.m_gump = gump;
 	cmd.GumpTextDisp.m_len_unktext = lenname;
 	cmd.GumpTextDisp.m_unk11 = 0;	// ? not COLOR_TYPE, not x,
@@ -2553,7 +2553,7 @@ void CClient::addGumpTextDisp( const CObjBase * pObj, GUMP_TYPE gump, const TCHA
 
 void CClient::addGumpInputBox( TARGMODE_TYPE id, BYTE parent, BYTE button,
 	bool fCancel, INPUTBOX_STYLE style,
-	DWORD mask,
+	UINT mask,
 	const TCHAR *pszText1,
 	const TCHAR *pszText2 )
 {
@@ -2655,7 +2655,6 @@ void CClient::addGumpMenu( TARGMODE_TYPE dwGumpID, const CGString * psControls, 
 		lengthText += (lentext2*2)+2;
 	}
 
-	// Send the fixed length stuff
 	CCommand cmd;
 	cmd.GumpDialog.m_Cmd = XCMD_GumpDialog;
 	cmd.GumpDialog.m_len = lengthText;
@@ -2711,7 +2710,7 @@ bool CClient::Gump_FindSection( CScriptLock & s, TARGMODE_TYPE targ, const TCHAR
 	return( g_Serv.ScriptLock( s, SCPFILE_GUMP_2, szSection ) != NULL );
 }
 
-void CClient::Gump_Button( TARGMODE_TYPE targ, DWORD dwButtonID, CObjBase * pObj )
+void CClient::Gump_Button( TARGMODE_TYPE targ, UINT dwButtonID, CObjBase * pObj )
 {
 	// one of the gump buttons was pressed.
 	if ( pObj == NULL )		// object is gone ?
@@ -2983,14 +2982,14 @@ bool CClient::addWalkCode( EXTDATA_TYPE iType, int iCodes )
 	cmd.ExtData.m_type = iType;
 
 	int len = (sizeof(cmd.ExtData) - sizeof(cmd.ExtData.m_data));
-	DWORD * pdwCodes = (DWORD*)(cmd.ExtData.m_data);
+	UINT * pdwCodes = (UINT*)(cmd.ExtData.m_data);
 
 	for ( int i=0; i < iCodes && m_Walk_CodeQty < COUNTOF(m_Walk_LIFO); m_Walk_CodeQty++, i++ )
 	{
-		DWORD dwCode = 0x88ca0000 + GetRandVal( 0xffff );
+		UINT dwCode = 0x88ca0000 + GetRandVal( 0xffff );
 		m_Walk_LIFO[m_Walk_CodeQty] = dwCode;
 		pdwCodes[i] = dwCode;
-		len += sizeof(DWORD);
+		len += sizeof(UINT);
 	}
 
 	cmd.ExtData.m_len = len;
@@ -3254,6 +3253,7 @@ void CClient::Setup_ListReq( const TCHAR * pszAccount, const TCHAR * pszPassword
 	{
 		// If the last char is lingering then log back into this char instantly.
 		// m_iClientLingerTime
+
 		Setup_Start(pCharLast); 
 		return;
 	}

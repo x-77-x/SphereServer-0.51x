@@ -425,7 +425,7 @@ long CScript::GetArgVal()
 	return( Exp_GetVal( m_pArg ));
 }
 
-DWORD CScript::GetArgHex()
+UINT CScript::GetArgHex()
 {
 	return( Exp_GetHex( m_pArg ));
 }
@@ -1179,7 +1179,7 @@ bool CScriptObj::r_GetRef( const TCHAR * & pszKey, CScriptObj * & pRef, CTextCon
 	{
 		// Can it be resolved to any uid ref.
 		pszKey += 4;
-		CObjUID uid = (DWORD) Exp_GetVal( pszKey );
+		CObjUID uid = (UINT) Exp_GetVal( pszKey );
 		SKIP_SEPERATORS(pszKey);
 		pRef = uid.ObjFind();
 		return( true );

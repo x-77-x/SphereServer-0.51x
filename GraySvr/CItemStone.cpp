@@ -1405,7 +1405,7 @@ void CItemStone::addStoneGump( CClient * pClient, STONEGUMP_TYPE menuid )
 	}
 }
 
-bool CItemStone::OnGumpButton( CClient * pClient, STONEGUMP_TYPE type, DWORD * pdwCheckID, int iCheckQty, CGString * psText, WORD * piTextID, int iTextQty )
+bool CItemStone::OnGumpButton( CClient * pClient, STONEGUMP_TYPE type, UINT * pdwCheckID, int iCheckQty, CGString * psText, WORD * piTextID, int iTextQty )
 {
 	// Button presses come here
 	ASSERT( pClient );

@@ -256,7 +256,7 @@ CItem * CItem::CreateHeader( ITEMID_TYPE id, TCHAR * pArg, CObjBase * pCont )
 	{
 		if ( ! pItem->IsMovableType())
 		{
-			DEBUG_ERR(( "Script Error: 0%x item is not movable type, cont=0%x\n", id, pCont ? ((DWORD)(pCont->GetUID())) : 0 ));
+			DEBUG_ERR(( "Script Error: 0%x item is not movable type, cont=0%x\n", id, pCont ? ((UINT)(pCont->GetUID())) : 0 ));
 			pItem->Delete();
 			return( NULL );
 		}
@@ -614,7 +614,7 @@ bailout:
 			}
 			else
 			{
-				DEBUG_ERR(( "'%s' Bad Link to 0%lx\n", GetName(), (DWORD) m_uidLink ));
+				DEBUG_ERR(( "'%s' Bad Link to 0%lx\n", GetName(), (UINT) m_uidLink ));
 				m_uidLink.ClearUID();
 				if ( g_World.m_iSaveVersion > 32 )
 				{
@@ -1748,7 +1748,7 @@ bool CItem::LoadSetContainer( CObjUID uid, LAYER_TYPE layer )
 	CObjBase * pObjCont = uid.ObjFind();
 	if ( pObjCont == NULL )
 	{
-		DEBUG_ERR(( "Invalid container 0%lx\n", (DWORD) uid ));
+		DEBUG_ERR(( "Invalid container 0%lx\n", (UINT) uid ));
 		return( false );	// not valid object.
 	}
 
@@ -1782,7 +1782,7 @@ bool CItem::LoadSetContainer( CObjUID uid, LAYER_TYPE layer )
 		id = 0;
 	}
 
-	DEBUG_ERR(( "Non container uid=0%lx,id=0%x\n", (DWORD) uid, id ));
+	DEBUG_ERR(( "Non container uid=0%lx,id=0%x\n", (UINT) uid, id ));
 	return( false );	// not a container.
 }
 
@@ -2124,7 +2124,7 @@ bool CItem::OnTrigger( const TCHAR * pszTrigName, CTextConsole * pSrc, int iArg 
 	{
 		// Check all the plot macros that are in effect for the source char.
 
-		DWORD dwPlot = pChar->m_pPlayer->m_Plot1;
+		UINT dwPlot = pChar->m_pPlayer->m_Plot1;
 		for ( int i=0; dwPlot; i++, dwPlot >>= 1 )
 		{
 			ASSERT( i < 32 );

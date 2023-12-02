@@ -240,7 +240,7 @@ void CClient::Event_Item_Pickup( CObjUID uid, int amount ) // Client grabs an it
 
 	// Where is the item coming from ? (just in case we have to toss it back)
 	CObjBase * pObjParent = dynamic_cast <CObjBase *>(pItem->GetParent());
-	m_Targ_PrvUID = ( pObjParent ) ? (DWORD) pObjParent->GetUID() : UID_CLEAR;
+	m_Targ_PrvUID = ( pObjParent ) ? (UINT) pObjParent->GetUID() : UID_CLEAR;
 	m_Targ_p = pItem->GetUnkPoint();
 
 	amount = m_pChar->ItemPickup( pItem, amount );
@@ -594,7 +594,7 @@ void CClient::Event_Skill_Use( SKILL_TYPE skill ) // Skill is clicked on the ski
 	}
 }
 
-bool CClient::Event_WalkingCheck(DWORD dwEcho)
+bool CClient::Event_WalkingCheck(UINT dwEcho)
 {
 	// look for the walk code, and remove it
 
@@ -621,7 +621,7 @@ bool CClient::Event_WalkingCheck(DWORD dwEcho)
 			m_Walk_CodeQty--;
 			ASSERT( m_Walk_CodeQty < COUNTOF(m_Walk_LIFO));
 			int n = m_Walk_CodeQty-i;
-			memmove( m_Walk_LIFO+i, m_Walk_LIFO+i+1, n*sizeof(DWORD));
+			memmove( m_Walk_LIFO+i, m_Walk_LIFO+i+1, n*sizeof(UINT));
 			// Set this to negative so we know later if we've gotten at least 1 valid echo
 			m_Walk_InvalidEchos = -1;
 			return( true );
@@ -652,7 +652,7 @@ bool CClient::Event_WalkingCheck(DWORD dwEcho)
 	return true;
 }
 
-void CClient::Event_Walking( BYTE rawdir, BYTE count, DWORD dwEcho ) // Player moves
+void CClient::Event_Walking( BYTE rawdir, BYTE count, UINT dwEcho ) // Player moves
 {
 	// The theory....
 	// The client sometimes echos 1 or 2 zeros or invalid echos when you first start
@@ -781,7 +781,7 @@ void CClient::Event_MenuChoice() // Choice from GMMenu or Itemmenu received
 	// result of addItemMenu call previous.
 	// select = 0 = cancel.
 
-	TARGMODE_TYPE menuid = (TARGMODE_TYPE)(DWORD) m_bin.MenuChoice.m_menuid;
+	TARGMODE_TYPE menuid = (TARGMODE_TYPE)(UINT) m_bin.MenuChoice.m_menuid;
 	if ( menuid != GetTargMode() ||
 		m_bin.MenuChoice.m_UID != m_pChar->GetUID())
 	{
@@ -917,7 +917,7 @@ void CClient::Event_Attack( CObjUID uid )
 	// Accept or decline the attack.
 	CCommand cmd;
 	cmd.AttackOK.m_Cmd = XCMD_AttackOK;
-	cmd.AttackOK.m_UID = (m_pChar->Attack( pChar )) ? (DWORD) pChar->GetUID() : 0;
+	cmd.AttackOK.m_UID = (m_pChar->Attack( pChar )) ? (UINT) pChar->GetUID() : 0;
 	xSendPkt( &cmd, sizeof( cmd.AttackOK ));
 }
 
@@ -1225,10 +1225,10 @@ void CClient::Event_BBoardRequest( CObjUID uid )
 			DEBUG_ERR(( "%x:BBoard feed back message bad length %d\n", GetSocket(), (int) m_bin.BBoard.m_len ));
 			return;
 		}
-		if ( ! addBBoardMessage( pBoard, m_bin.BBoard.m_flag, (DWORD)( m_bin.BBoard.m_UIDMsg )))
+		if ( ! addBBoardMessage( pBoard, m_bin.BBoard.m_flag, (UINT)( m_bin.BBoard.m_UIDMsg )))
 		{
 			// sanity check fails.
-			addObjectRemoveCantSee( (DWORD)( m_bin.BBoard.m_UIDMsg ), "the message" );
+			addObjectRemoveCantSee( (UINT)( m_bin.BBoard.m_UIDMsg ), "the message" );
 			return;
 		}
 		break;
@@ -1904,7 +1904,7 @@ void CClient::Event_GumpTextIn()
 	// m_bin.GumpText
 	// result of addGumpInputBox. GumpInputBox
 
-	TARGMODE_TYPE dialog = (TARGMODE_TYPE) (DWORD) m_bin.GumpText.m_dialogID;
+	TARGMODE_TYPE dialog = (TARGMODE_TYPE) (UINT) m_bin.GumpText.m_dialogID;
 
 	BYTE parent = m_bin.GumpText.m_parentID; // the original dialog #, shortened to a BYTE
 	BYTE button = m_bin.GumpText.m_buttonID;
@@ -1979,9 +1979,9 @@ void CClient::Event_GumpButton()
 	// possibly multiple check boxes.
 
 	// First let's completely decode this packet
-	TARGMODE_TYPE dialog = (TARGMODE_TYPE)(DWORD)( m_bin.GumpButton.m_dialogID );
-	CObjUID uid = (DWORD) m_bin.GumpButton.m_UID;
-	DWORD dwButtonID = m_bin.GumpButton.m_buttonID;
+	TARGMODE_TYPE dialog = (TARGMODE_TYPE)(UINT)( m_bin.GumpButton.m_dialogID );
+	CObjUID uid = (UINT) m_bin.GumpButton.m_UID;
+	UINT dwButtonID = m_bin.GumpButton.m_buttonID;
 
 	if ( dialog != GetTargMode())
 	{
@@ -1992,8 +1992,8 @@ void CClient::Event_GumpButton()
 
 	CObjBase * pObj = uid.ObjFind();
 
-	DWORD iCheckID[32]; // This should do for most pages...
-	DWORD iCheckQty = m_bin.GumpButton.m_checkQty; // this has the total of all checked boxes and radios
+	UINT iCheckID[32]; // This should do for most pages...
+	UINT iCheckQty = m_bin.GumpButton.m_checkQty; // this has the total of all checked boxes and radios
 	ASSERT( iCheckQty < COUNTOF(iCheckID));
 	int i = 0;
 	for ( ; i < iCheckQty; i++ ) // Store the returned checked boxes' ids for possible later use
@@ -2003,7 +2003,7 @@ void CClient::Event_GumpButton()
 
 	// Find out how many textentry boxes we have that returned data
 	CEvent * pMsg = (CEvent *)(((BYTE*)(&m_bin))+(iCheckQty-1)*sizeof(m_bin.GumpButton.m_checkIds[0]));
-	DWORD iTextQty = pMsg->GumpButton.m_textQty;
+	UINT iTextQty = pMsg->GumpButton.m_textQty;
 
 	WORD iTextID[96]; // Store textentry boxes' ids in here
 	CGString strText[COUNTOF(iTextID)]; // Store the text in here
@@ -2030,7 +2030,7 @@ void CClient::Event_GumpButton()
 
 #if 0 // def _DEBUG
 	// Dennis, can you leave this in? I use it to track down stuff
-	DEBUG_MSG(("uid: %x, dialog: %i, gump: %i\n", (DWORD) uid, dialog, dwButtonID ));
+	DEBUG_MSG(("uid: %x, dialog: %i, gump: %i\n", (UINT) uid, dialog, dwButtonID ));
 	if (iCheckQty > 0)
 	{
 		DEBUG_MSG(("%i boxes are checked.\n", iCheckQty));
@@ -2658,7 +2658,7 @@ bool CClient::Event_DoubleClick( CObjUID uid, bool fMacro, bool fTestTouch )
 	ASSERT(m_pChar);
 	if ( g_Log.IsLogged( LOGL_TRACE ))
 	{
-		DEBUG_MSG(( "%x:Event_DoubleClick 0%x\n", GetSocket(), (DWORD) uid ));
+		DEBUG_MSG(( "%x:Event_DoubleClick 0%x\n", GetSocket(), (UINT) uid ));
 	}
 
 	CObjBase * pObj = uid.ObjFind();
@@ -2748,7 +2748,7 @@ void CClient::Event_SingleClick( CObjUID uid )
 	ASSERT(m_pChar);
 	if ( g_Log.IsLogged( LOGL_TRACE ))
 	{
-		DEBUG_MSG(( "%x:Event_SingleClick %lx\n", GetSocket(), (DWORD) uid ));
+		DEBUG_MSG(( "%x:Event_SingleClick %lx\n", GetSocket(), (UINT) uid ));
 	}
 
 	CObjBase * pObj = uid.ObjFind();
@@ -2985,15 +2985,15 @@ bool CClient::xDispatchMsg()
 		break;
 	case XCMD_Attack: // Attack
 		if ( ! xCheckSize( sizeof( m_bin.Click ))) return(false);
-		Event_Attack( (DWORD) m_bin.Click.m_UID );
+		Event_Attack( (UINT) m_bin.Click.m_UID );
 		break;
 	case XCMD_DClick:// Doubleclick
 		if ( ! xCheckSize( sizeof( m_bin.Click ))) return(false);
-		Event_DoubleClick( (DWORD) m_bin.Click.m_UID, ((DWORD)(m_bin.Click.m_UID)) & UID_SPEC, true );
+		Event_DoubleClick( (UINT) m_bin.Click.m_UID, ((UINT)(m_bin.Click.m_UID)) & UID_SPEC, true );
 		break;
 	case XCMD_ItemPickupReq: // Pick up Item
 		if ( ! xCheckSize( sizeof( m_bin.ItemPickupReq ))) return(false);
-		Event_Item_Pickup( (DWORD) m_bin.ItemPickupReq.m_UID, m_bin.ItemPickupReq.m_amount );
+		Event_Item_Pickup( (UINT) m_bin.ItemPickupReq.m_UID, m_bin.ItemPickupReq.m_amount );
 		break;
 	case XCMD_ItemDropReq: // Drop Item
 		if ( ! xCheckSize( sizeof( m_bin.ItemDropReq ))) return(false);
@@ -3001,7 +3001,7 @@ bool CClient::xDispatchMsg()
 		break;
 	case XCMD_Click: // Singleclick
 		if ( ! xCheckSize( sizeof( m_bin.Click ))) return(false);
-		Event_SingleClick( (DWORD) m_bin.Click.m_UID );
+		Event_SingleClick( (UINT) m_bin.Click.m_UID );
 		break;
 	case XCMD_ExtCmd: // Ext. Command
 		if ( ! xCheckSize(3)) return(false);
@@ -3022,7 +3022,7 @@ bool CClient::xDispatchMsg()
 		break;
 	case XCMD_CharStatReq: // Status Request
 		if ( ! xCheckSize( sizeof( m_bin.CharStatReq ))) return(false);
-		if ( m_bin.CharStatReq.m_type == 4 ) addCharStatWindow( (DWORD) m_bin.CharStatReq.m_UID );
+		if ( m_bin.CharStatReq.m_type == 4 ) addCharStatWindow( (UINT) m_bin.CharStatReq.m_UID );
 		if ( m_bin.CharStatReq.m_type == 5 ) addSkillWindow( SKILL_QTY );
 		break;
 	case XCMD_Skill:	// Skill locking.
@@ -3033,16 +3033,16 @@ bool CClient::xDispatchMsg()
 	case XCMD_VendorBuy:	// Buy item from vendor.
 		if ( ! xCheckSize(3)) return(false);
 		if ( ! xCheckSize( m_bin.VendorBuy.m_len )) return(false);
-		Event_VendorBuy( (DWORD) m_bin.VendorBuy.m_UIDVendor );
+		Event_VendorBuy( (UINT) m_bin.VendorBuy.m_UIDVendor );
 		break;
 	case XCMD_MapEdit:	// plot course on map.
 		if ( ! xCheckSize( sizeof( m_bin.MapEdit ))) return(false);
-		Event_MapEdit( (DWORD) m_bin.MapEdit.m_UID );
+		Event_MapEdit( (UINT) m_bin.MapEdit.m_UID );
 		break;
 	case XCMD_BookPage: // Read/Change Book
 		if ( ! xCheckSize(3)) return(false);
 		if ( ! xCheckSize( m_bin.BookPage.m_len )) return(false);
-		Event_Book_Page( (DWORD) m_bin.BookPage.m_UID );
+		Event_Book_Page( (UINT) m_bin.BookPage.m_UID );
 		break;
 	case XCMD_Options: // Options set
 		if ( ! xCheckSize(3)) return(false);
@@ -3056,12 +3056,12 @@ bool CClient::xDispatchMsg()
 	case XCMD_SecureTrade: // Secure trading
 		if ( ! xCheckSize(3)) return(false);
 		if ( ! xCheckSize( m_bin.SecureTrade.m_len )) return(false);
-		Event_SecureTrade( (DWORD) m_bin.SecureTrade.m_UID );
+		Event_SecureTrade( (UINT) m_bin.SecureTrade.m_UID );
 		break;
 	case XCMD_BBoard: // BBoard Request.
 		if ( ! xCheckSize(3)) return(false);
 		if ( ! xCheckSize( m_bin.BBoard.m_len )) return(false);
-		Event_BBoardRequest( (DWORD) m_bin.BBoard.m_UID );
+		Event_BBoardRequest( (UINT) m_bin.BBoard.m_UID );
 		break;
 	case XCMD_War: // Combat Mode
 		if ( ! xCheckSize( sizeof( m_bin.War ))) return(false);
@@ -3069,7 +3069,7 @@ bool CClient::xDispatchMsg()
 		break;
 	case XCMD_CharName: // Rename Character(pet)
 		if ( ! xCheckSize( sizeof( m_bin.CharName ))) return(false);
-		Event_SetName( (DWORD) m_bin.CharName.m_UID );
+		Event_SetName( (UINT) m_bin.CharName.m_UID );
 		break;
 	case XCMD_MenuChoice: // Menu Choice
 		if ( ! xCheckSize( sizeof( m_bin.MenuChoice ))) return(false);
@@ -3079,17 +3079,17 @@ bool CClient::xDispatchMsg()
 		if ( m_Crypt.GetClientVersion() >= 12600 )
 		{
 			if ( ! xCheckSize( sizeof( m_bin.BookOpen_v26 ))) return(false);
-			Event_Book_Title( (DWORD) m_bin.BookOpen_v26.m_UID, m_bin.BookOpen_v26.m_title, m_bin.BookOpen_v26.m_author );
+			Event_Book_Title( (UINT) m_bin.BookOpen_v26.m_UID, m_bin.BookOpen_v26.m_title, m_bin.BookOpen_v26.m_author );
 		}
 		else
 		{
 			if ( ! xCheckSize( sizeof( m_bin.BookOpen_v25 ))) return(false);
-			Event_Book_Title( (DWORD) m_bin.BookOpen_v25.m_UID, m_bin.BookOpen_v25.m_title, m_bin.BookOpen_v25.m_author );
+			Event_Book_Title( (UINT) m_bin.BookOpen_v25.m_UID, m_bin.BookOpen_v25.m_title, m_bin.BookOpen_v25.m_author );
 		}
 		break;
 	case XCMD_DyeVat: // Color Select Dialog
 		if ( ! xCheckSize( sizeof( m_bin.DyeVat ))) return(false);
-		Event_Item_Dye( (DWORD) m_bin.DyeVat.m_UID );
+		Event_Item_Dye( (UINT) m_bin.DyeVat.m_UID );
 		break;
 	case XCMD_Prompt: // Response to console prompt.
 		if ( ! xCheckSize(3)) return(false);
@@ -3103,7 +3103,7 @@ bool CClient::xDispatchMsg()
 	case XCMD_VendorSell: // Vendor Sell
 		if ( ! xCheckSize(3)) return(false);
 		if ( ! xCheckSize( m_bin.VendorSell.m_len )) return(false);
-		Event_VendorSell( (DWORD) m_bin.VendorSell.m_UIDVendor );
+		Event_VendorSell( (UINT) m_bin.VendorSell.m_UIDVendor );
 		break;
 	case XCMD_Scroll:	// Scroll Closed
 		if ( ! xCheckSize( sizeof( m_bin.Scroll ))) return(false);
@@ -3140,7 +3140,7 @@ bool CClient::xDispatchMsg()
 	case XCMD_ToolTipReq:	// Tool Tip
 		if ( ! xCheckSize( sizeof( m_bin.ToolTipReq ))) return(false);
 		SetPrivFlags( PRIV_T2A );
-		Event_ToolTip( (DWORD) m_bin.ToolTipReq.m_UID );
+		Event_ToolTip( (UINT) m_bin.ToolTipReq.m_UID );
 		break;
 	case XCMD_CharProfile:	// Get Character Profile.
 		if ( ! xCheckSize(3)) return(false);
@@ -3152,7 +3152,7 @@ bool CClient::xDispatchMsg()
 		break;
 	case XCMD_MailMsg:	// Some new OSI packet
 		if ( ! xCheckSize( sizeof(m_bin.MailMsg))) return(false);
-		Event_MailMsg( (DWORD) m_bin.MailMsg.m_uid1, (DWORD) m_bin.MailMsg.m_uid2 );
+		Event_MailMsg( (UINT) m_bin.MailMsg.m_uid1, (UINT) m_bin.MailMsg.m_uid2 );
 		break;
 	case XCMD_ClientVersion:	// Client Version string packet
 		if ( ! xCheckSize(3)) return(false);

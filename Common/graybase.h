@@ -114,7 +114,7 @@ struct CObjUIDBase		// A unique system serial id. 4 bytes long
 #define UID_MASK		0x0FFFFFFF	// lose the upper bits.
 #define UID_FREE		0x01000000	// Spellbook needs unused UID's ?
 private:
-	DWORD m_Val;
+	UINT m_Val;
 public:
 
 	bool IsValidUID( void ) const
@@ -150,29 +150,29 @@ public:
 	{
 		return(( ! ( m_Val & ( UID_SPEC | UID_CONTAINED | UID_EQUIPPED ))) ? true : false );
 	}
-	void SetContainerFlags( DWORD dwFlags = 0 )
+	void SetContainerFlags(UINT dwFlags = 0 )
 	{
 		ASSERT( ! ( dwFlags & (UID_MASK|UID_ITEM)));
 		m_Val = ( m_Val & (UID_MASK|UID_ITEM )) | dwFlags;
 	}
 
-	DWORD GetIndex() const
+	UINT GetIndex() const
 	{
 		return( m_Val & (UID_MASK|UID_ITEM) );
 	}
-	bool operator == ( DWORD index )
+	bool operator == (UINT index )
 	{
 		return( GetIndex() == index );
 	}
-	bool operator != ( DWORD index )
+	bool operator != (UINT index )
 	{
 		return( GetIndex() != index );
 	}
-    operator DWORD () const
+    operator UINT () const
     {
 		return( GetIndex());
     }
-	void SetUID( DWORD dwVal )
+	void SetUID(UINT dwVal )
 	{
 		// can be set to -1 by the client.
 		m_Val = ( dwVal & (UID_MASK|UID_ITEM)) | ( m_Val &~ (UID_MASK|UID_ITEM));
@@ -188,7 +188,7 @@ struct CObjUID : public CObjUIDBase
 	{
 		ClearUID();
 	}
-	CObjUID( DWORD dw )
+	CObjUID(UINT dw )
 	{
 		SetUID( dw );
 	}
@@ -322,13 +322,13 @@ private:
 	int   m_iClientVersion;		// GRAY_CLIENT_VER 12537
 
 protected:
-	DWORD m_MasterHi;
-	DWORD m_MasterLo;
+	UINT m_MasterHi;
+	UINT m_MasterLo;
 
-	DWORD m_CryptMaskHi;
-	DWORD m_CryptMaskLo;
+	UINT m_CryptMaskHi;
+	UINT m_CryptMaskLo;
 
-	DWORD m_seed;	// seed we got from the client.
+	UINT m_seed;	// seed we got from the client.
 
 public:
 	CCryptBase()
@@ -382,9 +382,9 @@ private:
 	int				m_gameBlockPos;
 	int				m_gameStreamPos;
 
-	static const DWORD sm_p_box[];
+	static const UINT sm_p_box[];
 	static const BYTE  sm_b_box[];
-	static const DWORD sm_s_box[];
+	static const UINT sm_s_box[];
 
 	static unsigned int p_table[CRYPT_GAMEKEY_COUNT][18];
 	static unsigned int s_table[CRYPT_GAMEKEY_COUNT][1024];

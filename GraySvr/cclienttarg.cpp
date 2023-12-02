@@ -1228,7 +1228,7 @@ bool CClient::OnTarg_Use_Key( CItem * pKey, CItem * pItemTarg )
 		if ( ! pItemTarg->m_uidLink.IsValidUID())
 		{
 			// If we are in a house then lock down the item.
-			pItemTarg->m_uidLink = (DWORD) pKey->m_itKey.m_lockUID;
+			pItemTarg->m_uidLink = (UINT) pKey->m_itKey.m_lockUID;
 			SysMessage( "The item has been locked down." );
 			return( true );
 		}

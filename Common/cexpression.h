@@ -109,7 +109,7 @@ extern int GetLog2( UINT iVal );
 extern int GW_GetSCurve( int iValDiff, int iVariance );
 extern int GW_GetBellCurve( int iValDiff, int iVariance );
 
-extern DWORD ahextoi( const TCHAR * pArgs ); // Convert hex string to integer
+extern UINT ahextoi( const TCHAR * pArgs ); // Convert hex string to integer
 
 #define Exp_GetSingle( pa ) g_Exp.GetSingle( pa, false )
 #define Exp_GetVal( pa )	g_Exp.GetVal( pa, false )	

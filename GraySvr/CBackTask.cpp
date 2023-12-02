@@ -18,7 +18,7 @@
 CServRef::CServRef( const TCHAR * pszName, DWORD dwIP )
 {
 	// Statistics.
-	memset( m_dwStat, 0, sizeof( m_dwStat ));	// THIS MUST BE FIRST !
+	memset( m_uiStat, 0, sizeof( m_uiStat ));	// THIS MUST BE FIRST !
 
 	SetName( pszName );
 	m_ip.SetAddr( dwIP );	// SOCKET_LOCAL_ADDRESS
@@ -761,7 +761,7 @@ void CThread::CreateThread( void ( _cdecl * pEntryProc )(void *) )
 #endif
 }
 
-bool CThread::TerminateThread( DWORD dwExitCode )
+bool CThread::TerminateThread(uintptr_t dwExitCode )
 {
 	if ( ! IsActive()) 
 		return true;

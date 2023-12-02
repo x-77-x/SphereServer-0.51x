@@ -109,7 +109,7 @@ public:
 	{
 		return( GetArgVal());
 	}
-	DWORD GetArgHex();
+	UINT GetArgHex();
 	bool HasArgs() const
 	{
 		return(( m_pArg[0] ) ? true : false );
@@ -148,7 +148,7 @@ public:
 	{
 		WriteKeyFormat( pszKey, "%d", dwVal );
 	}
-	void WriteKeyHex( const TCHAR * pszKey, DWORD dwVal )
+	void WriteKeyHex( const TCHAR * pszKey, UINT dwVal )
 	{
 		WriteKeyFormat( pszKey, "0%x", dwVal );
 	}
@@ -216,7 +216,7 @@ public:
 	{
 		return( m_lOffset < -1 );
 	}
-	DWORD GetBadLinkOffset() const
+	UINT GetBadLinkOffset() const
 	{
 		// No check for valid range.
 		return( m_lOffset );
@@ -240,7 +240,7 @@ public:
 		DEBUG_CHECK(m_lOffset>=-1);
 		m_iLineNum = s.GetLineNumber();
 	}
-	DWORD GetLinkOffset() const
+	UINT GetLinkOffset() const
 	{
 		DEBUG_CHECK(IsLinked());
 		return( m_lOffset );
@@ -249,7 +249,7 @@ public:
 	{
 		m_lOffset = -1;
 	}
-	DWORD GetLinkLineNum() const
+	UINT GetLinkLineNum() const
 	{
 		DEBUG_CHECK(IsLinked());
 		return( m_iLineNum );
@@ -288,14 +288,14 @@ public:
 class CScriptIndexLink : public CScriptLink
 {
 private:
-	const DWORD m_dwIndex;
+	const UINT m_dwIndex;
 public:
-	CScriptIndexLink( DWORD index, CScript * pScript, CScript & s ) :
+	CScriptIndexLink(UINT index, CScript * pScript, CScript & s ) :
 		m_dwIndex( index )
 	{
 		SetLink( pScript, s );
 	}
-	DWORD GetIndexID() const
+	UINT GetIndexID() const
 	{
 		return( m_dwIndex );
 	}

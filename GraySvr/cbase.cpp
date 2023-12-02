@@ -323,7 +323,7 @@ int CObjBase::IsWeird() const
 	return( 0 );
 }
 
-void CObjBase::SetPrivateUID( DWORD dwIndex, bool fItem )
+void CObjBase::SetPrivateUID(UINT dwIndex, bool fItem )
 {
 	// Move the serial number,
 	// This is possibly dangerous if conflict arrises.
@@ -334,7 +334,7 @@ void CObjBase::SetPrivateUID( DWORD dwIndex, bool fItem )
 		if ( ! dwIndex )
 			return;	// The point was just to make sure it was located.
 		// remove the old UID.
-		g_World.FreeUID( ((DWORD)GetUID()) & UID_MASK );
+		g_World.FreeUID( ((UINT)GetUID()) & UID_MASK );
 	}
 
 	if ( dwIndex != UID_MASK )	// just wanted to remove it
@@ -664,7 +664,7 @@ scp_uid:
 		DEBUG_CHECK( g_Serv.IsLoading());
 		DEBUG_CHECK( ! IsValidUID());
 		SetPrivateUID( s.GetArgHex(), (dynamic_cast <CItem*>(this)) ? true : false );
-		if ( GetUID() == (DWORD) 0x038a72 )
+		if ( GetUID() == (UINT) 0x038a72 )
 		{
 			DEBUG_CHECK( ! IsValidUID());
 		}
