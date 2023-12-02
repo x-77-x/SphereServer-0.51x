@@ -1512,6 +1512,29 @@ int CClient::Setup_FillCharList( CEventCharDef * pCharList, const CChar * pCharF
 	return( MAX_CHARS_PER_ACCT );
 }
 
+bool CClient::Check_HasMaxChars(const CChar * pCharFirst)
+{
+	ASSERT(m_pAccount);
+
+	for (int k = 0, j = 0; k < SECTOR_QTY; k++)
+	{
+		CChar* pChar = STATIC_CAST <CChar*>(g_World.m_Sectors[k].m_Chars_Disconnect.GetHead());
+		for (; pChar != NULL; pChar = pChar->GetNext())
+		{
+			if (pCharFirst == pChar)
+				continue;
+			if (!m_pAccount->IsMyAccountChar(pChar))
+				continue;
+			if (j >= MAX_CHARS_PER_ACCT)
+				return TRUE;
+
+			if (++j >= g_Serv.m_iMaxCharsPerAccount)
+				return TRUE;
+		}
+	}
+	return FALSE;
+}
+
 void CClient::addCharList3()
 {
 	// just pop up a list of chars for this account.
@@ -3137,9 +3160,13 @@ void CClient::Setup_CreateDialog() // All the character creation stuff
 		DEBUG_ERR(( "%x:Setup_CreateDialog acct='%s' already on line!\n", GetSocket(), m_pAccount->GetName()));
 		return;
 	}
-
+	if (Check_HasMaxChars(m_pChar))
+	{
+		addSysMessage("Already max players");
+		DEBUG_ERR(("%x:Setup_CreateDialog acct='%s' already max players on account!\n", GetSocket(), m_pAccount->GetName()));
+		return;
+	}
 	// ??? Make sure they don't already have too many chars !
-	// g_Serv.m_iMaxCharsPerAccount
 
 	CChar * pChar = CChar::CreateBasic( CREID_MAN );
 	pChar->InitPlayer( &m_bin, this );

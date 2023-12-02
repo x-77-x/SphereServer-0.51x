@@ -2638,7 +2638,7 @@ int CServer::PrintPercent( long iCount, long iTotal )
 		return( 100 );
     int iPercent = MulDiv( iCount, 100, iTotal );
 	CGString sProgress;
-	int len = sProgress.Format( "%d%%", iPercent );
+	int len = sProgress.Format( "%d%%  ", iPercent );
 	PrintStr( sProgress );
 	while ( len-- ) PrintStr( "\x08" );
 	return( iPercent );
@@ -2994,6 +2994,7 @@ bool CServer::SocketsInit() // Initialize sockets
 			}
 			// h_addrtype == 2
 			// h_length = 4
+			g_Log.Event(LOGM_INIT, "Monitoring IP '127.0.0.1'.\n");
 			for ( int i=0; pHost->h_addr_list[i] != NULL; i++ )
 			{
 				struct in_addr ip;

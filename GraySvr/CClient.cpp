@@ -280,6 +280,7 @@ void CClient::Announce( bool fArrive ) const
 
 	if ( m_pChar != NULL )
 	{
+		m_pChar->OnTrigger((fArrive ? CTRIG_Login : CTRIG_Logout), m_pChar, m_pChar->GetUID());
 		m_pAccount->m_uidLastChar = m_pChar->GetUID();
 	}
 }

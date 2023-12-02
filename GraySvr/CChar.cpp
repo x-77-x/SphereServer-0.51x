@@ -2561,10 +2561,10 @@ void CChar::InitPlayer( CEvent * pBin, CClient * pClient )
 	Stat_Set( STAT_DEX, pBin->Create.m_dex + 1 );
 	Stat_Set( STAT_INT, pBin->Create.m_int + 1 );
 
-	if ( pBin->Create.m_val1 > 50 ||
-		pBin->Create.m_val2 > 50 ||
-		pBin->Create.m_val3 > 50 ||
-		pBin->Create.m_val1 + pBin->Create.m_val2 + pBin->Create.m_val3 > 101 )
+	if ( pBin->Create.m_val1 > 70 ||
+		pBin->Create.m_val2 > 70 ||
+		pBin->Create.m_val3 > 70 ||
+		pBin->Create.m_val1 + pBin->Create.m_val2 + pBin->Create.m_val3 > 211 )
 	{
 		// ! Cheater !
 		pBin->Create.m_val1 = 33;
@@ -3376,7 +3376,7 @@ muststeal:
 	ITRIG_TYPE trigger;
 	if ( pChar != NULL )
 	{
-		if ( ! pChar->NPC_IsOwnedBy( this ))
+		if (pChar != this && ! pChar->NPC_IsOwnedBy( this ))
 			goto muststeal;
 		trigger = pItem->IsEquipped() ? ITRIG_UNEQUIP : ITRIG_PICKUP_PACK;
 	}
@@ -4798,6 +4798,17 @@ const TCHAR * CChar::sm_szTrigName[CTRIG_QTY] =	// static
 	"@GetHit",			// I just got hit.
 	"@Hit",				// I just hit someone. (TARG)
 	"@Death",			// I just got killed.
+
+	"@Login",  // On Player Login
+	"@Logout", // On Player Logout
+
+	"@Skill_Start", // when beginning using a skill
+	"@Skill_Fail", // when a skill check fails
+	"@Skill_Success", // when a skill check successes
+
+	"@Call_Guards", // when calling guards - UNACTIVE
+
+	"@Region_Change" // when changing from one region to another one - UNACTIVE
 };
 
 bool CChar::OnTrigger( const TCHAR * pszTrigName, CTextConsole * pSrc, int iArg )

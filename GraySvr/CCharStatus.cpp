@@ -463,9 +463,9 @@ bool CChar::CanTouch( const CObjBase * pObj ) const
 		{
 			// Make some special cases for searchable.
 			const CChar * pChar = dynamic_cast <const CChar*> ( pContItem->GetTopLevelObj()) ;
-			if ( pChar == NULL )
+			if ( pChar == NULL)
 				return( false );
-			if ( ! pChar->NPC_IsOwnedBy( this ))	// player vendor boxes.
+			if ( pChar != this && ! pChar->NPC_IsOwnedBy( this ))	// player vendor boxes.
 				return( false );
 
 			if ( pContItem->GetID() == ITEMID_BANK_BOX ||

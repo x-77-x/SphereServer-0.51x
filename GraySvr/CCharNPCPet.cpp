@@ -484,12 +484,16 @@ bool CChar::NPC_CheckHirelingStatus()
 		Speak( "I can continue work for %d gold",
 			m_pDef->GetHireDayWage());
 
-		CItem * pMemory = Memory_AddObjTypes( NPC_GetOwner(), MEMORY_SPEAK );
-		ASSERT(pMemory);
-		pMemory->m_itEqMemory.m_Action = NPC_MEM_ACT_SPEAK_HIRE;
-
+		CChar* owner = NPC_GetOwner();
+		if (owner != NULL)
+		{
+			CItem* pMemory = Memory_AddObjTypes(owner, MEMORY_SPEAK);
+			ASSERT(pMemory);
+			pMemory->m_itEqMemory.m_Action = NPC_MEM_ACT_SPEAK_HIRE;
+		}
 		NPC_ClearOwners();
-		Skill_Start( SKILL_NONE );
+		Skill_Start(SKILL_NONE);
+
 		return( false );
 	}
 

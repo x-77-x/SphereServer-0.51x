@@ -50,6 +50,7 @@ SRC.SYSMESSAGE #0033,3, You have gained a reward!
 
 <b>[ISSUE 06]</b><BR>
 -Show damage above npc when attacked  (like LiL Sphere)
+<BR><b>[ DONE! ]</b> 
 
 ![alt text](http://dragonsoftime.com/junk/showdamage.png)
 
@@ -156,6 +157,7 @@ another nice one that will change the color of a moused over character
 		ARGN1=2
 		ENDIF
 	ENDIF
+ <BR><b>[ MOSTLY DONE! ]</b> 
 	
 <b>[ISSUE 22]</b><BR>
 -Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
