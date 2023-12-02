@@ -32,7 +32,7 @@ private:
 	int m_iStatics;
 	CUOStaticItemRec * m_pStatics;	// dyn alloc array block.
 public:
-	void LoadStatics( DWORD dwBlockIndex );
+	void LoadStatics(UINT dwBlockIndex );
 public:
 	CGrayStaticsBlock()
 	{

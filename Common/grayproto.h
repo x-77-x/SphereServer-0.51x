@@ -94,19 +94,19 @@ struct NWORD
 } PACK_NEEDED;
 struct NDWORD
 {
-	DWORD m_val;
-	operator DWORD () const
+	UINT m_val;
+	operator UINT () const
 	{
 		return( ntohl( m_val ));
 	}
-	NDWORD & operator = ( DWORD val )
+	NDWORD & operator = (UINT val )
 	{
 		m_val = htonl( val );
 		return( * this );
 	}
 
-#define PACKDWORD(p,d)	(p)[0]=((d)>>24)&0xFF;(p)[1]=((d)>>16)&0xFF;(p)[2]=HIBYTE(d);(p)[3]=LOBYTE(d)
-#define UNPACKDWORD(p)	MAKEDWORD( MAKEWORD((p)[3],(p)[2]), MAKEWORD((p)[1],(p)[0]))
+#define PACKUINT(p,d)	(p)[0]=((d)>>24)&0xFF;(p)[1]=((d)>>16)&0xFF;(p)[2]=HIBYTE(d);(p)[3]=LOBYTE(d)
+#define UNPACKUINT(p)	MAKEUINT( MAKEWORD((p)[3],(p)[2]), MAKEWORD((p)[1],(p)[0]))
 
 } PACK_NEEDED;
 
@@ -338,7 +338,7 @@ struct CEventCharDef
 
 struct CEvent	// event buffer from client to server..
 {
-#define MAX_BUFFER			15360	// Buffer Size (For socket operations)
+#define MAX_BUFFER			65536	// Buffer Size (For socket operations)
 #define MAX_ITEMS_CONT		256		// Max items in a container. (arbitrary)
 #define MAX_MENU_ITEMS		64		// number of items in a menu. (arbitrary)
 #define MAX_CHARS_PER_ACCT	5
@@ -350,7 +350,7 @@ struct CEvent	// event buffer from client to server..
 	{
 		BYTE m_Raw[ MAX_BUFFER ];
 
-		DWORD m_CryptHeader;	// This may just be a crypt header from the client.
+		UINT m_CryptHeader;	// This may just be a crypt header from the client.
 
 		struct 
 		{
@@ -878,12 +878,12 @@ struct CCommand	// command buffer from server to client.
 #if 0
 Message: 0x2d:
 Useage: who knows
-Structure: byte, dword, word, word, word, word, word, word
+Structure: byte, uint, word, word, word, word, word, word
 Length: 17
 
 Message: 0x30
 Usage: who knows
-Structure: byte, dword
+Structure: byte, uint
 length: 5
 
 Message: 0x31

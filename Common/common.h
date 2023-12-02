@@ -95,8 +95,8 @@
 #ifndef BYTE	// might be a typedef ?
 #define BYTE 		unsigned char	// 8 bits
 #define WORD 		unsigned short	// 16 bits
-#define DWORD		unsigned long	// 32 bits
-#define UINT		unsigned int
+#define UINT		unsigned int    // 32 bits
+#define DWORD		unsigned long	// 64 bits
 #endif	// BYTE
 
 #endif	// TRUE
@@ -120,8 +120,8 @@
 #define LOBYTE(w)			((BYTE)(((WORD)(w))&0xFF))
 #define HIBYTE(w)			((BYTE)(((WORD)(w))>>8))
 #endif	// MAKELONG
-#ifndef MAKEDWORD
-#define MAKEDWORD(low, high) ((DWORD)(((WORD)(low)) | (((DWORD)((WORD)(high))) << 16)))
+#ifndef MAKEUINT
+#define MAKEUINT(low, high) ((UINT)(((WORD)(low)) | (((UINT)((WORD)(high))) << 16)))
 #endif	// MAKEDWORD
 // My personal standard tastes.
 

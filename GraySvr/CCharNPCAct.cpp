@@ -928,9 +928,9 @@ void CChar::NPC_Script_OnTick( CItemMessage * pScriptItem, bool fForce )
 		{
 			// Should it be running (check time)
 			// 24 hour clock per day. ex. 20:01 = 2001 (decimal)
-			DWORD dwTOD = GetTopSector()->GetLocalTime() % (24*60);	// Time in minutes.
-			DWORD dwStart = pScriptItem->m_itNPCScript.m_TimeStart;
-			DWORD dwStop = pScriptItem->m_itNPCScript.m_TimeStop;
+			UINT dwTOD = GetTopSector()->GetLocalTime() % (24*60);	// Time in minutes.
+			UINT dwStart = pScriptItem->m_itNPCScript.m_TimeStart;
+			UINT dwStop = pScriptItem->m_itNPCScript.m_TimeStop;
 			bool fPlayTime;
 			if ( dwStart < dwStop )
 			{

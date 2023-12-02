@@ -327,7 +327,7 @@ CSector * CPointBase::GetSector() const
 	return( & ( g_World.m_Sectors[ (( m_y / SECTOR_SIZE_Y ) * SECTOR_COLS ) + ( m_x / SECTOR_SIZE_X ) ] ));
 }
 
-CRegionBase * CPointBase::GetRegion( DWORD dwType ) const
+CRegionBase * CPointBase::GetRegion( UINT dwType ) const
 {
 	// What region in the current CSector am i in ?
 	// We only need to update this every 8 or so steps ?

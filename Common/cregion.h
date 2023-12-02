@@ -114,7 +114,7 @@ public:
 	void CalcPath( const CPointBase pSrc, int iSteps );
 
 	CSector * GetSector() const;
-	CRegionBase * GetRegion( DWORD dwType ) const;
+	CRegionBase * GetRegion( UINT dwType ) const;
 	bool IsInDungeon() const;
 };
 
@@ -429,7 +429,7 @@ private:
 #define REGION_TYPE_ROOM		UID_EQUIPPED	// Room/Building/House. (static stat.mul type)
 #define REGION_TYPE_MULTI		UID_ITEM		// A multi item = house or ship.
 
-	DWORD m_RegionType;	// REGION_TYPE_* or multi UID number
+	UINT m_RegionType;	// REGION_TYPE_* or multi UID number
 	CGString m_sName;	// Name of the region.
 
 #define REGION_ANTIMAGIC_ALL		0x0001	// All magic banned here.
@@ -465,7 +465,7 @@ private:
 public:
 	bool RealizeRegion();
 	void SetName( const TCHAR * pszName );
-	CRegionBase( DWORD Type, const TCHAR * pszName = NULL )
+	CRegionBase(UINT Type, const TCHAR * pszName = NULL )
 	{
 		m_RegionType = Type;		// REGION_TYPE_*
 		m_Flags = 0;
@@ -482,7 +482,7 @@ public:
 		return( m_sName );
 	}
 
-	DWORD GetMultiUID() const
+	UINT GetMultiUID() const
 	{
 #ifdef DEBUG_CHECK
 		DEBUG_CHECK( m_RegionType & UID_MASK );
@@ -490,7 +490,7 @@ public:
 #endif
 		return( m_RegionType );
 	}
-	bool IsMatchType( DWORD dwType ) const
+	bool IsMatchType(UINT dwType ) const
 	{
 		// REGION_TYPE_MULTI = Specific UID's ? or UID in general = CRegionWorld
 		// REGION_TYPE_AREA = World region area only = CRegionWorld
@@ -569,7 +569,7 @@ public:
 
 public:
 
-	CRegionWorld( DWORD Type, const TCHAR * pszName = NULL ) : CRegionBase( Type, pszName )
+	CRegionWorld(UINT Type, const TCHAR * pszName = NULL ) : CRegionBase( Type, pszName )
 	{
 		m_TrigEntry = 0;
 		m_TrigPeriodic = 0;
@@ -666,7 +666,7 @@ protected:
 		m_p = pObj->m_p;
 	}
 
-	void SetPrivateUID( DWORD dwIndex )
+	void SetPrivateUID(UINT dwIndex )
 	{
 		m_UID.SetUID( dwIndex );	// Will have UID_ITEM as well.
 	}
@@ -710,7 +710,7 @@ public:
 	bool IsValidContainer() const;	// am i really in the container i say i am ?
 #endif
 
-	void SetContainerFlags( DWORD dwFlags = 0 )
+	void SetContainerFlags(UINT dwFlags = 0 )
 	{
 		m_UID.SetContainerFlags( dwFlags );
 #if defined(_DEBUG) && defined(GRAY_SVR)	// CObjBaseTemplate

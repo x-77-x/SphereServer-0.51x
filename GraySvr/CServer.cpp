@@ -605,7 +605,7 @@ bool CSkillClassDef::r_LoadVal( CScript &s )
 		m_sName = s.GetArgStr();
 		break;
 	case 1: // "PLOTFLAGS"
-		m_dwPlotFlags = s.GetArgVal();
+		m_uiPlotFlags = s.GetArgVal();
 		break;
 	default:
 		{
@@ -743,7 +743,7 @@ bool CRandGroupDef::r_LoadVal( CScript &s )
 			TCHAR * ppCmd[2];
 			int iArgs = ParseCmds( s.GetArgStr(), ppCmd, COUNTOF(ppCmd));
 			CRandGroupRec rec;
-			rec.m_dwVal = Exp_GetHex( ppCmd[0] );
+			rec.m_uiVal = Exp_GetHex( ppCmd[0] );
 			rec.m_iWeight = ( iArgs > 1 && ppCmd[1][0] ) ? Exp_GetVal( ppCmd[1] ) : 1;
 			m_iTotalWeight += rec.m_iWeight;
 			m_Members.Add(rec);
@@ -2994,7 +2994,7 @@ bool CServer::SocketsInit() // Initialize sockets
 			}
 			// h_addrtype == 2
 			// h_length = 4
-			g_Log.Event(LOGM_INIT, "Monitoring IP '127.0.0.1'.\n");
+			//g_Log.Event(LOGM_INIT, "Monitoring IP '127.0.0.1'.\n");
 			for ( int i=0; pHost->h_addr_list[i] != NULL; i++ )
 			{
 				struct in_addr ip;
@@ -3657,7 +3657,7 @@ bool CServer::CommandLine( int argc, TCHAR * argv[] )
 			// dump the items database. as just a text doc.
 			// Argument = hex bitmask to search thru.
 
-			DWORD dwMask = 0xFFFFFFFF;	// UFLAG4_ANIM
+			UINT dwMask = 0xFFFFFFFF;	// UFLAG4_ANIM
 			if ( argn+1<argc && argv[argn+1][0] == '0' )
 			{
 				dwMask = ahextoi( argv[argn+1] );
@@ -3924,7 +3924,7 @@ bool CServer::CommandLine( int argc, TCHAR * argv[] )
 
 				// It MUST have a walk entry !
 
-				DWORD dwAnim = 0;	// mask of valid anims.
+				UINT dwAnim = 0;	// mask of valid anims.
 				for ( int anim = 0; anim < animqty; anim ++, index += 5 )
 				{
 					CUOIndexRec Index;

@@ -533,8 +533,8 @@ void CCryptBase::Decrypt( BYTE * pOutput, const BYTE * pInput, int iLen )
 		for ( int i=0; i<iLen; i++ )
 		{
 			pOutput[i] = pInput[i] ^ (BYTE) m_CryptMaskLo;
-			DWORD MaskLo = m_CryptMaskLo;
-			DWORD MaskHi = m_CryptMaskHi;
+			UINT MaskLo = m_CryptMaskLo;
+			UINT MaskHi = m_CryptMaskHi;
 			m_CryptMaskHi = ((( ((MaskHi >> 1) | (MaskLo << 31)) ^ m_MasterHi) >> 1) | (MaskLo << 31)) ^ m_MasterHi;
 			m_CryptMaskLo = ((MaskLo >> 1) | (MaskHi << 31)) ^ m_MasterLo;
 		}
@@ -544,8 +544,8 @@ void CCryptBase::Decrypt( BYTE * pOutput, const BYTE * pInput, int iLen )
 		for ( int i=0; i<iLen; i++ )
 		{
 			pOutput[i] = pInput[i] ^ (BYTE) m_CryptMaskLo;
-			DWORD MaskLo = m_CryptMaskLo;
-			DWORD MaskHi = m_CryptMaskHi;
+			UINT MaskLo = m_CryptMaskLo;
+			UINT MaskHi = m_CryptMaskHi;
 			m_CryptMaskHi = 
 				(m_MasterHi >> ((5 * MaskHi * MaskHi) & 0xff))
 				+ (MaskHi * m_MasterHi)
@@ -587,14 +587,14 @@ const BYTE CCrypt::sm_b_box[] =
 	0x20, 0x65, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x2e, 0x3d, 0x5e, 0x29, 0xff, 0xff
 };
 
-const DWORD CCrypt::sm_p_box[] =
+const UINT CCrypt::sm_p_box[] =
 {
 	0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344,	0xa4093822, 0x299f31d0, 0x082efa98, 0xec4e6c89,
 	0x452821e6, 0x38d01377, 0xbe5466cf, 0x34e90c6c,	0xc0ac29b7, 0xc97c50dd, 0x3f84d5b5, 0xb5470917,
 	0x9216d5d9, 0x8979fb1b
 };
 
-const DWORD CCrypt::sm_s_box[] =
+const UINT CCrypt::sm_s_box[] =
 {
 	0xd1310ba6, 0x98dfb5ac, 0x2ffd72db, 0xd01adfb7,	0xb8e1afed, 0x6a267e96, 0xba7c9045, 0xf12c7f99,
 	0x24a19947, 0xb3916cf7, 0x0801f2e2, 0x858efc16,	0x636920d8, 0x71574e69, 0xa458fea3, 0xf4933d7e,

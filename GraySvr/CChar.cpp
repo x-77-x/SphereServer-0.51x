@@ -1460,7 +1460,7 @@ bool CChar::r_WriteVal( const TCHAR * pKey, CGString & sVal, CTextConsole * pSrc
 	case 8: // "MEMORY"
 		// What is our memory flags about this pSrc person.
 		{
-			DWORD dwFlags = 0;
+			UINT dwFlags = 0;
 			CItemMemory * pMemory = Memory_FindObj( pCharSrc );
 			if ( pMemory != NULL )
 			{
@@ -1881,9 +1881,9 @@ bool CChar::TeleportToObj( int iType, TCHAR * pszArgs )
 	// 1 = char
 	// 2 = item type
 
-	DWORD dwUID = m_Act_Targ.GetIndex() &~ UID_ITEM;
-	DWORD dwTotal = g_World.GetUIDCount();
-	DWORD dwCount = dwTotal-1;
+	UINT dwUID = m_Act_Targ.GetIndex() &~ UID_ITEM;
+	UINT dwTotal = g_World.GetUIDCount();
+	UINT dwCount = dwTotal-1;
 
 	int iArg;
 	if ( iType )
@@ -2701,7 +2701,7 @@ void CChar::UpdateDrag( CItem * pItem, CObjBase * pCont, CPointMap * ppt )
 
 		CPointMap ptTop = pObjTop->GetTopPoint();
 
-		cmd.DragAnim.m_srcUID = (pObjTop==pItem) ? 0 : (DWORD) pObjTop->GetUID();
+		cmd.DragAnim.m_srcUID = (pObjTop==pItem) ? 0 : (UINT) pObjTop->GetUID();
 		cmd.DragAnim.m_src_x = ptTop.m_x;
 		cmd.DragAnim.m_src_y = ptTop.m_y;
 		cmd.DragAnim.m_src_z = ptTop.m_z;
@@ -3532,7 +3532,7 @@ void CChar::EatAnim( const TCHAR * pszName, int iQty )
 	Emote(sEmoteMessage);
 }
 
-bool CChar::Reveal( DWORD dwFlags )
+bool CChar::Reveal( UINT dwFlags )
 {
 	// Some outside influence may be revealing us.
 
@@ -4144,7 +4144,7 @@ nocorpse:
 	CCommand cmd;
 	cmd.CharDeath.m_Cmd = XCMD_CharDeath;
 	cmd.CharDeath.m_UID = GetUID();	// 1-4
-	cmd.CharDeath.m_UIDCorpse = ( pCorpse == NULL ) ? 0 : (DWORD) pCorpse->GetUID(); // 9-12
+	cmd.CharDeath.m_UIDCorpse = ( pCorpse == NULL ) ? 0 : (UINT) pCorpse->GetUID(); // 9-12
 	cmd.CharDeath.m_DeathFlight = IsStat( STATF_Fly ) ? 1 : 0; 	// Die in flight ?
 	cmd.CharDeath.m_Death2Anim = ( dir & 0x80 ) ? 1 : 0; // Fore/Back Death ?
 
@@ -4716,6 +4716,7 @@ bool CChar::MoveToRegion( CRegionWorld * pNewArea, bool fAllowReject )
 	// Entering region trigger.
 	if ( pNewArea )
 	{
+		this->OnTrigger(CTRIG_Region_Change, this, 0);
 		if ( pNewArea->OnRegionTrigger( this, true ) && m_pArea && fAllowReject )
 			return false;
 	}

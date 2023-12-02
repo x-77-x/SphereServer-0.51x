@@ -226,13 +226,13 @@ CWorld::CWorld()
 	m_Clock_Startup = 0;
 }
 
-DWORD CWorld::AllocUID( DWORD dwIndex, CObjBase * pObj )
+UINT CWorld::AllocUID(UINT dwIndex, CObjBase * pObj )
 {
 	if ( dwIndex == 0 )
 	{
 		// Find an unused UID slot. Start at some random point.
-		DWORD dwCount = GetUIDCount() - 1;
-		DWORD dwCountStart = dwCount;
+		UINT dwCount = GetUIDCount() - 1;
+		UINT dwCountStart = dwCount;
 		dwIndex = GetRandVal( dwCount ) + 1;
 		while ( m_UIDs[dwIndex] != NULL )
 		{
@@ -945,7 +945,15 @@ void CWorld::GarbageCollection()
 	// This can take a while.
 
 	int iCount = 0;
-	for ( int i=1; i<GetUIDCount(); i++ )
+	int rCount = 0;
+	for (int i = 1; i < GetUIDCount(); ++i)
+	{
+		CObjBase* pObj = m_UIDs[i];
+		if (pObj == NULL || pObj == UID_PLACE_HOLDER)
+			continue;	// not used. step forward until we find all the used numbers
+		++rCount;
+	}
+	for ( int i=1; i<GetUIDCount(); ++i )
 	{
 		CObjBase * pObj = m_UIDs[i];
 		if ( pObj == NULL || pObj == UID_PLACE_HOLDER ) 
@@ -966,14 +974,14 @@ void CWorld::GarbageCollection()
 			FreeUID(i);	// Get rid of junk uid if all fails..
 			continue;
 		}
-#ifdef VISUAL_SPHERE
-		g_pServerObject->Fire_LoadPercent(MulDiv( iCount, 100, GetUIDCount() ));
-#else
-		g_Serv.PrintPercent( iCount, GetUIDCount());
-#endif
-		if (! (iCount & 0xFF ))
+
+		if (!(iCount & 0xFF))
 		{
-			g_Serv.PrintPercent( iCount, GetUIDCount());
+#ifdef VISUAL_SPHERE
+			g_pServerObject->Fire_LoadPercent(MulDiv( iCount, 100, GetUIDCount() ));
+#else
+			g_Serv.PrintPercent(iCount, rCount);
+#endif
 		}
 		iCount ++;
 	}
@@ -1005,13 +1013,14 @@ void CWorld::Speak( const CObjBaseTemplate * pSrc, const TCHAR * pText, COLOR_TY
 		switch ( mode )
 		{
 		case TALKMODE_YELL:
-			iHearRange = pSrc->GetVisualRange() * 200;
+			iHearRange = pSrc->GetVisualRange() * 3;//just make it enough, 3 times the viewrange is good, don't exagerate
 			break;
 		case TALKMODE_BROADCAST:
 			iHearRange = 0xFFFF;
 			break;
 		case TALKMODE_WHISPER:
 			iHearRange = 3;
+			color = COLOR_WHISPER;
 			break;
 		default:
 			iHearRange = UO_MAP_VIEW_SIZE;
@@ -1109,13 +1118,14 @@ void CWorld::SpeakUNICODE( const CObjBaseTemplate * pSrc, const NCHAR * pText, C
 		switch ( mode )
 		{
 		case TALKMODE_YELL:
-			iHearRange = pSrc->GetVisualRange() * 200;
+			iHearRange = pSrc->GetVisualRange() * 3;
 			break;
 		case TALKMODE_BROADCAST:
 			iHearRange = 0xFFFF;
 			break;
 		case TALKMODE_WHISPER:
 			iHearRange = 3;
+			color = COLOR_WHISPER;
 			break;
 		default:
 			iHearRange = UO_MAP_VIEW_SIZE;
@@ -1246,7 +1256,7 @@ unsigned long int getclock()
 }
 #endif
 
-DWORD CWorld::GetGameWorldTime( DWORD basetime ) const
+UINT CWorld::GetGameWorldTime(UINT basetime ) const
 {
 	// basetime = TICK_PER_SEC time.
 	// Get the time of the day in GameWorld minutes
@@ -1256,17 +1266,17 @@ DWORD CWorld::GetGameWorldTime( DWORD basetime ) const
 	return( basetime / g_Serv.m_iGameMinuteLength );
 }
 
-DWORD CWorld::GetNextNewMoon( bool bMoonIndex ) const
+UINT CWorld::GetNextNewMoon( bool bMoonIndex ) const
 {
 	// "Predict" the next new moon for this moon
 	// Get the period
-	DWORD iSynodic = bMoonIndex ? FELUCCA_SYNODIC_PERIOD : TRAMMEL_SYNODIC_PERIOD;
+	UINT iSynodic = bMoonIndex ? FELUCCA_SYNODIC_PERIOD : TRAMMEL_SYNODIC_PERIOD;
 
 	// Add a "month" to the current game time
-	DWORD iNextMonth = g_World.GetTime() + iSynodic;
+	UINT iNextMonth = g_World.GetTime() + iSynodic;
 
 	// Get the game time when this cycle will start
-	DWORD iNewStart = (DWORD) (iNextMonth -
+	UINT iNewStart = (UINT) (iNextMonth -
 		(double) (iNextMonth % iSynodic));
 
 	// Convert to ticks

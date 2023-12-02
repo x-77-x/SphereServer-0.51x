@@ -30,11 +30,11 @@ extern size_t DEBUG_ValidateAlloc( const void * pThis );
 #include "../common/cgraymap.h"
 
 #define GRAY_TITLE			"Sphere"	// "Sphere"
-#define GRAY_VERSION		"0.51x"
-#define GRAY_MAIN_SERVER	"menace.ne.mediaone.net"
+#define GRAY_VERSION		"0.51a"
+#define GRAY_MAIN_SERVER	"www.uoitalia.net"
 #define GRAY_GAME_SERVER
 #define GRAY_LOG_SERVER
-#define GRAY_URL			"77"	// default url.
+#define GRAY_URL			"www.uoitalia.net"	// default url.
 
 class CCharBase;
 class CClient;
@@ -241,7 +241,7 @@ struct CBaseBase : public CScriptObj, public CBaseStub
 	// Base type of both CItemBase and CCharBase
 protected:
 	WORD	m_wDispIndex;	// The artwork id. (may be the same as m_wBaseIndex)
-	DWORD	m_lInstances;	// How many instances of this type exist ?
+	UINT	m_lInstances;	// How many instances of this type exist ?
 	CScriptLink	m_ScriptLink;	// Offset into GRAYITEM or GRAYCHAR.SCP file.
 	CGString m_sName;		// default type name.
 private:
@@ -446,7 +446,7 @@ public:
 	virtual WORD GetBaseID() const = 0;
 	virtual CBaseBase * GetBase() const	= 0;
 
-	void SetPrivateUID( DWORD dwVal, bool fItem );
+	void SetPrivateUID(UINT dwVal, bool fItem );
 	CObjBase* GetNext() const
 	{
 		return( STATIC_CAST <CObjBase*>( CGObListRec::GetNext()));
@@ -505,18 +505,18 @@ public:
 		return( iDiffInTicks / TICK_PER_SEC );
 	}
 
-	DWORD GetPlayerVendorPrice() const
+	UINT GetPlayerVendorPrice() const
 	{
 		// The timer is not really a timer.
 		// override the vendor price of an item (in container).
 		// DEBUG_CHECK( g_World.IsLoading() || IsInContainer() );
 		return( m_timeout );
 	}
-	void SetPlayerVendorPrice( DWORD dwVal )
+	void SetPlayerVendorPrice(UINT uiVal )
 	{
 		// This can only be inside a vendor container.
 		// DEBUG_CHECK( g_World.IsLoading() || IsInContainer() );
-		m_timeout= dwVal;
+		m_timeout= uiVal;
 	}
 
 public:
@@ -1100,7 +1100,7 @@ private:
 	CChar * m_pChar;			// What char are we playing ?
 
 	// Walk limiting code. (Not working yet)
-	DWORD	m_Walk_LIFO[16];	// Client > 1.26 must match these .
+	UINT	m_Walk_LIFO[16];	// Client > 1.26 must match these .
 	int		m_Walk_InvalidEchos;
 	int		m_Walk_CodeQty;
 
@@ -1157,7 +1157,7 @@ public:
 		// TARGMODE_ADDITEM
 		struct
 		{
-			DWORD m_junk0;
+			UINT m_junk0;
 			ITEMID_TYPE m_id;
 			int		m_fStatic;
 		} m_tmAdd;
@@ -1179,7 +1179,7 @@ public:
 		CObjUIDBase m_tmSetupCharList[MAX_CHARS_PER_ACCT];
 
 		// TARGMODE_MENU_GM_PAGES
-		DWORD m_tmMenu[MAX_MENU_ITEMS];	// This saves the inrange tracking targets
+		UINT m_tmMenu[MAX_MENU_ITEMS];	// This saves the inrange tracking targets
 	};
 
 private:
@@ -1244,7 +1244,7 @@ private:
 	void Menu_Setup( TARGMODE_TYPE targmode, const TCHAR * pszSection );
 
 	bool Gump_FindSection( CScriptLock & s, TARGMODE_TYPE targ, const TCHAR * pszType );
-	void Gump_Button( TARGMODE_TYPE targmode, DWORD dwButton, CObjBase * pObj );
+	void Gump_Button( TARGMODE_TYPE targmode, UINT dwButton, CObjBase * pObj );
 
 	void Login_ServerList( TCHAR * pszAccount, TCHAR * pszPassword );		// Initial login (Login on "loginserver", new format)
 	bool Login_Relay( int iServer );			// Relay player to a certain IP
@@ -1309,7 +1309,7 @@ private:
 	void Event_VendorSell( CObjUID uidVendor );
 	void Event_SecureTrade( CObjUID uid );
 	bool Event_DeathOption( BYTE mode );
-	void Event_Walking( BYTE rawdir, BYTE count, DWORD dwCryptCode = 0 ); // Player moves
+	void Event_Walking( BYTE rawdir, BYTE count, UINT dwCryptCode = 0 ); // Player moves
 	void Event_CombatMode( bool fWar ); // Only for switching to combat mode
 	void Event_MenuChoice(); // Choice from GMMenu or Itemmenu received
 	void Event_PromptResp( const TCHAR * pszText, int len );
@@ -1329,7 +1329,7 @@ private:
 	void Event_BBoardRequest( CObjUID uid );
 	void Event_ChatButton(const NCHAR * pszName); // Client's chat button was pressed
 	void Event_ChatText(const char * pszLang, const NCHAR * pszText, int len); // Text from a client
-	bool Event_WalkingCheck(DWORD dwEcho);
+	bool Event_WalkingCheck(UINT dwEcho);
 
 public:
 	bool Event_DoubleClick( CObjUID uid, bool fMacro, bool fTestTouch );
@@ -1450,8 +1450,8 @@ public:
 	bool addTargetItems( TARGMODE_TYPE targmode, ITEMID_TYPE id );
 	void addTargetVerb( const TCHAR * pCmd, const TCHAR * pArg );
 	void addScroll( const TCHAR * pszText );
-	void addScrollFile( CScript &s, SCROLL_TYPE type, DWORD scrollID = 0, const TCHAR * pszHeader = NULL );
-	void addScrollFile( const TCHAR * szSec, SCROLL_TYPE type, DWORD scrollID = 0 );
+	void addScrollFile( CScript &s, SCROLL_TYPE type, UINT scrollID = 0, const TCHAR * pszHeader = NULL );
+	void addScrollFile( const TCHAR * szSec, SCROLL_TYPE type, UINT scrollID = 0 );
 
 	void addVendorClose( const CChar * pVendor );
 	int  addShopItems( CChar * pVendor, LAYER_TYPE layer );
@@ -1476,7 +1476,7 @@ public:
 
 	void addGumpInputBox( TARGMODE_TYPE id, BYTE parent, BYTE button,
 		bool fcancel, INPUTBOX_STYLE style,
-		DWORD dwmask, const TCHAR *ptext1, const TCHAR *ptext2 );
+		UINT dwmask, const TCHAR *ptext1, const TCHAR *ptext2 );
 	void addGumpMenu( TARGMODE_TYPE wGumpID, const CGString * sControls, int iControls, const CGString * psText, int iTexts, int x, int y, CObjBase * pObj = NULL );
 	void addGumpPropMenu( TARGMODE_TYPE wGumpID = TARGMODE_GUMP_PROP1 );
 	void add_Admin_Dialog( int iPage );
@@ -1775,10 +1775,10 @@ public:
 	ITEM_TYPE	m_type;			// default double click action type. (if any)
 
 	// Not applicable to all.
-	DWORD	m_buyvaluemin;		// Base value before magic and extras.
-	DWORD	m_buyvaluemax;
-	DWORD	m_sellvaluemin;	// ??? Get rid of this in favor of a simple % markup change
-	DWORD	m_sellvaluemax;
+	UINT	m_buyvaluemin;		// Base value before magic and extras.
+	UINT	m_buyvaluemax;
+	UINT	m_sellvaluemin;	// ??? Get rid of this in favor of a simple % markup change
+	UINT	m_sellvaluemax;
 	MATERIAL_TYPE m_Material;		// What is it made off?
 
 	// Weapons and armor -------------
@@ -1894,7 +1894,7 @@ class CItemBaseMulti : public CItemBase
 public:
 	CGTypedArray<CMultiComponentItem,CMultiComponentItem&> m_Components;	//  can be flipped to make these display ids.
 	CGRect m_rect;		// my region.
-	DWORD m_dwRegionFlags;
+	UINT m_dwRegionFlags;
 
 public:
 	CItemBaseMulti( const CItemBase* pBase, const CUOItemTypeRec &tile );
@@ -1993,8 +1993,8 @@ public:
 		// ITEM_NORMAL
 		struct	// used only to save and restore all this junk.
 		{
-			DWORD m_more1;
-			DWORD m_more2;
+			UINT m_more1;
+			UINT m_more2;
 			CPointBase m_morep;
 		} m_itNormal;
 
@@ -2008,7 +2008,7 @@ public:
 		struct	// lockable items.
 		{
 			CObjUIDBase m_lockUID;	// more1=For ship, door, container, etc.	(magic lock=non UID_ITEM)
-			DWORD m_lock_complexity;	// more2=0-1000 = How hard to pick or magic unlock. (conflict with door ?)
+			UINT m_lock_complexity;	// more2=0-1000 = How hard to pick or magic unlock. (conflict with door ?)
 			WORD  m_TrapType;			// morex = poison or explosion.
 		} m_itContainer;
 
@@ -2021,16 +2021,16 @@ public:
 		// ITEM_EQ_BANK_BOX
 		struct
 		{
-			DWORD m_Check_Amount;		// more1=Current amount of gold in account..
-			DWORD m_Check_Restock;		// more2 = amount to restock the bank account to
+			UINT m_Check_Amount;		// more1=Current amount of gold in account..
+			UINT m_Check_Restock;		// more2 = amount to restock the bank account to
 			CPointBase m_Open_Point;	// morep=point we are standing on when opened bank box.
 		} m_itEqBankBox;	
 
 		// ITEM_EQ_VENDOR_BOX
 		struct
 		{
-			DWORD m_junk1;
-			DWORD m_junk2;
+			UINT m_junk1;
+			UINT m_junk2;
 			CPointBase m_Open_Point;	// morep=point we are standing on when opened vendor box.
 		} m_itEqVendorBox;	
 
@@ -2059,7 +2059,7 @@ public:
 		{
 			WORD m_Hits_Cur;	// eqiv to quality of the item (armor/weapon).
 			WORD m_Hits_Max;	// can only be repaired up to this level.
-			DWORD m_junk2;
+			UINT m_junk2;
 			WORD m_spell;		// morex=SPELL_TYPE = The magic spell cast on this. (daemons breath)(boots of strength) etc
 			WORD m_skilllevel;	// morey=level of the spell. (0-100) armor mod
 			BYTE m_charges;		// morez	
@@ -2069,7 +2069,7 @@ public:
 		// ITEM_FIRE
 		struct
 		{
-			DWORD m_junk1;
+			UINT m_junk1;
 			short m_PolyStr;	// more2l=polymorph effect of this.
 			short m_PolyDex;	// more2h=
 			WORD m_spell;		// morex=SPELL_TYPE = The magic spell cast on this. (daemons breath)(boots of strength) etc
@@ -2080,9 +2080,9 @@ public:
 		// ITEM_SPELLBOOK
 		struct	// Spellbook extra spells.
 		{
-			DWORD m_spells1;	// more1=Mask of avail spells for spell book.
-			DWORD m_spells2;	// more2=Mask of avail spells for spell book.
-			DWORD m_spells3;	// morex,morey=necro type spells.
+			UINT m_spells1;	// more1=Mask of avail spells for spell book.
+			UINT m_spells2;	// more2=Mask of avail spells for spell book.
+			UINT m_spells3;	// morex,morey=necro type spells.
 			BYTE  m_spells4;	// morez
 		} m_itSpellbook;
 
@@ -2101,7 +2101,7 @@ public:
 		// ITEM_FOOD
 		struct
 		{
-			DWORD m_junk1;
+			UINT m_junk1;
 			int m_poison_skill;	// more2=0-1000 = Is the food or weapon poisoned ?
 			WORD m_MeatType;	// morex=Meat from what type of creature ? (CREID_TYPE)
 		} m_itFood;
@@ -2129,7 +2129,7 @@ public:
 		struct
 		{
 			ITEMID_TYPE m_Light_ID;		// more1=0 = use default for the type.
-			DWORD	m_junk2;			
+			UINT	m_junk2;
 			WORD	m_junk3;
 			WORD	m_charges;	// morey = how long will the torch last ?
 			BYTE	m_pattern;	// morez = light rotation pattern (LIGHT_PATTERN) ??? Moon gate conflict !!!
@@ -2138,9 +2138,9 @@ public:
 		// ITEM_EQ_TRADE_WINDOW
 		struct
 		{
-			DWORD	m_junk1;
-			DWORD	m_junk2;
-			DWORD	m_junk3;
+			UINT	m_junk1;
+			UINT	m_junk2;
+			UINT	m_junk3;
 			BYTE	m_fCheck;	// morez=Check box for trade window.
 		} m_itEqTradeWindow;
 
@@ -2148,7 +2148,7 @@ public:
 		struct		
 		{
 			ITEMID_TYPE m_ItemID;	// more1=The ITEMID_* for items)
-			DWORD	m_pile;			// more2=The max # of items to spawn per interval.  If this is 0, spawn up to the total amount
+			UINT	m_pile;			// more2=The max # of items to spawn per interval.  If this is 0, spawn up to the total amount
 			WORD	m_TimeLoMin;	// morex=Lo time in minutes.
 			WORD	m_TimeHiMin;	// morey=
 			BYTE	m_DistMax;		// morez=
@@ -2158,7 +2158,7 @@ public:
 		struct		
 		{
 			CREID_TYPE m_CharID;	// more1=CREID_*,  or (SPAWNTYPE_*,
-			DWORD	m_current;		// more2=The current spawned from here. m_amount = the max count.
+			UINT	m_current;		// more2=The current spawned from here. m_amount = the max count.
 			WORD	m_TimeLoMin;	// morex=Lo time in minutes.
 			WORD	m_TimeHiMin;	// morey=
 			BYTE	m_DistMax;		// morez=
@@ -2167,8 +2167,8 @@ public:
 		// ITEM_EXPLOSION
 		struct		
 		{
-			DWORD	m_junk1;
-			DWORD	m_junk2;
+			UINT	m_junk1;
+			UINT	m_junk2;
 			WORD	m_iDamage;		// morex = damage of the explosion
 			WORD	m_wFlags;		// morey = DAMAGE_TYPE = fire,magic,etc
 			BYTE	m_iDist;		// morez = distance range.
@@ -2178,13 +2178,13 @@ public:
 		// ITEM_MESSAGE
 		struct		
 		{
-			DWORD	m_TimeID;			// more1 = preconfigured book id from GRAYBOOK.SCP or Time date stamp for the book/message creation. (if |0x80000000)
+			UINT	m_TimeID;			// more1 = preconfigured book id from GRAYBOOK.SCP or Time date stamp for the book/message creation. (if |0x80000000)
 		} m_itBook;
 
 		// ITEM_EQ_NPC_SCRIPT
 		struct		
 		{
-			DWORD	m_TimeID;			// more1= preconfigured book id from GRAYBOOK.SCP or Time date stamp for the book/message creation. (if |0x80000000)
+			UINT	m_TimeID;			// more1= preconfigured book id from GRAYBOOK.SCP or Time date stamp for the book/message creation. (if |0x80000000)
 			WORD	m_page;				// more2l= what page of the script are we on ?
 			WORD	m_offset;			// more2h= offset on the page.
 			WORD	m_TimeStart;		// morex = When they are to start doing this. (local world time = hours * 100 + minutes )
@@ -2202,7 +2202,7 @@ public:
 		struct
 		{
 			POTION_TYPE m_Type;		// more1 = potion type
-			DWORD m_skillquality;	// more2 = 0-1000 Strength of the potion.
+			UINT m_skillquality;	// more2 = 0-1000 Strength of the potion.
 			WORD m_tick;			// morex = countdown to explode purple.
 		} m_itPotion;
 
@@ -2225,7 +2225,7 @@ public:
 		struct
 		{
 			int m_Strength;			// more1 = How many uses til a rune will wear out ?
-			DWORD m_junk2;			
+			UINT m_junk2;
 			CPointBase m_mark_p;	// morep = rune marked to a location or a teleport ?
 		} m_itRune;
 
@@ -2266,7 +2266,7 @@ public:
 		// ITEM_SIGN_GUMP
 		struct
 		{
-			DWORD m_junk1;
+			UINT m_junk1;
 			GUMP_TYPE m_gump;	// more2 = the gump id to come up. (GUMP_TYPE)
 		} m_itSign;
 
@@ -2282,7 +2282,7 @@ public:
 		struct
 		{
 			CREID_TYPE m_Type;	// more1 = What char template to use.
-			DWORD m_Plot1;		// more2 = Flags to set in the plot.
+			UINT m_Plot1;		// more2 = Flags to set in the plot.
 		} m_itAdvanceGate;
 
 		// ITEM_LOOM
@@ -2308,8 +2308,8 @@ public:
 		// ITEM_CANNON_MUZZLE
 		struct 
 		{
-			DWORD m_junk1;
-			DWORD m_Load;			// more2 = Is the cannon loaded ? Mask = 1=powder, 2=shot
+			UINT m_junk1;
+			UINT m_Load;			// more2 = Is the cannon loaded ? Mask = 1=powder, 2=shot
 		} m_itCannon;
 
 		// ITEM_DREAM_GATE
@@ -2321,28 +2321,28 @@ public:
 		// ITEM_EQ_MURDER_COUNT
 		struct 
 		{
-			DWORD m_Decay_Balance;	// more1 = For the murder flag, how much time is left ?
+			UINT m_Decay_Balance;	// more1 = For the murder flag, how much time is left ?
 		} m_itEqMurderCount;
 		
 		// ITEM_ITEM_STONE
 		struct 
 		{
 			ITEMID_TYPE m_ItemID;	// more1 = generate this item or template.
-			DWORD m_Plot1;			// more2 = Flags to set in the plot.
+			UINT m_Plot1;			// more2 = Flags to set in the plot.
 		} m_itItemStone;
 
 		// ITEM_EQ_STUCK
 		struct 
 		{
-			DWORD m_junk1;
-			DWORD m_junk2;
+			UINT m_junk1;
+			UINT m_junk2;
 			CPointBase m_p;	// morep = point we are standing on when stuck.
 		} m_itEqStuck;
 
 		// ITEM_WEB
 		struct 
 		{
-			DWORD m_Hits_Cur;	// more1 = how much damage the web can take.
+			UINT m_Hits_Cur;	// more1 = how much damage the web can take.
 		} m_itWeb;
 
 		// ITEM_TRAP
@@ -2369,7 +2369,7 @@ public:
 		struct 
 		{
 			ITEMID_TYPE m_SwitchID;	// more1 = the next state of this switch.
-			DWORD		m_junk2;
+			UINT		m_junk2;
 			WORD		m_fStep;	// morex = can we just step on this to activate ?
 			// uidLink = the item to use when this item is thrown or used.
 		} m_itSwitch;
@@ -2377,7 +2377,7 @@ public:
 		// ITEM_SOUND
 		struct
 		{
-			DWORD	m_Sound;	// more1 = SOUND_TYPE
+			UINT	m_Sound;	// more1 = SOUND_TYPE
 			int		m_Repeat;	// more2 = 
 		} m_itSound;
 
@@ -2555,7 +2555,7 @@ public:
 		return( m_type == type );
 	}
 	bool IsValidLockUID() const;
-	bool IsKeyLockFit( DWORD dwLockUID ) const
+	bool IsKeyLockFit(UINT dwLockUID ) const
 	{
 		DEBUG_CHECK( m_type == ITEM_KEY );
 		if (( m_itKey.m_lockUID & UID_MASK ) == UID_MASK )	// master key.
@@ -2684,17 +2684,17 @@ private:
 
 	bool	m_bBuyFixed;
 	bool	m_bSellFixed;
-	DWORD	m_buyprice;
-	DWORD	m_sellprice;
+	UINT	m_buyprice;
+	UINT	m_sellprice;
 
 public:
 	CItemVendable( ITEMID_TYPE id, CItemBase * pDef );
 	~CItemVendable();
 
-	void	SetBuyPrice(DWORD dwPrice = 0);
-	DWORD	GetBuyPrice() const;
-	void	SetSellPrice(DWORD dwPrice = 0);
-	DWORD	GetSellPrice() const;
+	void	SetBuyPrice(UINT dwPrice = 0);
+	UINT	GetBuyPrice() const;
+	void	SetSellPrice(UINT dwPrice = 0);
+	UINT	GetSellPrice() const;
 
 	WORD	GetQuality() const {return m_quality;}
 	void	SetQuality(WORD quality = 0)
@@ -2751,7 +2751,7 @@ public:
 	}
 
 	CItem * ContentFind( ITEMID_TYPE id, int iDecendLevels = 255 ) const;
-	CItem * ContentFindType( ITEM_TYPE iType, DWORD dwArg = 0, int iDecendLevels = 255 ) const;
+	CItem * ContentFindType( ITEM_TYPE iType, UINT dwArg = 0, int iDecendLevels = 255 ) const;
 	bool ContentFindKeyFor( CItem * pLocked ) const;
 	// bool IsItemInContainer( CItem * pItem ) const;
 
@@ -3194,7 +3194,7 @@ public:
 	void SetAbbrev( const TCHAR * pAbbrev ) { m_sAbbrev = pAbbrev; }
 
 	bool OnPromptResp( CClient * pClient, TARGMODE_TYPE TargMode, const TCHAR * pszText, CGString & sMsg );
-	bool OnGumpButton( CClient * pClient, STONEGUMP_TYPE type, DWORD * pCheckID, int iCheckQty, CGString * psText, WORD * piTextID, int iTextQty );
+	bool OnGumpButton( CClient * pClient, STONEGUMP_TYPE type, UINT* pCheckID, int iCheckQty, CGString * psText, WORD * piTextID, int iTextQty );
 	void Use_Item( CClient * pClient );
 };
 
@@ -3400,7 +3400,7 @@ public:
 	CGString m_sDesires;	// Desires that are typical for the char class. see also m_sNeed
 
 	BYTE  m_defense;	// base defense. can be modified by armor.
-	DWORD m_Anims;	// Bitmask of animations available for monsters. ANIM_TYPE
+	UINT m_Anims;	// Bitmask of animations available for monsters. ANIM_TYPE
 
 	short m_MaxFood;	// Derived from foodtype...this is the max amount of food we can eat.
 	short m_Str;	// Base Str for type. (in case of polymorph)
@@ -3545,8 +3545,8 @@ private:
 public:
 
 	// General plot type stuff. ??? Get rid of this in favor of m_Events
-	DWORD m_Plot1;	// script triggers the get item interaction events .
-	DWORD m_Plot2;	// non-triggers.
+	UINT m_Plot1;	// script triggers the get item interaction events .
+	UINT m_Plot2;	// non-triggers.
 
 	WORD m_Murders;		// Murder count.
 	BYTE m_SkillClass;	// What skill class group have we selected.
@@ -3659,7 +3659,7 @@ private:
 
 	// Plus_Luck	// bless luck or curse luck ?
 
-	DWORD m_StatFlag;		// Flags above
+	UINT m_StatFlag;		// Flags above
 
 #define SKILL_VARIANCE 100		// Difficulty modifier for determining success. 10.0 %
 	WORD m_Skill[SKILL_QTY];	// List of skills ( skill * 10 )
@@ -3722,9 +3722,9 @@ public:
 	{
 		struct
 		{
-			DWORD		m_Arg1;	// "ACTARG1"
-			DWORD		m_Arg2;	// "ACTARG2"
-			DWORD		m_Arg3;	// "ACTARG3"
+			UINT		m_Arg1;	// "ACTARG1"
+			UINT		m_Arg2;	// "ACTARG2"
+			UINT		m_Arg3;	// "ACTARG3"
 		} m_atUnk;
 
 		// SKILL_MAGERY
@@ -3760,7 +3760,7 @@ public:
 		// SKILL_MEDITATION
 		struct
 		{
-			DWORD m_junk1;
+			UINT m_junk1;
 			WORD m_Stroke_Count;		// For mining, smithing, tinkering, lumberjacking, etc. all requiring multi strokes.
 		} m_atTaming;
 
@@ -3818,19 +3818,19 @@ public:
 public:
 	// Status and attributes ------------------------------------
 	int IsWeird() const;
-	bool IsStat( DWORD dwStatFlag ) const
+	bool IsStat(UINT dwStatFlag ) const
 	{
 		return(( m_StatFlag & dwStatFlag) ? true : false );
 	}
-	void SetStat( DWORD dwStatFlag )
+	void SetStat(UINT dwStatFlag )
 	{
 		m_StatFlag |= dwStatFlag;
 	}
-	void ClearStat( DWORD dwStatFlag )
+	void ClearStat(UINT dwStatFlag )
 	{
 		m_StatFlag &= ~dwStatFlag;
 	}
-	void ModStat( DWORD dwStatFlag, bool fMod )
+	void ModStat(UINT dwStatFlag, bool fMod )
 	{
 		if ( fMod )
 			m_StatFlag |= dwStatFlag;
@@ -3957,7 +3957,7 @@ public:
 
 	bool IsSwimming() const;
 
-	bool MoveToRegionReTest( DWORD dwType )
+	bool MoveToRegionReTest(UINT dwType )
 	{
 		return( MoveToRegion( dynamic_cast <CRegionWorld *>( GetTopPoint().GetRegion( dwType )), false ));
 	}
@@ -4318,7 +4318,7 @@ public:
 	bool MakeCorpse( bool fFrontFall );
 	bool RaiseCorpse( CItemCorpse * pCorpse );
 	bool Death();
-	bool Reveal( DWORD dwFlags = ( STATF_Invisible | STATF_Hidden | STATF_Sleeping ));
+	bool Reveal(UINT dwFlags = ( STATF_Invisible | STATF_Hidden | STATF_Sleeping ));
 	void Jail( CTextConsole * pSrc, bool fSet );
 	void EatAnim( const TCHAR * pszName, int iQty );
 	void CallGuards();
@@ -4489,7 +4489,7 @@ class CQuest : public CGObListRec : public CScriptObj // NOT USED YET
 	// Quests are scripted things that run groups of NPC's and players.
 	CGString m_sName;	// List is sorted by name of the quest.
 	int m_iState;	// what is the state of the quest.
-	DWORD m_dwFlags;	// Arbitrary flags for the quest.
+	UINT m_dwFlags;	// Arbitrary flags for the quest.
 	// List of Players and NPC's involved in the quest. (and what there status is)
 
 public:
@@ -4771,7 +4771,7 @@ extern class CWorld : public CScriptObj	// the world. Stuff saved in *World.SCP 
 private:
 	// Clock stuff. how long have we been running ? all i care about.
 	time_t m_Clock_Time;		// the current relative tick time  (in seconds)
-	DWORD  m_Clock_PrevSys;		// System time of the last OnTick(). (CLOCKS_PER_SEC)
+	time_t  m_Clock_PrevSys;		// System time of the last OnTick(). (CLOCKS_PER_SEC)
 
 	// Special purpose timers.
 	time_t	m_Clock_Sector;		// next time to do sector stuff.
@@ -4841,35 +4841,35 @@ public:
 #define TRAMMEL_FULL_BRIGHTNESS 2 // light units LIGHT_BRIGHT
 #define FELUCCA_FULL_BRIGHTNESS 6 // light units LIGHT_BRIGHT
 	int GetMoonPhase( bool bMoonIndex = false ) const;
-	DWORD GetNextNewMoon (bool bMoonIndex) const;
+	UINT GetNextNewMoon (bool bMoonIndex) const;
 
-	DWORD GetGameWorldTime( DWORD basetime ) const;
-	DWORD GetGameWorldTime() const	// return game world minutes
+	UINT GetGameWorldTime(UINT basetime ) const;
+	UINT GetGameWorldTime() const	// return game world minutes
 	{
 		return( GetGameWorldTime( GetTime()));
 	}
 
 	// UID Managenent
 
-	DWORD GetUIDCount() const
+	UINT GetUIDCount() const
 	{
 		return( m_UIDs.GetCount());
 	}
 #define UID_PLACE_HOLDER ((CObjBase*)0xFFFFFFFF)
-	CObjBase * FindUID( DWORD dwIndex ) const
+	CObjBase * FindUID( UINT uiIndex ) const
 	{
-		if ( ! dwIndex || dwIndex >= GetUIDCount())
+		if ( ! uiIndex || uiIndex >= GetUIDCount())
 			return( NULL );
-		if ( m_UIDs[ dwIndex ] == UID_PLACE_HOLDER )	// unusable for now.
+		if ( m_UIDs[ uiIndex ] == UID_PLACE_HOLDER )	// unusable for now.
 			return( NULL );
-		return( m_UIDs[ dwIndex ] );
+		return( m_UIDs[ uiIndex ] );
 	}
-	void FreeUID( DWORD dwIndex )
+	void FreeUID(UINT uiIndex )
 	{
 		// Can't free up the UID til after the save !
-		m_UIDs[dwIndex] = ( IsSaving()) ? UID_PLACE_HOLDER : NULL;
+		m_UIDs[uiIndex] = ( IsSaving()) ? UID_PLACE_HOLDER : NULL;
 	}
-	DWORD AllocUID( DWORD dwIndex, CObjBase * pObj );
+	UINT AllocUID( UINT uiIndex, CObjBase * pObj );
 
 	// World Map stuff.
 
@@ -5074,7 +5074,7 @@ public:
 
 struct CRandGroupRec
 {
-	DWORD m_dwVal;
+	UINT m_uiVal;
 	int m_iWeight;	// relative random weight for this possible value.
 };
 
@@ -5112,9 +5112,9 @@ public:
 		}
 		return( i - 1);
 	}
-	DWORD GetMemberVal( int i ) const
+	UINT GetMemberVal( int i ) const
 	{
-		return( m_Members[i].m_dwVal );
+		return( m_Members[i].m_uiVal );
 	}
 };
 
@@ -5138,13 +5138,13 @@ public:
 	WORD m_SkillLevelMax[ SKILL_QTY ];
 
 	// Triggers that come with the skillclass 
-	DWORD m_dwPlotFlags;
+	UINT m_uiPlotFlags;
 	CFragmentArray m_Events;	// Action or motivation type indexes.
 
 private:
 	void Init()
 	{
-		m_dwPlotFlags = 0;
+		m_uiPlotFlags = 0;
 		for ( int i=0; i<COUNTOF(m_SkillLevelMax); i++ )
 		{
 			m_SkillLevelMax[i] = 1000;
@@ -5242,7 +5242,7 @@ private:
 	CGString m_sStatus;	// last returned status string.
 
 	// statistics
-	DWORD m_dwStat[ SERV_STAT_QTY ];
+	UINT m_uiStat[ SERV_STAT_QTY ];
 
 protected:
 	int m_iClientsAvg;	// peak per day of clients.
@@ -5268,31 +5268,31 @@ public:
 		return(m_sStatus);
 	}
 
-	DWORD StatGet( SERV_STAT_TYPE i ) const
+	UINT StatGet( SERV_STAT_TYPE i ) const
 	{
 		ASSERT( i>=0 && i<SERV_STAT_QTY );
-		return( m_dwStat[i] );
+		return( m_uiStat[i] );
 	}
 	void StatInc( SERV_STAT_TYPE i )
 	{
 		ASSERT( i>=0 && i<SERV_STAT_QTY );
-		m_dwStat[i]++;
+		m_uiStat[i]++;
 	}
 	void StatDec( SERV_STAT_TYPE i )
 	{
 		ASSERT( i>=0 && i<SERV_STAT_QTY );
-		DEBUG_CHECK( m_dwStat[i] );
-		m_dwStat[i]--;
+		DEBUG_CHECK( m_uiStat[i] );
+		m_uiStat[i]--;
 	}
 	void StatChange( SERV_STAT_TYPE i, int iChange )
 	{
 		ASSERT( i>=0 && i<SERV_STAT_QTY );
-		m_dwStat[i] += iChange;
+		m_uiStat[i] += iChange;
 	}
-	void SetStat( SERV_STAT_TYPE i, DWORD dwVal )
+	void SetStat( SERV_STAT_TYPE i, UINT uiVal )
 	{
 		ASSERT( i>=0 && i<SERV_STAT_QTY );
-		m_dwStat[i] = dwVal;
+		m_uiStat[i] = uiVal;
 	}
 
 	const TCHAR * GetName() const { return( m_sName ); }
@@ -5343,9 +5343,9 @@ public:
 class CThread	// basic multi tasking functionality.
 {
 protected:
-	DWORD m_hThread;
+	uintptr_t m_hThread;
 #ifdef _WIN32
-	DWORD m_ThreadID;
+	uintptr_t m_ThreadID;
 #endif
 protected:
 	void OnClose();
@@ -5368,7 +5368,7 @@ public:
 	{
 		return( m_hThread ? true : false );
 	}
-	bool TerminateThread( DWORD dwExitCode );
+	bool TerminateThread(uintptr_t dwExitCode );
 #ifdef _WIN32
 	void CreateThread( void ( _cdecl * pEntryProc )(void *));
 #else
@@ -5496,10 +5496,10 @@ public:
 	const TCHAR * GetDesc( PROFILE_TYPE id ) const;
 };
 
-struct CScriptIndexArray : public CGObSortArray< CScriptIndexLink *, DWORD >
+struct CScriptIndexArray : public CGObSortArray< CScriptIndexLink *, UINT >
 {
 	// Sorted array of links to scripts.
-	int CompareKey( DWORD id, CScriptIndexLink * pBase ) const
+	int CompareKey(UINT id, CScriptIndexLink * pBase ) const
 	{
 		ASSERT( pBase );
 		return( id - pBase->GetIndexID());

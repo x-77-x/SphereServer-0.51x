@@ -258,7 +258,7 @@ bool CItemMulti::MultiAddRegion()
 	*(static_cast<CGRect*>(&rect)) = pMulti->m_rect;
 	rect.OffsetRect( pt.m_x, pt.m_y );
 
-	DWORD dwFlags;
+	UINT dwFlags;
 	if ( m_type == ITEM_SHIP )
 	{
 		dwFlags = REGION_FLAG_SHIP;

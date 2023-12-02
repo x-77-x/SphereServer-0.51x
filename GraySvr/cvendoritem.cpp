@@ -39,7 +39,7 @@ void CItemVendable::DupeCopy( const CItem * pItem )
 	m_bSellFixed = pVendItem->m_bSellFixed;
 }
 
-void CItemVendable::SetBuyPrice(DWORD dwPrice)
+void CItemVendable::SetBuyPrice(UINT dwPrice)
 {
 	if ( dwPrice != 0 )
 	{
@@ -55,7 +55,7 @@ void CItemVendable::SetBuyPrice(DWORD dwPrice)
 	}
 }
 
-void CItemVendable::SetSellPrice(DWORD dwPrice)
+void CItemVendable::SetSellPrice(UINT dwPrice)
 {
 	if ( dwPrice != 0 )
 	{
@@ -75,7 +75,7 @@ void CItemVendable::Restock()
 {
 	if ( ! m_bBuyFixed )
 	{
-		DWORD dwRange = m_pDef->m_buyvaluemax - m_pDef->m_buyvaluemin;
+		UINT dwRange = m_pDef->m_buyvaluemax - m_pDef->m_buyvaluemin;
 		if ( dwRange <= 0 )
 			m_buyprice = m_pDef->m_buyvaluemin;
 		else
@@ -83,7 +83,7 @@ void CItemVendable::Restock()
 	}
 	if ( ! m_bSellFixed )
 	{
-		DWORD dwRange = m_pDef->m_sellvaluemax - m_pDef->m_sellvaluemin;
+		UINT dwRange = m_pDef->m_sellvaluemax - m_pDef->m_sellvaluemin;
 		if ( dwRange <= 0 )
 			m_sellprice = m_pDef->m_sellvaluemin;
 		else
@@ -150,7 +150,7 @@ void CItemVendable::r_Write(CScript &s)
 	return;
 }
 
-DWORD CItemVendable::GetBuyPrice() const
+UINT CItemVendable::GetBuyPrice() const
 {
 	if ( GetPlayerVendorPrice() )
 		return GetPlayerVendorPrice();
@@ -158,7 +158,7 @@ DWORD CItemVendable::GetBuyPrice() const
 		return m_buyprice;
 }
 
-DWORD CItemVendable::GetSellPrice() const
+UINT CItemVendable::GetSellPrice() const
 {
 	if ( GetPlayerVendorPrice() )
 		return GetPlayerVendorPrice();

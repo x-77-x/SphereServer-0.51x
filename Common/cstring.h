@@ -179,7 +179,7 @@ public:
 	{
 		return Format( "%d", iVal );
 	}
-	int FormatHex( DWORD dwVal )
+	int FormatHex(UINT dwVal )
 	{
 		return Format( "0%x", dwVal );
 	}

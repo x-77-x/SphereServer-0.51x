@@ -11,9 +11,9 @@ protected:
 	DECLARE_MEM_DYNAMIC;
 public:
 	// Translate the import UID's into my UID's
-	const DWORD m_dwSer;		// My Imported serial number
+	const UINT m_dwSer;		// My Imported serial number
 	CObjBase * m_pObj;	// world object corresponding.
-	DWORD m_dwContSer;	// My containers' serial number
+	UINT m_dwContSer;	// My containers' serial number
 	LAYER_TYPE m_layer;	// UOX does this diff than us.
 public:
 	bool IsTopLevel() const
@@ -21,7 +21,7 @@ public:
 		return( m_dwContSer == UID_UNUSED );
 	}
 
-	CImportSer( DWORD dwSer ) :
+	CImportSer(UINT dwSer ) :
 		m_dwSer( dwSer )
 	{
 		m_pObj = NULL;
@@ -344,7 +344,7 @@ bool CImportFile::ImportWSC( CScript & s, WORD wModeFlags )
 			if ( m_pCurSer != NULL )
 				return( false );
 
-			DWORD dwSerial = atoi( pArg );
+			UINT dwSerial = atoi( pArg );
 			if ( dwSerial == UID_UNUSED )
 			{
 				DEBUG_ERR(( "Import:Bad serial number\n" ));

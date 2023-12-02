@@ -23,7 +23,7 @@ int GetRandVal( int iqty )
 		return( 0 );
 	if ( iqty > RAND_MAX )
 	{
-		return( IMULDIV( rand(), (DWORD) iqty, RAND_MAX + 1 )) ;
+		return( IMULDIV( rand(), (UINT) iqty, RAND_MAX + 1 )) ;
 	}
 	return( rand() % iqty );
 }
@@ -95,7 +95,7 @@ int GW_GetSCurve( int iValDiff, int iVariance )
 	return( iChance );
 }
 
-DWORD ahextoi( const TCHAR * pszStr ) // Convert hex string to integer
+UINT ahextoi( const TCHAR * pszStr ) // Convert hex string to integer
 {
 	// Unfortunatly the library func cant handle the number FFFFFFFF
 	// TCHAR * sstop; return( strtol( s, &sstop, 16 ));
@@ -105,7 +105,7 @@ DWORD ahextoi( const TCHAR * pszStr ) // Convert hex string to integer
 
 	GETNONWHITESPACE( pszStr );
 
-	DWORD val = 0;
+	UINT val = 0;
 	while (true)
 	{
 		TCHAR ch = *pszStr;
@@ -317,7 +317,7 @@ int CExpression::GetSingle( const TCHAR * & pArgs, bool fHexDef )
 		}
 try_hex:
 		const TCHAR * pStart = pArgs;
-		DWORD val = 0;
+		UINT val = 0;
 		while ( true )
 		{
 			TCHAR ch = *pArgs;

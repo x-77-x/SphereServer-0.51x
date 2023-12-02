@@ -25,7 +25,7 @@
 //////////////////////////////////////////////////////////////////
 // -CGrayStaticsBlock
 
-void CGrayStaticsBlock::LoadStatics( DWORD ulBlockIndex )
+void CGrayStaticsBlock::LoadStatics(UINT ulBlockIndex )
 {
 	// long ulBlockIndex = (bx*UO_BLOCKS_Y + by);
 	// NOTE: What is index.m_wVal3 and index.m_wVal4 in VERFILE_STAIDX ?
