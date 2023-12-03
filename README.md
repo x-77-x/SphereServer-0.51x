@@ -72,7 +72,7 @@ OTHER STUFF...
 	
 <b>[ISSUE 10]</b><BR>
 -when you run from an npc with a bow, he shoots a LOT of arrow animations,  you get hit multiple times!
-
+one arrow per step, so when a npc runs at you, its like a machine gun
 
 <b>[ISSUE 11]</b><BR>
 -no shooting arrows through multis floors!
