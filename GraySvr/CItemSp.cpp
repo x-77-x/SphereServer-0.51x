@@ -213,7 +213,7 @@ bool CItemMulti::MultiAddRegion()
 {
 	// Add/move a region for the multi so we know when we are in it.
 
-	DEBUG_CHECK( m_type == ITEM_MULTI || m_type == ITEM_SHIP );
+	DEBUG_CHECK( m_type == ITEM_MULTI || m_type == ITEM_SHIP || this->m_pDef->m_type == ITEM_MULTI || this->m_pDef->m_type == ITEM_SHIP);
 	ASSERT( IsTopLevel());
 
 	CPointMap pt = GetTopPoint();
