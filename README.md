@@ -76,7 +76,8 @@ OTHER STUFF...
 
 <b>[ISSUE 11]</b><BR>
 -no shooting arrows through multis floors!
-example... put a npc on the roof of a tower, you can shoot him from the 1st floor
+example... put a npc on the roof of a tower, you can shoot him from the 1st floor,
+maybe check LOS for Z ?
 
 	
 <b>[ISSUE 12]</b><BR>
