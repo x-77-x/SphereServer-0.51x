@@ -5666,6 +5666,9 @@ public:
 	int  m_iMaxBaseSkill;		// Maximum value for base skills at char creation
 	int  m_iStamRunningPenalty;		// Weight penalty for running (+N% of max carry weight)
 	int  m_iStaminaLossAtWeight;	// %Weight at which characters begin to lose stamina
+	bool m_fAutoResurrect;     // allow instaress as an option in config file, false per default
+	int  m_iWhisperColor;	// default whisper color - pre-set to 0x03b1 - set to ZERO to allow players to select it from clients
+	bool m_fEnableChat;			//false per default, enables chat use in game
 
 private:
 	// Web status pages.

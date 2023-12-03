@@ -636,6 +636,66 @@ const TCHAR * CValStr::FindName( int iVal ) const
 
 //***************************************************************************
 
+//***************************************************************************
+// Checks string values
+int ChkStrn(char* s, const char* sym, DWORD len)
+{
+	unsigned int x = 0;
+	while (x < len) {
+		if (s[x] == 0x00) {
+			++x;
+			continue;
+		}
+		if (strchr(sym, s[x])) {
+			return -1;
+		}
+		++x;
+	}
+	return 0;
+}
+
+int ChkStr(char* s, const char* sym)
+{
+	if (!s)
+		return -1;
+	while (*s) {
+		if (strchr(sym, *s++))
+			return -1;
+	}
+	return 0;
+}
+
+// remove extra string spaces values, but also initial and ending if "trim == true"
+char* strip_extra_spaces(char* str, bool trim) 
+{
+	if (trim)
+	{
+		char* end;
+
+		// Trim leading space
+		while (isspace((unsigned char)*str)) str++;
+
+		if (*str == 0)  // All spaces?
+			return str;
+
+		// Trim trailing space
+		end = str + strlen(str) - 1;
+		while (end > str && isspace((unsigned char)*end)) end--;
+
+		// Write new null terminator character
+		end[1] = '\0';
+	}
+
+	int i, x;
+	for (i = x = 0; str[i]; ++i)
+		if (!isspace(str[i]) || (i > 0 && !isspace(str[i - 1])))
+			str[x++] = str[i];
+	str[x] = '\0';
+	
+	return str;
+}
+//***************************************************************************
+
 #if 0
 
 UINT PT_ahextou( LPCTSTR pszStr )

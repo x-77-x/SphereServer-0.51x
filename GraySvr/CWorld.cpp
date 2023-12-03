@@ -1020,7 +1020,6 @@ void CWorld::Speak( const CObjBaseTemplate * pSrc, const TCHAR * pText, COLOR_TY
 			break;
 		case TALKMODE_WHISPER:
 			iHearRange = 3;
-			color = COLOR_WHISPER;
 			break;
 		default:
 			iHearRange = UO_MAP_VIEW_SIZE;
@@ -1125,7 +1124,6 @@ void CWorld::SpeakUNICODE( const CObjBaseTemplate * pSrc, const NCHAR * pText, C
 			break;
 		case TALKMODE_WHISPER:
 			iHearRange = 3;
-			color = COLOR_WHISPER;
 			break;
 		default:
 			iHearRange = UO_MAP_VIEW_SIZE;

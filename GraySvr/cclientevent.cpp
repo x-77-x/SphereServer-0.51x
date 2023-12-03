@@ -121,7 +121,7 @@ void CClient::Event_Item_Dye( CObjUID uid ) // Rehue an item
 		SysMessage( "You can't reach it" );
 		return;
 	}
-	if ( GetTargMode() != TARGMODE_DYE )
+	if ( GetTargMode() != TARGMODE_DYE)
 	{
 		return;
 	}
@@ -131,7 +131,7 @@ void CClient::Event_Item_Dye( CObjUID uid ) // Rehue an item
 
 	if ( ! IsPriv( PRIV_GM ))
 	{
-		if ( pObj->IsChar())
+		if ( pObj->IsChar() || pObj->GetBaseID() != 0x0FAB || uid != m_Targ_UID)
 			return;
 		if ( color<COLOR_BLUE_LOW || color>COLOR_DYE_HIGH )
 			color = COLOR_DYE_HIGH;
@@ -169,6 +169,11 @@ void CClient::Event_Book_Title( CObjUID uid, const TCHAR * pszTitle, const TCHAR
 	}
 	if ( ! pBook->IsBookWritable())	// Not blank
 		return;
+
+	if (ChkStr((char*)&pszTitle[0], "\n\r") || ChkStr((char*)&pszAuthor[0], "\n\r"))
+	{
+		return;
+	}
 
 	pBook->SetName( pszTitle );
 	pBook->m_sAuthor = pszAuthor;
@@ -216,6 +221,9 @@ void CClient::Event_Book_Page( CObjUID uid ) // Book window
 		len += strcpylen( szTemp+len, m_bin.BookPage.m_page[0].m_text+len );
 		szTemp[len++] = '\t';
 	}
+
+	if (ChkStr((char*)&szTemp[0], "\n\r"))
+		return;
 
 	szTemp[--len] = '\0';
 	pText->SetPageText( iPage, szTemp );
@@ -942,15 +950,21 @@ void CClient::Event_VendorBuy( CObjUID uidVendor )
 	int i=0;
 	for ( ;i<nItems;i++)
 	{
+		if (m_bin.VendorBuy.items[i].m_amount < 1)
+		{
+			return;
+		}
+
 		CObjUID uid( m_bin.VendorBuy.items[i].m_UID );
 		CItemVendable * pItem = dynamic_cast <CItemVendable *> (uid.ItemFind());
-		if ( pItem == NULL ) 
+
+		if ( pItem == NULL )
 			continue;	// ignore it for now.
 
 		// Do cheat/sanity check on goods sold.
 		//int iPrice = pItem->GetVendorPrice( true );
 		long iPrice = pItem->GetBuyPrice();
-		if ( ! iPrice ||
+		if ( ! iPrice || 
 			pItem->GetTopLevelObj() != pVendor ||
 			m_bin.VendorBuy.items[i].m_amount > pItem->GetAmount())
 		{
@@ -1761,13 +1775,17 @@ void CClient::Event_Talk_Common( TCHAR * szText ) // PC speech
 
 void CClient::Event_Talk( const TCHAR * pszText, COLOR_TYPE color, TALKMODE_TYPE mode ) // PC speech
 {
-	if ( ! m_pAccount )
+	if ( ! m_pAccount || mode == TALKMODE_BROADCAST || color > 0x0BB6 )
 		return;
 	ASSERT( m_pChar );
 
+	if (mode == TALKMODE_WHISPER && g_Serv.m_iWhisperColor > 0)
+	{
+		color = g_Serv.m_iWhisperColor;
+	}
+
 	// store the language of choice.
 	m_pAccount->m_lang[0] = 0;	// default.
-
 	// Rip out the unprintables first.
 	TCHAR szText[MAX_TALK_BUFFER];
 	int len = GetBareText( szText, pszText, sizeof(szText));
@@ -1797,8 +1815,13 @@ void CClient::Event_TalkUNICODE()
 	// ENU = English
 	// FRC = French
 
-	if ( ! m_pAccount )
+	if (!m_pAccount || m_bin.TalkUNICODE.m_mode == TALKMODE_BROADCAST || m_bin.TalkUNICODE.m_color > 0x0BB6 || m_bin.TalkUNICODE.m_font > 0x09)
 		return;
+
+	if (m_bin.TalkUNICODE.m_mode == TALKMODE_WHISPER && g_Serv.m_iWhisperColor > 0)
+	{
+		m_bin.TalkUNICODE.m_color = g_Serv.m_iWhisperColor;
+	}
 
 	TCHAR szText[MAX_TALK_BUFFER];
 	int iLen = CvtNUNICODEToSystem( szText, m_bin.TalkUNICODE.m_utext, sizeof( szText ));
@@ -1833,7 +1856,7 @@ void CClient::Event_TalkUNICODE()
 
 bool CClient::Event_DeathOption( BYTE mode )
 {
-	if ( m_pChar == NULL ) 
+	if ( m_pChar == NULL || (mode == 1 && !g_Serv.m_fAutoResurrect) )
 		return false;
 	if ( mode )
 	{
@@ -1893,6 +1916,9 @@ void CClient::Event_SetName( CObjUID uid )
 		return;
 
 	if ( g_Serv.IsObscene( m_bin.CharName.m_name ))
+		return;
+
+	if (ChkStr((char*)&pChar[0], "\n\r[]@\\^£$%&=#§*<>|1234567890,.-;:_/\"!?()°+ηςΰωθιμ"))
 		return;
 
 	pChar->SetName( m_bin.CharName.m_name );
@@ -3127,12 +3153,14 @@ bool CClient::xDispatchMsg()
 		break;
 
 	case XCMD_ChatText:	// ChatText
+		if (!g_Serv.m_fEnableChat) return(false);
 		if ( ! xCheckSize(3)) return(false);
 		if ( ! xCheckSize( m_bin.ChatText.m_len )) return(false);
 		SetPrivFlags( PRIV_T2A );
 		Event_ChatText( m_bin.ChatText.m_lang, m_bin.ChatText.m_utext, m_bin.ChatText.m_len );
 		break;
 	case XCMD_Chat: // Chat
+		if (!g_Serv.m_fEnableChat) return(false);
 		if ( ! xCheckSize( sizeof( m_bin.Chat))) return(false);
 		SetPrivFlags( PRIV_T2A );
 		Event_ChatButton(m_bin.Chat.m_uname);

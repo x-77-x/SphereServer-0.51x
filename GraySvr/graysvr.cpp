@@ -227,7 +227,7 @@ void Assert_CheckFail( const TCHAR * pExp, const TCHAR *pFile, unsigned uLine )
 	// These get left in in relesae code .
 	g_Log.Event( LOGL_CRIT, "Assert:'%s' file '%s', line %d\n", pExp, pFile, uLine );
 	// if ( g_Serv.m_fSecure )	{}
-	//throw( CGrayError( LOGL_CRIT, 0, pExp ));
+	throw( CGrayError( LOGL_CRIT, 0, pExp ));
 }
 #endif // VISUAL_SPHERE
 
