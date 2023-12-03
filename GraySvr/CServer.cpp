@@ -980,8 +980,10 @@ CServer::CServer() : CServRef( GRAY_TITLE, SOCKET_LOCAL_ADDRESS )
 	m_iMaxBaseSkill = 250;
 	m_iStamRunningPenalty = 50;
 	m_iStaminaLossAtWeight = 100;
-
 	m_ClientVersion.SetClientVersion( GRAY_CLIENT_VER );
+	m_fAutoResurrect = false;
+	m_iWhisperColor = 0x03b1;
+	m_fEnableChat = false;
 }
 
 CServer::~CServer()
@@ -1282,7 +1284,7 @@ bool CServer::OnServCmd( TCHAR * pszCmd, TCHAR * pszArgs, CTextConsole * pSrc )
 		"RESTORE",
 		"SAVE",
 		"SERVLIST",
-		"UNBLOCKIP",
+		"UNBLOCKIP"
 	};
 
 	switch ( FindTableSorted( pszCmd, szCmds, COUNTOF(szCmds)))
@@ -1373,7 +1375,7 @@ bool CServer::OnServCmd( TCHAR * pszCmd, TCHAR * pszArgs, CTextConsole * pSrc )
 		}
 		break;
 #if 0 // def _DEBUG
-	case 8: // "GENOCIDE"
+	case 9: // "GENOCIDE"
 		// Loop thru the whole world and kill all thse creatures.
 		if ( pszArgs[0] )
 		{
@@ -1551,6 +1553,7 @@ enum SC_TYPE
 	SC_ACCTFILES,			// m_sAcctBaseDir
 	SC_ARRIVEDEPARTMSG, 
 	SC_AUTONEWBIEKEYS,		// m_fAutoNewbieKeys
+	SC_AUTORESURRECT,
 	SC_BACKUPLEVELS,				// m_iSaveBackupLevels
 	SC_BANKMAXITEMS,
 	SC_BANKMAXWEIGHT,
@@ -1567,6 +1570,7 @@ enum SC_TYPE
 	SC_DEBUGFLAGS,
 	SC_DECAYTIMER,
 	SC_DUNGEONLIGHT,
+	SC_ENABLECHAT,
 	SC_EQUIPPEDCAST,				// m_fEquippedCast
 	SC_FILES,	//
 	SC_FLIPDROPPEDITEMS,			// m_fFlipDroppedItems
@@ -1623,17 +1627,20 @@ enum SC_TYPE
 	SC_STATCAP,					// m_iMaxSumOfStats
 	SC_VENDORMAXSELL,			// m_iVendorMaxSell
 	SC_VERBOSE,
+	SC_WHISPERCOLOR,
 	SC_WOPPLAYER,
 	SC_WOPSTAFF,
 	SC_WORLDSAVE,
-	SC_QTY,
+	
+	SC_QTY
 };
 
 const TCHAR * CServer::sm_KeyTable[SC_QTY] =
 {
 	"ACCTFILES",			// m_sAcctBaseDir
-	"ARRIVEDEPARTMSG", 
+	"ARRIVEDEPARTMSG",
 	"AUTONEWBIEKEYS",		// m_fAutoNewbieKeys
+	"AUTORESURRECT",
 	"BACKUPLEVELS",				// m_iSaveBackupLevels
 	"BANKMAXITEMS",
 	"BANKMAXWEIGHT",
@@ -1650,6 +1657,7 @@ const TCHAR * CServer::sm_KeyTable[SC_QTY] =
 	"DEBUGFLAGS",
 	"DECAYTIMER",
 	"DUNGEONLIGHT",
+	"ENABLECHAT",
 	"EQUIPPEDCAST",				// m_fEquippedCast
 	"FILES",	//
 	"FLIPDROPPEDITEMS",			// m_fFlipDroppedItems
@@ -1706,6 +1714,7 @@ const TCHAR * CServer::sm_KeyTable[SC_QTY] =
 	"STATCAP",					// m_iMaxSumOfStats
 	"VENDORMAXSELL",			// m_iVendorMaxSell
 	"VERBOSE",
+	"WHISPERCOLOR",
 	"WOPPLAYER",
 	"WOPSTAFF",
 	"WORLDSAVE",
@@ -1965,7 +1974,15 @@ do_mulfiles:
 	case SC_WORLDSAVE: // Put save files here.
 		m_sWorldBaseDir = GetMergedFileName( s.GetArgStr(), "" );
 		break;
-
+	case SC_AUTORESURRECT:
+		m_fAutoResurrect = s.GetArgVal();
+		break;
+	case SC_WHISPERCOLOR:
+		m_iWhisperColor = s.GetArgVal();
+		break;
+	case SC_ENABLECHAT:
+		m_fEnableChat = s.GetArgVal();
+		break;
 	default:
 		if ( s.IsKeyHead( "MULFILE", 7 ))
 		{
@@ -2290,6 +2307,16 @@ do_mulfiles:
 	case SC_WORLDSAVE:	// Put save files here.
 		sVal = m_sWorldBaseDir;
 		break;
+	case SC_AUTORESURRECT:
+		sVal.FormatVal(m_fAutoResurrect);
+		break;
+	case SC_WHISPERCOLOR:
+		sVal.FormatVal(m_iWhisperColor);
+		break;
+	case SC_ENABLECHAT:
+		sVal.FormatVal(m_fEnableChat);
+		break;
+
 	default:
 		return( CServRef::r_WriteVal( pKey, sVal, pSrc ));
 	}
@@ -2631,12 +2658,18 @@ void CServer::PrintStr( const TCHAR * pStr ) const
 
 int CServer::PrintPercent( long iCount, long iTotal )
 {
+	static int prev = 100;
 	// These vals can get very large. so use MulDiv to prevent overflow. (not IMULDIV)
 	DEBUG_CHECK( iCount >= 0 );
 	DEBUG_CHECK( iTotal >= 0 );
 	if ( iTotal <= 0 )
 		return( 100 );
     int iPercent = MulDiv( iCount, 100, iTotal );
+	if (prev == iPercent)//avoid updating if the value is the same as before, updating it too much will slow down console output and also the loading
+	{
+		return iPercent;
+	}
+	prev = iPercent;
 	CGString sProgress;
 	int len = sProgress.Format( "%d%%  ", iPercent );
 	PrintStr( sProgress );
@@ -2994,7 +3027,7 @@ bool CServer::SocketsInit() // Initialize sockets
 			}
 			// h_addrtype == 2
 			// h_length = 4
-			//g_Log.Event(LOGM_INIT, "Monitoring IP '127.0.0.1'.\n");
+			g_Log.Event(LOGM_INIT, "Monitoring IP '127.0.0.1'.\n");
 			for ( int i=0; pHost->h_addr_list[i] != NULL; i++ )
 			{
 				struct in_addr ip;

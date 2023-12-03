@@ -444,8 +444,6 @@ enum COLOR_CODE
 	COLOR_TRANSLUCENT	= 0x4fff, // almost invis
 
 	COLOR_UNDERWEAR		= 0x8000,	// Only can be used on humans.
-
-	COLOR_WHISPER		= 0x03b1,
 };
 
 #define SOUND_QTY	0x300

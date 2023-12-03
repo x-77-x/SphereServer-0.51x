@@ -2595,6 +2595,8 @@ void CClient::addGumpInputBox( TARGMODE_TYPE id, BYTE parent, BYTE button,
 
 void CClient::addEnableChatButton()
 {
+	if (!g_Serv.m_fEnableChat) return;
+
 	CCommand cmd;
 	cmd.ChatEnable.m_Cmd = XCMD_ChatEnable;
 	cmd.ChatEnable.m_enable = 0x01;
@@ -2607,6 +2609,8 @@ void CClient::addEnableChatButton()
 
 void CClient::addChatSystemMessage( CHATMSG_TYPE iType, const TCHAR * pszName1, const TCHAR * pszName2, const char * pszLang)
 {
+	if (!g_Serv.m_fEnableChat)
+		return;
 	CCommand cmd;
 	cmd.ChatReq.m_Cmd = XCMD_ChatReq;
 	cmd.ChatReq.m_subcmd = iType;

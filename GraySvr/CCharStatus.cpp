@@ -309,6 +309,12 @@ bool CChar::CanSee( const CObjBaseTemplate * pObj ) const
 			if ( pItem->IsAttr( ATTR_INVIS ))
 				return( false );
 		}
+		
+		if (m_pPlayer && pItem->GetTopLevelObj() == this)
+		{
+			return this->CanTouch((CObjBase*)pObj);
+		}
+
 		CObjBase * pObjCont = pItem->GetContainer();
 		if ( pObjCont != NULL )
 		{
@@ -318,8 +324,10 @@ bool CChar::CanSee( const CObjBaseTemplate * pObj ) const
 	else
 	{
 		const CChar * pChar = STATIC_CAST <const CChar*>(pObj);
-		if ( this == pChar )
-			return( true );
+		if (this == pChar)
+		{
+			return(true);
+		}
 		ASSERT(pChar);
 		if ( pChar->IsStat(STATF_DEAD) && m_pNPC )
 		{
@@ -450,14 +458,9 @@ bool CChar::CanTouch( const CObjBase * pObj ) const
 		if ( pItem == NULL )
 			break;
 
-		// What is this inside of ?
-		CObjBase * pObjCont = pItem->GetContainer();
-		if ( pObjCont == NULL ) 
-			break;	// reached top level.
-		pObj = pObjCont;
 		const CItemContainer* pContItem = dynamic_cast <const CItemContainer*>(pObj);
 		if ( pContItem == NULL )
-			break;
+			goto get_container;
 
 		if ( ! pContItem->IsSearchable())	// bank box etc.
 		{
@@ -487,6 +490,13 @@ bool CChar::CanTouch( const CObjBase * pObj ) const
 			pObj = pChar;
 			break;
 		}
+
+	get_container:
+		// What is this inside of ?
+		CObjBase* pObjCont = pItem->GetContainer();
+		if (pObjCont == NULL)
+			break;	// reached top level.
+		pObj = pObjCont;
 	}
 
 	// We now have the top level object.

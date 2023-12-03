@@ -382,6 +382,9 @@ failout:
 		return CObjBaseTemplate::SetName( s.GetKey());
 	}
 
+	//name must not contain any unwanted spaces
+	pszName = strip_extra_spaces((char*)&pszName[0]);
+
 	// NOTE: Name must be <= MAX_NAME_SIZE
 	TCHAR szTmp[ MAX_NAME_SIZE + 1 ];
 	int len = strlen( pszName );
