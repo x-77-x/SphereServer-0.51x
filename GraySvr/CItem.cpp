@@ -1600,11 +1600,13 @@ bool CItem::SetDispID( ITEMID_TYPE id )
 	if ( CItemBase::IsValidDispID(id))
 	{
 		m_id = id;
+		Update();
 	}
 	else
 	{
 		m_id = m_pDef->GetDispID();
 	}
+	
 	return( true );
 }
 
