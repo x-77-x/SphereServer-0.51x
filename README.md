@@ -178,6 +178,10 @@ SET YELLDISTANCE IN SPHERE.INI ???
 <b>[ISSUE 25]</b><BR>
 -multi and/or custom maps?
 
+<b>[ISSUE 26]</b><BR>
+-animal taming... even with 100.0 skill animals with high INT are almost impossible to tame (nightmares ect...)
+maybe decrease INT check by 50% ??
+
   
   SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add those features
   and add a few new things and tidy up the 0.51a source for those who still have old server files...
