@@ -1911,8 +1911,16 @@ void CClient::addCharStatWindow( CObjUID uid ) // Opens the status window
 	strncpy( cmd.Status.m_name, pChar->GetName(), sizeof( cmd.Status.m_name ));
 	cmd.Status.m_name[ sizeof( cmd.Status.m_name )-1 ] = '\0';
 
-	cmd.Status.m_health = pChar->m_StatHealth;
-	cmd.Status.m_maxhealth = pChar->Stat_Get(STAT_STR);
+	if (pChar == m_pChar)
+	{
+		cmd.Status.m_health = pChar->m_StatHealth;
+		cmd.Status.m_maxhealth = pChar->Stat_Get(STAT_STR);
+	}
+	else
+	{
+		cmd.Status.m_health = pChar->GetHealthPercent();
+		cmd.Status.m_maxhealth = 100;
+	}
 
 	// renamable ?
 	if ( m_pChar != pChar &&	// can't rename self. it looks weird.
