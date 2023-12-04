@@ -2758,14 +2758,16 @@ void CChar::UpdateStats( STAT_TYPE type, int iChange, int iLimit )
 	cmd.StatChng.m_Cmd = XCMD_StatChngStr + type - STAT_STR;
 	cmd.StatChng.m_UID = GetUID();
 	cmd.StatChng.m_max = Stat_Get(type);
-	cmd.StatChng.m_val = m_StatVal[type].m_val;
 
-	if ( type == STAT_STR )	// everyone sees my health
+	if (type == STAT_STR)	// everyone sees my health with percent value
 	{
-		UpdateCanSee( &cmd, sizeof(cmd.StatChng), m_pClient );
+		//players shouldn't know the exact hitpoints other players have, but only the integer with percentage of total hits (can go over 100%)
+		cmd.StatChng.m_val = MulDiv(m_StatVal[type].m_val, 100, Stat_Get(type));
+		UpdateCanSee(&cmd, sizeof(cmd.StatChng), m_pClient);
 	}
 	if ( IsClient())
 	{
+		cmd.StatChng.m_val = m_StatVal[type].m_val;
 		m_pClient->xSendPkt( &cmd, sizeof(cmd.StatChng));
 	}
 }
@@ -4232,9 +4234,12 @@ bool CChar::Death()
 	if ( OnTrigger( CTRIG_Death, this ))
 		return( true );
 
-	if ( IsClient())	// Prevents crashing ?
+	if (IsClient())	// Prevents crashing ?
 	{
 		GetClient()->addPause();
+
+		//we MUST CANCEL ALL TRADES to avoid unwanted effects!
+		CancelAllTrades();
 	}
 
 	// I am dead and we need to give credit for the kill to my attacker(s).

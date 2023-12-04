@@ -943,6 +943,21 @@ void CClient::Event_VendorBuy( CObjUID uidVendor )
 		return;
 	}
 
+	CItem* pItemCont = m_pChar->GetContentHead();
+	for (; pItemCont != NULL; pItemCont = pItemCont->GetNext())
+	{
+		if (pItemCont->m_type == ITEM_EQ_TRADE_WINDOW)
+		{
+			CItem* pItemPartner = pItemCont->m_uidLink.ItemFind(); // counterpart trade window.
+			if (pItemPartner == NULL)
+			{
+				// found it - don't do anything, since this could cause a money bug
+				SysMessage("You can't buy items while doing a trade with another player!");
+				return;
+			}
+		}
+	}
+
 	// Calculate the total cost of goods.
 	int costtotal=0;
 	bool fSoldout = false;
