@@ -1629,7 +1629,7 @@ bool CClient::Cmd_Skill_Tracking( int track_sel, bool fExec )
 
 			NPCBRAIN_TYPE basic_type = pChar->GetCreatureType();
 			if (( track_type == basic_type ) ||
-				( track_type == NPCBRAIN_NONE && basic_type == NPCBRAIN_HUMAN ) ||
+				( track_type == NPCBRAIN_NONE && pChar->IsClient() ) ||
 				( track_type == NPCBRAIN_QTY ))
 			{
 				// Can't track polymorphed players this way.
