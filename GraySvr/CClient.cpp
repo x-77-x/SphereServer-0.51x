@@ -167,6 +167,11 @@ void CClient::SysMessage( const TCHAR * pMsg ) const // System message (In lower
 	}
 }
 
+void CClient::ColorSysMessage(const TCHAR* pMsg, COLOR_TYPE color, FONT_TYPE font) const // System message (In lower left corner) custom COLORED and custom FONT
+{
+	((CClient*)this)->addBark(pMsg, NULL, color, TALKMODE_SYSTEM, font);
+}
+
 int CClient::Send( const void * pData, int len )
 {
 	// overload these virtuals for stats purposes.
@@ -1203,8 +1208,42 @@ do_resend:
 	case CV_SYNC:
 		goto do_resend;
 	case CV_SYSMESSAGE:
-		SysMessage( s.GetArgStr());
+	{
+		char* cchar = s.GetArgStr();
+		if (cchar[0] == '#')
+		{
+			COLOR_TYPE color = 0xFFFF;
+			FONT_TYPE font = FONT_QTY;
+			for (int i = 0, c = 1; cchar[i]; ++i)
+			{
+				if (cchar[i] == ',')
+				{
+					if (i == c)
+						break;
+					cchar[i] = '\0';
+					if (c == 1)
+					{
+						color = ahextoi(&cchar[c]);
+						c = i + 1;
+					}
+					else
+					{
+						font = (FONT_TYPE)ahextoi(&cchar[c]);
+						cchar = &cchar[i + 1];
+						break;
+					}
+				}
+			}
+			if (font < FONT_QTY && color <= COLOR_QTY)
+			{
+				ColorSysMessage(cchar, color, font);// , color, font);
+				break;
+			}
+			//if we failed to run this, go directly to print message, with what isn't needed removed
+		}
+		SysMessage(cchar);
 		break;
+	}
 	case CV_TELE:
 		return Cmd_Skill_Magery( SPELL_Teleport, dynamic_cast <CObjBase *>(pSrc));
 	case CV_TILE:

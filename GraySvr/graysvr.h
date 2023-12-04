@@ -1529,6 +1529,7 @@ public:
 	}
 
 	void SysMessage( const TCHAR * pMsg ) const; // System message (In lower left corner)
+	void ColorSysMessage(const TCHAR* pMsg, COLOR_TYPE color, FONT_TYPE font) const;
 	bool CanSee( const CObjBaseTemplate * pObj ) const;
 	bool Gump_Setup( TARGMODE_TYPE targmode, CObjBase * pObj );
 	bool UseInterWorldGate( const CItem * pItem );
@@ -4320,6 +4321,7 @@ public:
 	bool Death();
 	bool Reveal(UINT dwFlags = ( STATF_Invisible | STATF_Hidden | STATF_Sleeping ));
 	void Jail( CTextConsole * pSrc, bool fSet );
+	COLOR_TYPE GetNotoColor(const CChar* pChar, bool fIncog) const;
 	void EatAnim( const TCHAR * pszName, int iQty );
 	void CallGuards();
 	void Emote( const TCHAR * pText, CClient * pClientExclude = NULL, bool fPossessive = false );

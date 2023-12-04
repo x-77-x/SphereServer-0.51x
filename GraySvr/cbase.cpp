@@ -938,21 +938,80 @@ do_movetop:
 		Delete();
 		return( true );
 	case OV_SAY:
-do_speak:
-		Speak( s.GetArgStr());
+	do_speak:
+	{
+		char* cchar = s.GetArgStr();
+		if (cchar[0] == '#')
+		{
+			COLOR_TYPE color = 0xFFFF;
+			FONT_TYPE font = FONT_QTY;
+			for (int i = 0, c = 1; cchar[i]; ++i)
+			{
+				if (cchar[i] == ',')
+				{
+					if (i == c)
+						break;
+					cchar[i] = '\0';
+					if (c == 1)
+					{
+						color = ahextoi(&cchar[c]);
+						c = i + 1;
+					}
+					else
+					{
+						font = (FONT_TYPE)ahextoi(&cchar[c]);
+						cchar = &cchar[i + 1];
+						break;
+					}
+				}
+			}
+			if (font < FONT_QTY && color <= COLOR_QTY)
+			{
+				Speak(cchar, color, TALKMODE_SAY, font);// , color, font);
+				break;
+			}
+		}
+		Speak(cchar);
 		break;
+	}
 	case OV_SAYU:
-do_speaku:
+	do_speaku:
+	{
+		char* cchar = s.GetArgStr();
+		if (cchar[0] == '#')
+		{
+			COLOR_TYPE color = 0xFFFF;
+			FONT_TYPE font = FONT_QTY;
+			for (int i = 0, c = 1; cchar[i]; ++i)
+			{
+				if (cchar[i] == ',')
+				{
+					if (i == c)
+						break;
+					cchar[i] = '\0';
+					if (c == 1)
+					{
+						color = ahextoi(&cchar[c]);
+						c = i + 1;
+					}
+					else
+					{
+						font = (FONT_TYPE)ahextoi(&cchar[c]);
+						cchar = &cchar[i + 1];
+						break;
+					}
+				}
+			}
+			if (font < FONT_QTY && color <= COLOR_QTY)
+			{
+				SpeakUTF8(cchar, color, TALKMODE_SAY, font);// , color, font);
+				break;
+			}
+		}
 		// Speak in unicode from the UTF8 system format.
-		if ( s.GetArgStr()[3] == ',' )
-		{
-			SpeakUTF8( s.GetArgStr()+4, COLOR_TEXT_DEF, TALKMODE_SAY, FONT_NORMAL, s.GetArgStr());
-		}
-		else
-		{
-			SpeakUTF8( s.GetArgStr());
-		}
+		SpeakUTF8(cchar, COLOR_TEXT_DEF, TALKMODE_SAY, FONT_NORMAL);
 		break;
+	}
 	case OV_SFX:
 do_sound:
 		{

@@ -2007,10 +2007,10 @@ bool CChar::HitTry()
 		if ( iRet == 2 )	// probably too far away
 			return( true );
 
+		// Get experience for it. Even if we miss...
+		Skill_Experience(sk, m_Act_Difficulty);
 		if ( iRet )	// Took my swing
 		{
-			// Get experience for it.
-			Skill_Experience( sk, m_Act_Difficulty );
 			// Assume I want to continue hitting
 			// Swing again. (start swing delay)
 			Skill_Start( GetWeaponSkill());
@@ -2165,7 +2165,7 @@ int CChar::Hit( CChar * pCharTarg )
 	if ( GetActiveSkill() == SKILL_ARCHERY )
 	{
 		// There's a chance that the arrow will stick in the target
-		if ( !GetRandVal(4))
+		if ( !GetRandVal(3))
 		{
 			CItem * pAmmo = CItem::CreateBase( AmmoID );
 			pCharTarg->ItemBounce( pAmmo );

@@ -2032,6 +2032,20 @@ void CChar::Jail( CTextConsole * pSrc, bool fSet )
 	}
 }
 
+COLOR_TYPE CChar::GetNotoColor(const CChar* pChar, bool fIncog) const
+{
+	switch (pChar->GetNotoFlag(this, fIncog))
+	{
+		case NOTO_GOOD:			return 0x0063;	// Blue
+		case NOTO_GUILD_SAME:	return 0x0044;	// Green (same guild)
+		case NOTO_NEUTRAL:		return 0x03b2;	// Grey 1 (someone that can be attacked)
+		case NOTO_CRIMINAL:		return 0x03b2;	// Grey 2 (criminal)
+		case NOTO_GUILD_WAR:	return 0x002b;	// Orange (enemy guild)
+		case NOTO_EVIL:			return 0x0026;	// Red
+		default: return COLOR_TEXT_DEF;			// ?Grey
+	}
+}
+
 enum CV_TYPE
 {
 	CV_ALLSKILLS,

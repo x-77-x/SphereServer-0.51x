@@ -369,7 +369,7 @@ public:
 	virtual const TCHAR * GetName() const = 0;	// ( every object must have at least a type name )
 
 	virtual CChar * GetChar() const;	// are we also a Cchar ? dynamic_cast ?
-	virtual void SysMessage( const TCHAR * pszMessage ) const = 0;	// Feed back message.
+	virtual void SysMessage( const TCHAR * pszMessage ) const=0;	// Feed back message.
 
 	void VSysMessage( const TCHAR * pszFormat, va_list args ) const
 	{

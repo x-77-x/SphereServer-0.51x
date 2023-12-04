@@ -33,8 +33,10 @@ so
 
 <b>[ISSUE 03]</b><BR>
 -COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
-SRC.SYSMESSAGE #0033,3, You have gained a reward!
--COLORED SPEECH?! SRC.SAY #0033,3, I talk in color!
+SRC.SYSMESSAGE #0033,3,You have gained a reward!
+-COLORED SPEECH?! SRC.SAY #0033,3,I talk in color!
+<BR><b>[ DONE! ]</b> 
+
 	
 ![alt text](http://dragonsoftime.com/junk/coloredsysmessage.png)
 

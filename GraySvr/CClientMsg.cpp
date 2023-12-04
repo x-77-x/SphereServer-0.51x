@@ -1069,7 +1069,8 @@ void CClient::addItemName( const CItem * pItem )
 		CChar * pCharCorpse = pCorpseItem->m_uidLink.CharFind();
 		if ( pCharCorpse )
 		{
-			switch ( pCharCorpse->GetNotoFlag( m_pChar, true ))
+			color = pCharCorpse->GetNotoColor(m_pChar, true);
+			/*switch (pCharCorpse->GetNotoFlag(m_pChar, true))
 			{
 			case NOTO_GOOD:			color = 0x0063;	break;	// Blue
 			case NOTO_GUILD_SAME:	color = 0x0044;	break;	// Green (same guild)
@@ -1078,7 +1079,7 @@ void CClient::addItemName( const CItem * pItem )
 			case NOTO_GUILD_WAR:	color = 0x002b;	break;	// Orange (enemy guild)
 			case NOTO_EVIL:			color = 0x0026;	break;	// Red
 			default: color = COLOR_TEXT_DEF;	break;	// ?Grey
-			}
+			}*/
 		}
 	}
 
@@ -1124,8 +1125,9 @@ void CClient::addCharName( const CChar * pChar ) // Singleclick text for a chara
 	// Karma color codes ?
 	ASSERT( pChar );
 
-	WORD color;
-	switch ( pChar->GetNotoFlag( m_pChar, true ))
+	WORD color = pChar->GetNotoColor(m_pChar, true);
+
+	/*switch (pChar->GetNotoFlag(m_pChar, true))
 	{
 	case NOTO_GOOD:			color = 0x0063;	break;	// Blue
 	case NOTO_GUILD_SAME:	color = 0x0044;	break;	// Green (same guild)
@@ -1134,7 +1136,7 @@ void CClient::addCharName( const CChar * pChar ) // Singleclick text for a chara
 	case NOTO_GUILD_WAR:	color = 0x002b;	break;	// Orange (enemy guild)
 	case NOTO_EVIL:			color = 0x0026;	break;	// Red
 	default: color = COLOR_TEXT_DEF;	break;	// ?Grey
-	}
+	}*/
 
 	TCHAR szTemp[ MAX_SCRIPT_LINE_LEN ];
 
