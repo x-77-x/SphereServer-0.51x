@@ -6,7 +6,7 @@ SPHERESERVER 0.51x  WISHLIST  (3/17/21)
 <b>[ISSUE 01]</b><BR>
 -HITPOINTS - on NPCS, there needs to be a seperation between STR and hitpoints, 
 i want npc characters with 200STR AND 1000hp.
-by default the hitpoints will drain until they are equal with STR. so add...
+by default the hitpoints will drain until they are equal with STR. so maybe add...
 MAXHITS=1000
 MAXSTAM=1000
 MAXMANA=1000
@@ -32,11 +32,10 @@ so
 ![alt text](http://dragonsoftime.com/junk/taskbar.png)
 
 <b>[ISSUE 03]</b><BR>
+<BR><b>[ DONE! ]</b> 
 -COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
 SRC.SYSMESSAGE #0033,3,You have gained a reward!
--COLORED SPEECH?! SRC.SAY #0033,3,I talk in color!
-<BR><b>[ DONE! ]</b> 
-
+-COLORED SPEECH?! SRC.SAY #0033,3,I talk in color! (like Lil Sphere)
 	
 ![alt text](http://dragonsoftime.com/junk/coloredsysmessage.png)
 
@@ -73,12 +72,13 @@ after 17 years i just realized you can dye a ship deed and the multi will be aff
 OTHER STUFF...
 	
 <b>[ISSUE 10]</b><BR>
--when you run from an npc with a bow, he shoots a shitton of arrow animations,  you get hit multiple times
-
+-when you run from an npc with a bow, he shoots a LOT of arrow animations,  you get hit multiple times!
+one arrow per step, so when a npc runs at you, its like a machine gun
 
 <b>[ISSUE 11]</b><BR>
 -no shooting arrows through multis floors!
-example... put a npc on the roof of a tower, you can shoot him from the 1st floor
+example... put a npc on the roof of a tower, you can shoot him from the 1st floor,
+maybe check LOS for Z ?
 
 	
 <b>[ISSUE 12]</b><BR>
@@ -170,10 +170,18 @@ thats way too long, also poison needs to be dehardcoded so the different posion 
 <b>[ISSUE 23]</b><BR>
 -yell distance! ! it would be nice to adjust the distance when players yell in game 20 squares, 50 squares, ect...
 players can communicate cross map by yelling =P
+SET YELLDISTANCE IN SPHERE.INI ???
 <BR><b>[ FIXED!!! ]</b> 
 
 <b>[ISSUE 24]</b><BR>
--magic resistance... no matter your skill, you take full spell damage
+-magic resistance... no matter your skill, you take full spell damage, reistance doesnt work
+
+<b>[ISSUE 25]</b><BR>
+-multi and/or custom maps?
+
+<b>[ISSUE 26]</b><BR>
+-animal taming... even with 100.0 skill animals with high INT are almost impossible to tame (nightmares ect...)
+maybe decrease INT check by 50% ??
 
   
   SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add those features
