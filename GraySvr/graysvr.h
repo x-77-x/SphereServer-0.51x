@@ -1243,6 +1243,7 @@ private:
 	void Menu_Select( const TCHAR * pszSection, int iSelect );
 	void Menu_Setup( TARGMODE_TYPE targmode, const TCHAR * pszSection );
 
+	void Gump_Cancel(DWORD gumpId, DWORD buttonId = 0);
 	bool Gump_FindSection( CScriptLock & s, TARGMODE_TYPE targ, const TCHAR * pszType );
 	void Gump_Button( TARGMODE_TYPE targmode, UINT dwButton, CObjBase * pObj );
 

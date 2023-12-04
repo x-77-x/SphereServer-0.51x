@@ -1385,6 +1385,7 @@ void CClient::Cmd_Script_Menu( TARGMODE_TYPE menuid, int iSelect ) // Menus for 
 
 	if ( iSelect<0)
 	{
+		Gump_Cancel(menuid);
 		Menu_Setup( menuid, sSec );
 	}
 	else

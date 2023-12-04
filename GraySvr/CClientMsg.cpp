@@ -2661,6 +2661,8 @@ void CClient::addGumpMenu( TARGMODE_TYPE dwGumpID, const CGString * psControls, 
 		lengthText += (lentext2*2)+2;
 	}
 
+	Gump_Cancel(dwGumpID);
+
 	CCommand cmd;
 	cmd.GumpDialog.m_Cmd = XCMD_GumpDialog;
 	cmd.GumpDialog.m_len = lengthText;
@@ -2700,6 +2702,17 @@ void CClient::addGumpMenu( TARGMODE_TYPE dwGumpID, const CGString * psControls, 
 		}
 	}
 	SetTargMode( dwGumpID );
+}
+
+void CClient::Gump_Cancel(DWORD gumpId, DWORD buttonId)
+{
+	CCommand cmd;
+	cmd.ExtData.m_Cmd = XCMD_ExtData;
+	cmd.ExtData.m_type = 0x04; //cancel GUMP
+	cmd.ExtData.m_len = sizeof(DWORD) * 2 + sizeof(WORD) * 2 + 1;
+	PACKUINT(cmd.ExtData.m_data, gumpId);//gumpID
+	PACKUINT(cmd.ExtData.m_data + 4, buttonId);//0 - to close the gump on client
+	xSendPkt(&cmd, sizeof(DWORD) * 2 + sizeof(WORD) * 2 + 1);
 }
 
 bool CClient::Gump_FindSection( CScriptLock & s, TARGMODE_TYPE targ, const TCHAR * pszType )

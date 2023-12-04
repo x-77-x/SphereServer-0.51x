@@ -338,7 +338,7 @@ struct CEventCharDef
 
 struct CEvent	// event buffer from client to server..
 {
-#define MAX_BUFFER			65536	// Buffer Size (For socket operations)
+#define MAX_BUFFER			0x7fff	// Buffer Size (For socket operations)
 #define MAX_ITEMS_CONT		256		// Max items in a container. (arbitrary)
 #define MAX_MENU_ITEMS		64		// number of items in a menu. (arbitrary)
 #define MAX_CHARS_PER_ACCT	5
@@ -1854,7 +1854,6 @@ len: 1
 			NDWORD m_index;		// = predefined message type (MSG_TYPE) 
 			char m_name[MAX_NAME_SIZE+2]; // Name or other label (does OSI have this part actually working?)
 		} SpeakTable;
-
 	};
 } PACK_NEEDED;
 
