@@ -711,6 +711,8 @@ void CClient::addBark( const TCHAR * pText, const CObjBaseTemplate * pSrc, COLOR
 	}
 
 	int len = strlen(pText);
+	if (len <= 0)
+		return;
 	DEBUG_CHECK( len < MAX_TALK_BUFFER );
 	len += sizeof(cmd.Speak);
 	cmd.Speak.m_len = len;
