@@ -1812,8 +1812,9 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 	ASSERT( sk == SKILL_NONE || IsSkillBase(sk) || IsSkillNPC(sk));
 
 	bool ret = true;
-	if(sk > SKILL_NONE && sk < SKILL_QTY)
-		this->OnTrigger(CTRIG_SkillStart, this, sk);
+	if (sk > SKILL_NONE && sk < SKILL_QTY)
+		if (OnTrigger(CTRIG_SkillStart, this, sk))
+			return false;
 	// Some skill can start right away. Need no targetting.
 	switch ( sk )
 	{
@@ -2495,12 +2496,13 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 	{
 		if (!ret)
 		{
-			this->OnTrigger(CTRIG_SkillFail, this, sk);
-			return ret;
+			if(!OnTrigger(CTRIG_SkillFail, this, sk))
+				return ret;
 		}
 		else
 		{
-			this->OnTrigger(CTRIG_SkillSuccess, this, sk);
+			if (OnTrigger(CTRIG_SkillSuccess, this, sk))
+				return false;
 		}
 	}
 

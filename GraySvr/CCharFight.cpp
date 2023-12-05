@@ -1381,6 +1381,9 @@ void CChar::CallGuards()
 		else if ( ! pChar->IsCriminal())
 			continue;
 
+		if (pChar->OnTrigger(CTRIG_CallGuards, pChar, pGuard->GetUID()))
+			return;
+
 		if ( pGuard == NULL )
 		{
 			// Spawn a new guard.
@@ -1392,8 +1395,6 @@ void CChar::CallGuards()
 			ASSERT(pChar->GetTopPoint().IsValid());
 			pGuard->Spell_Teleport( pChar->GetTopPoint(), false, false );
 		}
-
-		pChar->OnTrigger(CTRIG_CallGuards, pChar, pGuard->GetUID());
 
 		if ( pGuard->NPC_LookAtCharGuard( pChar )) 
 			return;
@@ -2227,8 +2228,10 @@ int CChar::Hit( CChar * pCharTarg )
 	//trigger if not on magic damage and Source is valid
 	if (pCharTarg && pCharTarg != this)
 	{
-		pCharTarg->OnTrigger(CTRIG_GetHit, this, iDmg);//we received damage from opponent
-		OnTrigger(CTRIG_Hit, pCharTarg, iDmg);//we did damage to opponent
+		if (OnTrigger(CTRIG_Hit, pCharTarg, iDmg))//we did damage to opponent
+			return(1);
+		if (pCharTarg->OnTrigger(CTRIG_GetHit, this, iDmg))//we received damage from opponent
+			return(1);
 	}
 
 	return( pCharTarg->OnTakeDamage( iDmg, this, DAMAGE_HIT ) ? 1 : 0 );
