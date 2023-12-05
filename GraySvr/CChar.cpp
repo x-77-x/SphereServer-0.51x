@@ -201,10 +201,14 @@ bailout:
 
 	if ( IsDisconnected())
 	{
-		if ( ! GetTopSector()->IsCharDisconnectedIn( this ))
+		CPointMap point = this->GetTopPoint();
+		if (point.m_x >= 0 && point.m_x < UO_SIZE_X && point.m_y >= 0 && point.m_y < UO_SIZE_Y)//sanity checks
 		{
-			iResultCode = 0x1102;
-			goto bailout;
+			if (!GetTopSector()->IsCharDisconnectedIn(this))
+			{
+				iResultCode = 0x1102;
+				goto bailout;
+			}
 		}
 		if ( m_pNPC )
 		{

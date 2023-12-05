@@ -2340,8 +2340,8 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 					break;
 				}
 			}
-			iDifficulty = max( pChar->Stat_Get(STAT_INT), pChar->Stat_Get(STAT_STR));
-			iDifficulty = max( iDifficulty, pChar->Skill_GetBase(SKILL_TAMING)/10);
+			iDifficulty = max( pChar->Stat_Get(STAT_INT), pChar->m_StatVal[STAT_STR].m_val );
+			iDifficulty = max( iDifficulty, pChar->Skill_GetBase(SKILL_TAMING)/10 );
 
 			if ( pChar->Memory_FindObjTypes( this, MEMORY_FIGHT|MEMORY_AGGREIVED|MEMORY_IRRITATEDBY ))
 			{
