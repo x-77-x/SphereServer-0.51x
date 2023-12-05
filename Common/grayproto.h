@@ -619,7 +619,7 @@ struct CEvent	// event buffer from client to server..
 			NWORD m_len;	// 1-2 = len = 0x0c
 			BYTE m_flag;	// 3= 0=board name, 5=new message, 4=associate message, 1=message header, 2=message body
 			NDWORD m_UID;	// 4-7 = UID for the bboard.
-			NDWORD m_UIDMsg; // 8- = name or links data.
+			NDWORD m_UIDMsg;// 8-11 = name or links data.
 			BYTE m_data[1];	// submit new message data here.
 		} BBoard;
 

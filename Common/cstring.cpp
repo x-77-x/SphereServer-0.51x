@@ -637,7 +637,7 @@ const TCHAR * CValStr::FindName( int iVal ) const
 //***************************************************************************
 
 //***************************************************************************
-// Checks string values
+// Checks string values - returns true if value is found - used only in uni check
 int ChkStrn(char* s, const char* sym, DWORD len)
 {
 	unsigned int x = 0;
@@ -654,6 +654,7 @@ int ChkStrn(char* s, const char* sym, DWORD len)
 	return 0;
 }
 
+// Checks string values - returns true if value is found - ascii
 int ChkStr(char* s, const char* sym)
 {
 	if (!s)
