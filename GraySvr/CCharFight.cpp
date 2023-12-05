@@ -1393,7 +1393,7 @@ void CChar::CallGuards()
 			pGuard->Spell_Teleport( pChar->GetTopPoint(), false, false );
 		}
 
-		pChar->OnTrigger(CTRIG_Call_Guards, pChar, pGuard->GetUID());
+		pChar->OnTrigger(CTRIG_CallGuards, pChar, pGuard->GetUID());
 
 		if ( pGuard->NPC_LookAtCharGuard( pChar )) 
 			return;

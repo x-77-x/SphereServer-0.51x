@@ -4742,7 +4742,7 @@ bool CChar::MoveToRegion( CRegionWorld * pNewArea, bool fAllowReject )
 	// Entering region trigger.
 	if ( pNewArea )
 	{
-		this->OnTrigger(CTRIG_Region_Change, this, 0);
+		this->OnTrigger(CTRIG_RegionChange, this, 0);
 		if ( pNewArea->OnRegionTrigger( this, true ) && m_pArea && fAllowReject )
 			return false;
 	}
@@ -4829,13 +4829,13 @@ const TCHAR * CChar::sm_szTrigName[CTRIG_QTY] =	// static
 	"@Login",  // On Player Login
 	"@Logout", // On Player Logout
 
-	"@Skill_Start", // when beginning using a skill
-	"@Skill_Fail", // when a skill check fails
-	"@Skill_Success", // when a skill check successes
+	"@SkillStart", // when beginning using a skill
+	"@SkillFail", // when a skill check fails
+	"@SkillSuccess", // when a skill check successes
 
-	"@Call_Guards", // when calling guards - UNACTIVE
+	"@CallGuards", // when calling guards - UNACTIVE
 
-	"@Region_Change" // when changing from one region to another one - UNACTIVE
+	"@RegionChange" // when changing from one region to another one - UNACTIVE
 };
 
 bool CChar::OnTrigger( const TCHAR * pszTrigName, CTextConsole * pSrc, int iArg )

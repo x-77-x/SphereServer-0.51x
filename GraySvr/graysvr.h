@@ -3610,13 +3610,13 @@ enum CTRIG_TYPE
 	CTRIG_Login,
 	CTRIG_Logout,
 
-	CTRIG_Skill_Start,
-	CTRIG_Skill_Fail,
-	CTRIG_Skill_Success,
+	CTRIG_SkillStart,
+	CTRIG_SkillFail,
+	CTRIG_SkillSuccess,
 
-	CTRIG_Call_Guards,
+	CTRIG_CallGuards,
 
-	CTRIG_Region_Change,
+	CTRIG_RegionChange,
 
 	CTRIG_QTY,
 };
