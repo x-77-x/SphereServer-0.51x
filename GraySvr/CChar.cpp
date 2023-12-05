@@ -4833,9 +4833,9 @@ const TCHAR * CChar::sm_szTrigName[CTRIG_QTY] =	// static
 	"@SkillFail", // when a skill check fails
 	"@SkillSuccess", // when a skill check successes
 
-	"@CallGuards", // when calling guards - UNACTIVE
+	"@CallGuards", // when calling guards
 
-	"@RegionChange" // when changing from one region to another one - UNACTIVE
+	"@RegionChange" // when changing from one region to another one
 };
 
 bool CChar::OnTrigger( const TCHAR * pszTrigName, CTextConsole * pSrc, int iArg )
