@@ -4554,7 +4554,9 @@ bool CChar::CheckLocation( bool fStanding )
 	// what will happen ?
 	// RETURN: true = we teleported.
 
-	if ( ! fStanding )
+
+	//we disabled this to avoid that at any step the monster shoots an arrow
+	/*if (!fStanding)
 	{
 		// If we moved and are wielding are in combat and are using a
 		// crossbow/bow kind of weapon, then reset the weaponswingtimer.
@@ -4562,7 +4564,7 @@ bool CChar::CheckLocation( bool fStanding )
 		{
 			SetWeaponSwingTimer();
 		}
-	}
+	}*/
 
 	CWorldSearch AreaItems( GetTopPoint());
 	while (true)
