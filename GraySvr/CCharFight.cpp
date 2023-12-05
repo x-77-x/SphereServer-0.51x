@@ -1790,6 +1790,13 @@ int CChar::OnTakeDamage( int iDmg, CChar * pSrc, DAMAGE_TYPE uType )
 		UpdateAnimate( ANIM_GET_HIT );
 	}
 
+	//trigger if not on magic damage and Source is valid
+	if (pSrc && !(uType & DAMAGE_MAGIC))
+	{
+		OnTrigger(CTRIG_GetHit, pSrc, iDmg);//we received damage from opponent
+		pSrc->OnTrigger(CTRIG_Hit, this, iDmg);//we did damage to opponent
+	}
+
 	return( iDmg );
 }
 
