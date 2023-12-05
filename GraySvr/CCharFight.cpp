@@ -1790,13 +1790,6 @@ int CChar::OnTakeDamage( int iDmg, CChar * pSrc, DAMAGE_TYPE uType )
 		UpdateAnimate( ANIM_GET_HIT );
 	}
 
-	//trigger if not on magic damage and Source is valid
-	if (pSrc && !(uType & DAMAGE_MAGIC))
-	{
-		OnTrigger(CTRIG_GetHit, pSrc, iDmg);//we received damage from opponent
-		pSrc->OnTrigger(CTRIG_Hit, this, iDmg);//we did damage to opponent
-	}
-
 	return( iDmg );
 }
 
@@ -2229,6 +2222,13 @@ int CChar::Hit( CChar * pCharTarg )
 			// Poison delivered.
 			pCharTarg->SetPoison( GetRandVal( Skill_GetAdjusted( SKILL_POISONING )), this );
 		}
+	}
+
+	//trigger if not on magic damage and Source is valid
+	if (pCharTarg && pCharTarg != this)
+	{
+		pCharTarg->OnTrigger(CTRIG_GetHit, this, iDmg);//we received damage from opponent
+		OnTrigger(CTRIG_Hit, pCharTarg, iDmg);//we did damage to opponent
 	}
 
 	return( pCharTarg->OnTakeDamage( iDmg, this, DAMAGE_HIT ) ? 1 : 0 );
