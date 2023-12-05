@@ -119,11 +119,11 @@ private:
 public:
 	DWORD GetCount() const
 	{
-		return( m_Data.GetCount());
+		return(m_Data.GetCount());
 	}
-	const CUOVersionBlock * GetEntry( DWORD i ) const
+	const CUOVersionBlock* GetEntry(DWORD i) const
 	{
-		return( &m_Data.ElementAt(i));
+		return(&m_Data.ElementAt(i));
 	}
 	void Unload()
 	{
@@ -134,7 +134,7 @@ public:
 		Unload();
 	}
 	void Load();
-	bool FindVerDataBlock( VERFILE_TYPE type, DWORD id, CUOIndexRec & Index ) const;
+	bool FindVerDataBlock(VERFILE_TYPE type, DWORD id, CUOIndexRec& Index) const;
 
 } g_VerData;
 

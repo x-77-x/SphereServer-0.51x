@@ -1600,11 +1600,13 @@ bool CItem::SetDispID( ITEMID_TYPE id )
 	if ( CItemBase::IsValidDispID(id))
 	{
 		m_id = id;
+		Update();
 	}
 	else
 	{
 		m_id = m_pDef->GetDispID();
 	}
+	
 	return( true );
 }
 
@@ -2456,6 +2458,8 @@ bool CItem::Use_Door( bool fJustOpen )
 	//  true = open
 	DEBUG_CHECK( m_type == ITEM_DOOR || m_type == ITEM_DOOR_LOCKED );
 	ITEMID_TYPE id = GetDispID();
+	if(id == ITEMID_SIGN_BRASS_1 || id == ITEMID_SIGN_BRASS_2)
+		return(false);
 	int doordir = CItemBase::IsDoorID( id )-1;
 	DEBUG_CHECK( doordir >= 0 );
 	if ( doordir < 0 || ! IsTopLevel())

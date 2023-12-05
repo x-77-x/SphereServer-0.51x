@@ -201,10 +201,14 @@ bailout:
 
 	if ( IsDisconnected())
 	{
-		if ( ! GetTopSector()->IsCharDisconnectedIn( this ))
+		CPointMap point = this->GetTopPoint();
+		if (point.m_x >= 0 && point.m_x < UO_SIZE_X && point.m_y >= 0 && point.m_y < UO_SIZE_Y)//sanity checks
 		{
-			iResultCode = 0x1102;
-			goto bailout;
+			if (!GetTopSector()->IsCharDisconnectedIn(this))
+			{
+				iResultCode = 0x1102;
+				goto bailout;
+			}
 		}
 		if ( m_pNPC )
 		{
@@ -2032,6 +2036,20 @@ void CChar::Jail( CTextConsole * pSrc, bool fSet )
 	}
 }
 
+COLOR_TYPE CChar::GetNotoColor(const CChar* pChar, bool fIncog) const
+{
+	switch (pChar->GetNotoFlag(this, fIncog))
+	{
+		case NOTO_GOOD:			return 0x0063;	// Blue
+		case NOTO_GUILD_SAME:	return 0x0044;	// Green (same guild)
+		case NOTO_NEUTRAL:		return 0x03b2;	// Grey 1 (someone that can be attacked)
+		case NOTO_CRIMINAL:		return 0x03b2;	// Grey 2 (criminal)
+		case NOTO_GUILD_WAR:	return 0x002b;	// Orange (enemy guild)
+		case NOTO_EVIL:			return 0x0026;	// Red
+		default: return COLOR_TEXT_DEF;			// ?Grey
+	}
+}
+
 enum CV_TYPE
 {
 	CV_ALLSKILLS,
@@ -2743,15 +2761,18 @@ void CChar::UpdateStats( STAT_TYPE type, int iChange, int iLimit )
 	CCommand cmd;
 	cmd.StatChng.m_Cmd = XCMD_StatChngStr + type - STAT_STR;
 	cmd.StatChng.m_UID = GetUID();
-	cmd.StatChng.m_max = Stat_Get(type);
-	cmd.StatChng.m_val = m_StatVal[type].m_val;
 
-	if ( type == STAT_STR )	// everyone sees my health
+	if (type == STAT_STR)	// everyone sees my health with percent value
 	{
-		UpdateCanSee( &cmd, sizeof(cmd.StatChng), m_pClient );
+		//players shouldn't know the exact hitpoints other players have, but only the integer with percentage of total hits (can go over 100%)
+		cmd.StatChng.m_max = 100;//this is the value sent to players
+		cmd.StatChng.m_val = GetHealthPercent();
+		UpdateCanSee(&cmd, sizeof(cmd.StatChng), m_pClient);
 	}
 	if ( IsClient())
 	{
+		cmd.StatChng.m_max = Stat_Get(type);
+		cmd.StatChng.m_val = m_StatVal[type].m_val;
 		m_pClient->xSendPkt( &cmd, sizeof(cmd.StatChng));
 	}
 }
@@ -4218,9 +4239,12 @@ bool CChar::Death()
 	if ( OnTrigger( CTRIG_Death, this ))
 		return( true );
 
-	if ( IsClient())	// Prevents crashing ?
+	if (IsClient())	// Prevents crashing ?
 	{
 		GetClient()->addPause();
+
+		//we MUST CANCEL ALL TRADES to avoid unwanted effects!
+		CancelAllTrades();
 	}
 
 	// I am dead and we need to give credit for the kill to my attacker(s).
@@ -4530,7 +4554,9 @@ bool CChar::CheckLocation( bool fStanding )
 	// what will happen ?
 	// RETURN: true = we teleported.
 
-	if ( ! fStanding )
+
+	//we disabled this to avoid that at any step the monster shoots an arrow
+	/*if (!fStanding)
 	{
 		// If we moved and are wielding are in combat and are using a
 		// crossbow/bow kind of weapon, then reset the weaponswingtimer.
@@ -4538,7 +4564,7 @@ bool CChar::CheckLocation( bool fStanding )
 		{
 			SetWeaponSwingTimer();
 		}
-	}
+	}*/
 
 	CWorldSearch AreaItems( GetTopPoint());
 	while (true)
@@ -4716,7 +4742,7 @@ bool CChar::MoveToRegion( CRegionWorld * pNewArea, bool fAllowReject )
 	// Entering region trigger.
 	if ( pNewArea )
 	{
-		this->OnTrigger(CTRIG_Region_Change, this, 0);
+		this->OnTrigger(CTRIG_RegionChange, this, 0);
 		if ( pNewArea->OnRegionTrigger( this, true ) && m_pArea && fAllowReject )
 			return false;
 	}
@@ -4803,13 +4829,13 @@ const TCHAR * CChar::sm_szTrigName[CTRIG_QTY] =	// static
 	"@Login",  // On Player Login
 	"@Logout", // On Player Logout
 
-	"@Skill_Start", // when beginning using a skill
-	"@Skill_Fail", // when a skill check fails
-	"@Skill_Success", // when a skill check successes
+	"@SkillStart", // when beginning using a skill
+	"@SkillFail", // when a skill check fails
+	"@SkillSuccess", // when a skill check successes
 
-	"@Call_Guards", // when calling guards - UNACTIVE
+	"@CallGuards", // when calling guards - UNACTIVE
 
-	"@Region_Change" // when changing from one region to another one - UNACTIVE
+	"@RegionChange" // when changing from one region to another one - UNACTIVE
 };
 
 bool CChar::OnTrigger( const TCHAR * pszTrigName, CTextConsole * pSrc, int iArg )

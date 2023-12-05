@@ -1069,7 +1069,8 @@ void CClient::addItemName( const CItem * pItem )
 		CChar * pCharCorpse = pCorpseItem->m_uidLink.CharFind();
 		if ( pCharCorpse )
 		{
-			switch ( pCharCorpse->GetNotoFlag( m_pChar, true ))
+			color = pCharCorpse->GetNotoColor(m_pChar, true);
+			/*switch (pCharCorpse->GetNotoFlag(m_pChar, true))
 			{
 			case NOTO_GOOD:			color = 0x0063;	break;	// Blue
 			case NOTO_GUILD_SAME:	color = 0x0044;	break;	// Green (same guild)
@@ -1078,7 +1079,7 @@ void CClient::addItemName( const CItem * pItem )
 			case NOTO_GUILD_WAR:	color = 0x002b;	break;	// Orange (enemy guild)
 			case NOTO_EVIL:			color = 0x0026;	break;	// Red
 			default: color = COLOR_TEXT_DEF;	break;	// ?Grey
-			}
+			}*/
 		}
 	}
 
@@ -1124,8 +1125,9 @@ void CClient::addCharName( const CChar * pChar ) // Singleclick text for a chara
 	// Karma color codes ?
 	ASSERT( pChar );
 
-	WORD color;
-	switch ( pChar->GetNotoFlag( m_pChar, true ))
+	WORD color = pChar->GetNotoColor(m_pChar, true);
+
+	/*switch (pChar->GetNotoFlag(m_pChar, true))
 	{
 	case NOTO_GOOD:			color = 0x0063;	break;	// Blue
 	case NOTO_GUILD_SAME:	color = 0x0044;	break;	// Green (same guild)
@@ -1134,7 +1136,7 @@ void CClient::addCharName( const CChar * pChar ) // Singleclick text for a chara
 	case NOTO_GUILD_WAR:	color = 0x002b;	break;	// Orange (enemy guild)
 	case NOTO_EVIL:			color = 0x0026;	break;	// Red
 	default: color = COLOR_TEXT_DEF;	break;	// ?Grey
-	}
+	}*/
 
 	TCHAR szTemp[ MAX_SCRIPT_LINE_LEN ];
 
@@ -1909,8 +1911,16 @@ void CClient::addCharStatWindow( CObjUID uid ) // Opens the status window
 	strncpy( cmd.Status.m_name, pChar->GetName(), sizeof( cmd.Status.m_name ));
 	cmd.Status.m_name[ sizeof( cmd.Status.m_name )-1 ] = '\0';
 
-	cmd.Status.m_health = pChar->m_StatHealth;
-	cmd.Status.m_maxhealth = pChar->Stat_Get(STAT_STR);
+	if (pChar == m_pChar)
+	{
+		cmd.Status.m_health = pChar->m_StatHealth;
+		cmd.Status.m_maxhealth = pChar->Stat_Get(STAT_STR);
+	}
+	else
+	{
+		cmd.Status.m_health = pChar->GetHealthPercent();
+		cmd.Status.m_maxhealth = 100;
+	}
 
 	// renamable ?
 	if ( m_pChar != pChar &&	// can't rename self. it looks weird.
@@ -2659,6 +2669,8 @@ void CClient::addGumpMenu( TARGMODE_TYPE dwGumpID, const CGString * psControls, 
 		lengthText += (lentext2*2)+2;
 	}
 
+	Gump_Cancel(dwGumpID);
+
 	CCommand cmd;
 	cmd.GumpDialog.m_Cmd = XCMD_GumpDialog;
 	cmd.GumpDialog.m_len = lengthText;
@@ -2698,6 +2710,17 @@ void CClient::addGumpMenu( TARGMODE_TYPE dwGumpID, const CGString * psControls, 
 		}
 	}
 	SetTargMode( dwGumpID );
+}
+
+void CClient::Gump_Cancel(DWORD gumpId, DWORD buttonId)
+{
+	CCommand cmd;
+	cmd.ExtData.m_Cmd = XCMD_ExtData;
+	cmd.ExtData.m_type = 0x04; //cancel GUMP
+	cmd.ExtData.m_len = sizeof(DWORD) * 2 + sizeof(WORD) * 2 + 1;
+	PACKUINT(cmd.ExtData.m_data, gumpId);//gumpID
+	PACKUINT(cmd.ExtData.m_data + 4, buttonId);//0 - to close the gump on client
+	xSendPkt(&cmd, sizeof(DWORD) * 2 + sizeof(WORD) * 2 + 1);
 }
 
 bool CClient::Gump_FindSection( CScriptLock & s, TARGMODE_TYPE targ, const TCHAR * pszType )

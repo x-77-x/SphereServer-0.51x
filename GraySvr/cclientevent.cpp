@@ -943,6 +943,21 @@ void CClient::Event_VendorBuy( CObjUID uidVendor )
 		return;
 	}
 
+	CItem* pItemCont = m_pChar->GetContentHead();
+	for (; pItemCont != NULL; pItemCont = pItemCont->GetNext())
+	{
+		if (pItemCont->m_type == ITEM_EQ_TRADE_WINDOW)
+		{
+			CItem* pItemPartner = pItemCont->m_uidLink.ItemFind(); // counterpart trade window.
+			if (pItemPartner == NULL)
+			{
+				// found it - don't do anything, since this could cause a money bug
+				SysMessage("You can't buy items while doing a trade with another player!");
+				return;
+			}
+		}
+	}
+
 	// Calculate the total cost of goods.
 	int costtotal=0;
 	bool fSoldout = false;
@@ -1265,6 +1280,27 @@ void CClient::Event_BBoardRequest( CObjUID uid )
 		}
 		// if pMsgItem then this is a reply to it !
 		{
+			int lenstr = m_bin.BBoard.m_data[0];
+			if (lenstr > 36) //the name must be lower or equal to 36 chars, to avoid exiting from view
+				return;
+			//we will first iter to check if strings are OK, we don't want unexpected errors or other buggy things
+			if (ChkStr((TCHAR*)&m_bin.BBoard.m_data[1], "/n/r[]"))
+				return;
+			int len = 1 + lenstr;
+			int lines = m_bin.BBoard.m_data[len++];
+			if (lines > 80) lines = 80;	// limit this. 80 lines is a good value
+
+			while (--lines)
+			{
+				lenstr = m_bin.BBoard.m_data[len++];
+				if (lenstr > 36 || strlen((TCHAR*)&m_bin.BBoard.m_data[len]) >= lenstr)//36 chars per single line
+					return;
+				if(ChkStr((TCHAR*)&m_bin.BBoard.m_data[len], "/n/r[]"))
+					return;
+
+				len += lenstr;
+			}
+
 			CItemMessage * pMsgNew = dynamic_cast <CItemMessage *>( CItem::CreateBase( ITEMID_BBOARD_MSG ));
 			if ( pMsgNew == NULL )
 			{
@@ -1272,14 +1308,14 @@ void CClient::Event_BBoardRequest( CObjUID uid )
 				return;
 			}
 
-			int lenstr = m_bin.BBoard.m_data[0];
+			lenstr = m_bin.BBoard.m_data[0];
 			pMsgNew->SetName( (const TCHAR*) &m_bin.BBoard.m_data[1] );
 			pMsgNew->m_itBook.m_TimeID = g_World.GetTime() | 0x80000000;
 			pMsgNew->m_sAuthor = m_pChar->GetName();
 			pMsgNew->m_uidLink = m_pChar->GetUID();	// Link it to you forever.
 
-			int len = 1 + lenstr;
-			int lines = m_bin.BBoard.m_data[len++];
+			len = 1 + lenstr;
+			lines = m_bin.BBoard.m_data[len++];
 			if ( lines > 32 ) lines = 32;	// limit this.
 
 			while ( lines-- )
@@ -1789,7 +1825,7 @@ void CClient::Event_Talk( const TCHAR * pszText, COLOR_TYPE color, TALKMODE_TYPE
 	// Rip out the unprintables first.
 	TCHAR szText[MAX_TALK_BUFFER];
 	int len = GetBareText( szText, pszText, sizeof(szText));
-	if ( len <= 0 ) 
+	if (len <= 0 || ChkStr((char*)szText, "\n\r"))
 		return;
 	pszText = szText;
 
@@ -1825,7 +1861,7 @@ void CClient::Event_TalkUNICODE()
 
 	TCHAR szText[MAX_TALK_BUFFER];
 	int iLen = CvtNUNICODEToSystem( szText, m_bin.TalkUNICODE.m_utext, sizeof( szText ));
-	if ( iLen <= 0 )
+	if ( iLen <= 0 || ChkStrn((char*)m_bin.TalkUNICODE.m_utext, "\n\r", iLen))
 		return;
 
 	m_bin.TalkUNICODE.m_utext[ iLen ] = '\0';
@@ -3137,7 +3173,7 @@ bool CClient::xDispatchMsg()
 		break;
 	case XCMD_GumpText:	// Gump text input
 		if ( ! xCheckSize(3)) return(false);
-		if ( ! xCheckSize( m_bin.GumpText.m_len )) return(false);
+		if ( ! xCheckSize( m_bin.GumpText.m_len ) || strlen((char*)m_bin.GumpText.m_text) >= m_bin.GumpText.m_textlen || ChkStr((char*)m_bin.GumpText.m_text, "\n\r[]")) return(false);
 		Event_GumpTextIn();
 		break;
 	case XCMD_TalkUNICODE:	// Talk unicode.

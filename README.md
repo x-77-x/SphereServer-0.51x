@@ -32,9 +32,10 @@ so
 ![alt text](http://dragonsoftime.com/junk/taskbar.png)
 
 <b>[ISSUE 03]</b><BR>
+<BR><b>[ DONE! ]</b> 
 -COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
-SRC.SYSMESSAGE #0033,3, You have gained a reward!
--COLORED SPEECH?! SRC.SAY #0033,3, I talk in color!  (like Lil Sphere)
+SRC.SYSMESSAGE #0033,3,You have gained a reward!
+-COLORED SPEECH?! SRC.SAY #0033,3,I talk in color! (like Lil Sphere)
 	
 ![alt text](http://dragonsoftime.com/junk/coloredsysmessage.png)
 

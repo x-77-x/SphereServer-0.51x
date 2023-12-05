@@ -1813,7 +1813,7 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 
 	bool ret = true;
 	if(sk > SKILL_NONE && sk < SKILL_QTY)
-		this->OnTrigger(CTRIG_Skill_Start, this, sk);
+		this->OnTrigger(CTRIG_SkillStart, this, sk);
 	// Some skill can start right away. Need no targetting.
 	switch ( sk )
 	{
@@ -2340,8 +2340,8 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 					break;
 				}
 			}
-			iDifficulty = max( pChar->Stat_Get(STAT_INT), pChar->Stat_Get(STAT_STR));
-			iDifficulty = max( iDifficulty, pChar->Skill_GetBase(SKILL_TAMING)/10);
+			iDifficulty = max( pChar->Stat_Get(STAT_INT), pChar->m_StatVal[STAT_STR].m_val );
+			iDifficulty = max( iDifficulty, pChar->Skill_GetBase(SKILL_TAMING)/10 );
 
 			if ( pChar->Memory_FindObjTypes( this, MEMORY_FIGHT|MEMORY_AGGREIVED|MEMORY_IRRITATEDBY ))
 			{
@@ -2495,12 +2495,12 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 	{
 		if (!ret)
 		{
-			this->OnTrigger(CTRIG_Skill_Fail, this, sk);
+			this->OnTrigger(CTRIG_SkillFail, this, sk);
 			return ret;
 		}
 		else
 		{
-			this->OnTrigger(CTRIG_Skill_Success, this, sk);
+			this->OnTrigger(CTRIG_SkillSuccess, this, sk);
 		}
 	}
 

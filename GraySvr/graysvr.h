@@ -1243,6 +1243,7 @@ private:
 	void Menu_Select( const TCHAR * pszSection, int iSelect );
 	void Menu_Setup( TARGMODE_TYPE targmode, const TCHAR * pszSection );
 
+	void Gump_Cancel(DWORD gumpId, DWORD buttonId = 0);
 	bool Gump_FindSection( CScriptLock & s, TARGMODE_TYPE targ, const TCHAR * pszType );
 	void Gump_Button( TARGMODE_TYPE targmode, UINT dwButton, CObjBase * pObj );
 
@@ -1529,6 +1530,7 @@ public:
 	}
 
 	void SysMessage( const TCHAR * pMsg ) const; // System message (In lower left corner)
+	void ColorSysMessage(const TCHAR* pMsg, COLOR_TYPE color, FONT_TYPE font) const;
 	bool CanSee( const CObjBaseTemplate * pObj ) const;
 	bool Gump_Setup( TARGMODE_TYPE targmode, CObjBase * pObj );
 	bool UseInterWorldGate( const CItem * pItem );
@@ -3608,13 +3610,13 @@ enum CTRIG_TYPE
 	CTRIG_Login,
 	CTRIG_Logout,
 
-	CTRIG_Skill_Start,
-	CTRIG_Skill_Fail,
-	CTRIG_Skill_Success,
+	CTRIG_SkillStart,
+	CTRIG_SkillFail,
+	CTRIG_SkillSuccess,
 
-	CTRIG_Call_Guards,
+	CTRIG_CallGuards,
 
-	CTRIG_Region_Change,
+	CTRIG_RegionChange,
 
 	CTRIG_QTY,
 };
@@ -4320,6 +4322,7 @@ public:
 	bool Death();
 	bool Reveal(UINT dwFlags = ( STATF_Invisible | STATF_Hidden | STATF_Sleeping ));
 	void Jail( CTextConsole * pSrc, bool fSet );
+	COLOR_TYPE GetNotoColor(const CChar* pChar, bool fIncog) const;
 	void EatAnim( const TCHAR * pszName, int iQty );
 	void CallGuards();
 	void Emote( const TCHAR * pText, CClient * pClientExclude = NULL, bool fPossessive = false );
