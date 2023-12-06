@@ -1769,7 +1769,7 @@ int CChar::OnTakeDamage( int iDmg, CChar * pSrc, DAMAGE_TYPE uType )
 	{
 		CGString sMsg;
 		sMsg.Format("-%d", iDmg);
-		this->Speak(sMsg, COLOR_RED, TALKMODE_SAY);
+		g_World.OverHeadMessage(this, sMsg, COLOR_RED);
 	}
 
 	UpdateStats( STAT_STR, -iDmg );
