@@ -47,7 +47,6 @@ SRC.SYSMESSAGE #0033,3,You have gained a reward!
 SRC.SAY #0033,3,I talk in color!
 ```
 (like Lil Sphere)
-<b>[ DONE! ]</b> 
 
 ![alt text](http://dragonsoftime.com/junk/coloredsysmessage.png)
 
