@@ -41,7 +41,7 @@ so
 ```
 SRC.SYSMESSAGE #0033,3,You have gained a reward!
 ```
-(like Lil Sphere)
+(like Lil Sphere)<BR>
 <b>[ DONE! ]</b> 
 
 -COLORED SPEECH?! 
@@ -67,8 +67,8 @@ nice to be able to change the color of NPCs name when single clicked
 ![alt text](http://dragonsoftime.com/junk/coloreditems.png)	
 
 <b>[ISSUE 06]</b><BR>
--Show damage above npc when attacked  (like LiL Sphere)
-<BR><b>[ DONE! ]</b> 
+-Show damage above npc when attacked  (like LiL Sphere)<BR>
+<b>[ DONE! ]</b> 
 
 ![alt text](http://dragonsoftime.com/junk/showdamage.png)
 
@@ -85,15 +85,15 @@ after 17 years i just realized you can dye a ship deed and the multi will be aff
 ![alt text](http://dragonsoftime.com/junk/coloredmultis.png)
 
 <b>[ISSUE 09]</b><BR>
--sphere script loading times are abnormally slow compared to the 51a release version
-	<BR><b>[ DONE! ]</b>   
+-sphere script loading times are abnormally slow compared to the 51a release version<BR>
+<b>[ DONE! ]</b>   
 	
 OTHER STUFF...
 	
 <b>[ISSUE 10]</b><BR>
 -when you run from an npc with a bow, he shoots a LOT of arrow animations,  you get hit multiple times!
-one arrow per step, so when a npc runs at you, its like a machine gun
- [DONE?]
+one arrow per step, so when a npc runs at you, its like a machine gun<BR>
+[DONE?]
 
 
 <b>[ISSUE 11]</b><BR>
@@ -109,7 +109,7 @@ but i know i disabled it 18+ years ago for a reason
 
 
 <b>[ISSUE 13]</b><BR>
--TRACKING - make sure "tracking players" actually track players only, ect... (i remember something wrong with tracking)
+-TRACKING - make sure "tracking players" actually track players only, ect... (i remember something wrong with tracking)<BR>
  [DONE!]
 
 
@@ -197,15 +197,15 @@ another nice one that will change the color of a moused over character
 	
 <b>[ISSUE 22]</b><BR>
 -Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
-thats way too long, also poison needs to be dehardcoded so the different posion levels damages can be adjusted
-	<BR><b>[ DONE? ]</b>   
+thats way too long, also poison needs to be dehardcoded so the different posion levels damages can be adjusted<BR>
+<b>[ DONE? ]</b>   
 
 
 <b>[ISSUE 23]</b><BR>
 -yell distance! ! it would be nice to adjust the distance when players yell in game 20 squares, 50 squares, ect...
 players can communicate cross map by yelling =P
-SET YELLDISTANCE IN SPHERE.INI ???
-<BR><b>[ DONE? ]</b> 
+SET YELLDISTANCE IN SPHERE.INI ???<BR>
+<b>[ DONE? ]</b> 
 
 <b>[ISSUE 24]</b><BR>
 -magic resistance... no matter your skill, you take full spell damage, reistance doesnt work
