@@ -54,6 +54,7 @@ SRC.SAY #0033,3,I talk in color!
 
 <b>[ISSUE 04]</b><BR>
 -COLORED NAMES on NPCs
+
 ![alt text](http://dragonsoftime.com/junk/colorednames.png)
 
 ```
@@ -71,9 +72,9 @@ nice to be able to change the color of NPCs name when single clicked
 
 <b>[ISSUE 06]</b><BR>
 -Show damage above npc when attacked  (like LiL Sphere)<BR>
-<b>[ DONE! ]</b> 
-
-![alt text](http://dragonsoftime.com/junk/showdamage.png)
+ 
+![alt text](http://dragonsoftime.com/junk/showdamage.png)<BR>
+<b>[ DONE! ]</b>
 
 
 <b>[ISSUE 07]</b><BR>
@@ -141,6 +142,7 @@ and TAG.YOURMOM=1 same as VAR. i think, but permanent, great way to tag characte
 
 <b>[ISSUE 19]</b><BR>
 -books?  the books in SPHEREBook.scp never worked, the pages are empty when you add them in game
+MORE=X  is book #
 
 
 <b>[ISSUE 20]</b><BR>
