@@ -5,11 +5,13 @@ SPHERESERVER 0.51x  WISHLIST  (3/17/21)
 -----------------------------
 <b>[ISSUE 01]</b><BR>
 -HITPOINTS - on NPCS, there needs to be a seperation between STR and hitpoints, 
-i want npc characters with 200STR AND 1000hp.
-by default the hitpoints will drain until they are equal with STR. so maybe add...
+i want npc characters with 200STR AND 1000hp.<BR>
+by default HITPOINTS will drain until they are equal with STR. so maybe add...
+```
 MAXHITS=1000
 MAXSTAM=1000
 MAXMANA=1000
+```
 and correct the regen???
 
 so if players and npcs are over their maxhits, hp drains to equal their maxhits
@@ -20,10 +22,12 @@ and if players and npcs are under their maxhits, they heal to equal their maxhit
 (optional)
 AND FOR PLAYERS i want players to have x2 for hitpoints, stamina, mana
 so 
+```
 125 STR = 250 hitpoints
 125 DEX = 250 stamina
 125 INT = 250 mana
-(this is optional of course)
+```
+(this is optional of course!)
 
 
 <b>[ISSUE 02]</b><BR>
@@ -31,16 +35,29 @@ so
 
 ![alt text](http://dragonsoftime.com/junk/taskbar.png)
 
-<b>[ISSUE 03]</b><BR>
-<BR><b>[ DONE! ]</b> 
+<b>[ISSUE 03]</b>
 -COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
+```
 SRC.SYSMESSAGE #0033,3,You have gained a reward!
--COLORED SPEECH?! SRC.SAY #0033,3,I talk in color! (like Lil Sphere)
-	
+```
+<b>[ DONE! ]</b> 
+
+-COLORED SPEECH?! 
+```
+SRC.SAY #0033,3,I talk in color!
+```
+(like Lil Sphere)
+<b>[ DONE! ]</b> 
+
 ![alt text](http://dragonsoftime.com/junk/coloredsysmessage.png)
 
 <b>[ISSUE 04]</b><BR>
--COLORED NAMES, TAG.NAME.HUE 021   nice to be able to change the color of NPCs name when single clicked
+-COLORED NAMES
+```
+TAG.NAME.HUE 021
+NAMEHUE=021
+```
+nice to be able to change the color of NPCs name when single clicked
 
 ![alt text](http://dragonsoftime.com/junk/colorednames.png)
 
@@ -67,13 +84,15 @@ after 17 years i just realized you can dye a ship deed and the multi will be aff
 
 <b>[ISSUE 09]</b><BR>
 -sphere script loading times are abnormally slow compared to the 51a release version
-	<BR><b>[ FIXED!!! ]</b>   
+	<BR><b>[ DONE! ]</b>   
 	
 OTHER STUFF...
 	
 <b>[ISSUE 10]</b><BR>
 -when you run from an npc with a bow, he shoots a LOT of arrow animations,  you get hit multiple times!
 one arrow per step, so when a npc runs at you, its like a machine gun
+ [DONE?]
+
 
 <b>[ISSUE 11]</b><BR>
 -no shooting arrows through multis floors!
@@ -86,8 +105,10 @@ maybe check LOS for Z ?
 check area for guards?  maybe cant be used on other players?  not really sure how provoc is supposed to work,
 but i know i disabled it 18+ years ago for a reason
 
+
 <b>[ISSUE 13]</b><BR>
 -TRACKING - make sure "tracking players" actually track players only, ect... (i remember something wrong with tracking)
+ [DONE!]
 
 
 <b>[ISSUE 14]</b><BR>
@@ -132,25 +153,31 @@ ONTRIGGER=CLICK  (single click) colored  NAME.HUE!?
 
 ONTRIGGER=DROPON_SELF
 	heres a nice lil bag script in the new sphere that will let you only drop runes in a bag...
-	ON=@DROPON_SELF
+ ```
+	ONTRIGGER=DROPON_SELF
 	IF !(<ARGO.TYPE>==t_rune)
 	SRC.SYSMESSAGE You may only place runes inside this bag.
 	RETURN 1
 	ENDIF
+```
 
 since there is no runebooks in 51a, a newbied bag that will only accept runes would be nice
 
 --characters--
-ONTRIGGER=LOGIN  (like lil Sphere)
 
-ONTRIGGER=LOGOUT  (like lil Sphere)
+ON=@LOGIN  (like lil Sphere)  [DONE!]
 
-ONTRIGGER=GetHit
+ON=@LOGOUT  (like lil Sphere)  [DONE!]
 
-a trigger so NPCS will look at eachother ONTRIGGER=SeeNewNPC ?  a way to get npcs to fight (besides berserker brain)
+ON=@GetHit  [DONE?]
 
-ONTRIGGER=NotoSend
+a trigger so NPCS will look at eachother 
+
+ON=@SeeNewNPC ??  a way to get npcs to fight (besides berserker brain)
+
+ON=@NotoSend
 another nice one that will change the color of a moused over character
+```
 	ON=@NotoSend//2 ALLY 5 ENEMY 6 RED	
 	IF (<SRC.TAG0.MILITARY>)
 	 IF !<GUILD>
@@ -159,19 +186,20 @@ another nice one that will change the color of a moused over character
 		ARGN1=2
 		ENDIF
 	ENDIF
+```
  <BR><b>[ MOSTLY DONE! ]</b> 
 	
 <b>[ISSUE 22]</b><BR>
 -Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
 thats way too long, also poison needs to be dehardcoded so the different posion levels damages can be adjusted
-	<BR><b>[ FIXED!!! ]</b>   
+	<BR><b>[ DONE? ]</b>   
 
 
 <b>[ISSUE 23]</b><BR>
 -yell distance! ! it would be nice to adjust the distance when players yell in game 20 squares, 50 squares, ect...
 players can communicate cross map by yelling =P
 SET YELLDISTANCE IN SPHERE.INI ???
-<BR><b>[ FIXED!!! ]</b> 
+<BR><b>[ DONE? ]</b> 
 
 <b>[ISSUE 24]</b><BR>
 -magic resistance... no matter your skill, you take full spell damage, reistance doesnt work
@@ -184,9 +212,9 @@ SET YELLDISTANCE IN SPHERE.INI ???
 maybe decrease INT check by 50% ??
 
   
-  SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add those features
+  SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add ALL those features
   and add a few new things and tidy up the 0.51a source for those who still have old server files...
-  for those who dont know... there was a re-write 0.53 that changed the structure for what we know as the modern versions of Sphere, that
+  for those who dont know...<BR> there was a re-write 0.53 that changed the structure for what we know as the modern versions of Sphere, that
   0.53 is what lead up to 55i version alot of people used, this was BEFORE that... servers that used TUS, GreyServer, 0.48e. 0.51a... 1998 to 2000
  
 BLAST FROM THE PAST 
