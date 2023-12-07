@@ -51,7 +51,7 @@ SRC.SAY #0033,3,I talk in color!
 ![alt text](http://dragonsoftime.com/junk/coloredsysmessage.png)
 
 <b>[ISSUE 04]</b><BR>
--COLORED NAMES
+-COLORED NAMES on NPCs
 ```
 TAG.NAME.HUE 021
 NAMEHUE=021
