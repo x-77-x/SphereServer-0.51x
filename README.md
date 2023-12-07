@@ -21,14 +21,14 @@ and if players and npcs are under their maxhits, they heal to equal their maxhit
 ![alt text](http://dragonsoftime.com/junk/maxstats2.png)
 
 (optional)
-AND FOR PLAYERS i want players to have x2 for hitpoints, stamina, mana
+AND FOR PLAYERS i want players to have x2 multiplyer for hitpoints, stamina, mana
 so 
 ```
 125 STR = 250 hitpoints
 125 DEX = 250 stamina
 125 INT = 250 mana
 ```
-(this is optional of course!)
+(this is option in sphere.ini of course!)
 
 
 <b>[ISSUE 02]</b><BR>
