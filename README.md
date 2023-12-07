@@ -41,13 +41,13 @@ so
 ```
 SRC.SYSMESSAGE #0033,3,You have gained a reward!
 ```
+(like Lil Sphere)
 <b>[ DONE! ]</b> 
 
 -COLORED SPEECH?! 
 ```
 SRC.SAY #0033,3,I talk in color!
 ```
-(like Lil Sphere)
 
 ![alt text](http://dragonsoftime.com/junk/coloredsysmessage.png)
 
@@ -74,8 +74,10 @@ nice to be able to change the color of NPCs name when single clicked
 
 
 <b>[ISSUE 07]</b><BR>
--walk and shoot would be nice, shoot and run, but half accuracy when moving?
-	
+-walk and shoot would be nice, shoot and run,<BR>
+but half accuracy when moving?
+must have range!
+ 
 <b>[ISSUE 08]</b><BR>
 -colored multis??? new sphere you can go debug mode and set the color on a multi and it will change color in game
 after 17 years i just realized you can dye a ship deed and the multi will be affected, but only the parts are colored =)
@@ -96,8 +98,8 @@ one arrow per step, so when a npc runs at you, its like a machine gun
 
 <b>[ISSUE 11]</b><BR>
 -no shooting arrows through multis floors!
-example... put a npc on the roof of a tower, you can shoot him from the 1st floor,
-maybe check LOS for Z ?
+example... put a npc on the roof of a tower, you can shoot him from the 1st floor,<BR>
+<b>maybe check LOS for Z ?</b>
 
 	
 <b>[ISSUE 12]</b><BR>
