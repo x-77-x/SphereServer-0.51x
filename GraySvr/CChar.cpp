@@ -2038,7 +2038,7 @@ void CChar::Jail( CTextConsole * pSrc, bool fSet )
 
 COLOR_TYPE CChar::GetNotoColor(const CChar* pChar, bool fIncog) const
 {
-	switch (pChar->GetNotoFlag(this, fIncog))
+	switch (GetNotoFlag(pChar, fIncog))
 	{
 		case NOTO_GOOD:			return 0x0063;	// Blue
 		case NOTO_GUILD_SAME:	return 0x0044;	// Green (same guild)
@@ -4742,8 +4742,9 @@ bool CChar::MoveToRegion( CRegionWorld * pNewArea, bool fAllowReject )
 	// Entering region trigger.
 	if ( pNewArea )
 	{
-		this->OnTrigger(CTRIG_RegionChange, this, 0);
 		if ( pNewArea->OnRegionTrigger( this, true ) && m_pArea && fAllowReject )
+			return false;
+		if (this->OnTrigger(CTRIG_RegionChange, this, 0))
 			return false;
 	}
 
@@ -4833,9 +4834,9 @@ const TCHAR * CChar::sm_szTrigName[CTRIG_QTY] =	// static
 	"@SkillFail", // when a skill check fails
 	"@SkillSuccess", // when a skill check successes
 
-	"@CallGuards", // when calling guards - UNACTIVE
+	"@CallGuards", // when calling guards
 
-	"@RegionChange" // when changing from one region to another one - UNACTIVE
+	"@RegionChange" // when changing from one region to another one
 };
 
 bool CChar::OnTrigger( const TCHAR * pszTrigName, CTextConsole * pSrc, int iArg )

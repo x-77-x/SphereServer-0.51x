@@ -789,6 +789,7 @@ bool CRegionWorld::OnRegionTrigger( CTextConsole * pSrc, bool fEnter, bool fPeri
 
 	int id;
 	const TCHAR * pszAction;
+
 	if ( fPeriodic ) 
 	{
 		id = m_TrigPeriodic;

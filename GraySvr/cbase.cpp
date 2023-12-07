@@ -875,9 +875,27 @@ bool CObjBase::r_Verb( CScript & s, CTextConsole * pSrc ) // Execute command fro
 	case OV_MESSAGE:	//put info message (for pSrc client only) over item.
 do_message:
 		{
-			if ( pCharSrc == NULL ) 
-				return( false );
-			pCharSrc->ObjMessage( s.GetArgStr(), this );
+			char* cchar = s.GetArgStr();
+			if (pCharSrc->IsClient() && cchar[0] == '#')
+			{
+				COLOR_TYPE color = 0xFFFF;
+				for (int i = 0, c = 1; cchar[i]; ++i)
+				{
+					if (cchar[i] == ' ')
+					{
+						if (i == c)
+							break;
+						cchar[i] = '\0';
+						color = ahextoi(&cchar[c]);
+					}
+				}
+				if (color <= COLOR_QTY)
+				{
+					pCharSrc->GetClient()->addObjMessage(cchar, this, color);
+					break;
+				}
+			}
+			pCharSrc->ObjMessage( cchar, this );
 		}
 		break;
 	case OV_MOVE:

@@ -1213,6 +1213,64 @@ void CWorld::SpeakUNICODE( const CObjBaseTemplate * pSrc, const NCHAR * pText, C
 	}
 }
 
+void CWorld::OverHeadMessage(const CObjBaseTemplate* pSrc, const TCHAR* pText, COLOR_TYPE color, FONT_TYPE font)
+{
+	if (pSrc == NULL)
+		return;
+	const CChar* pCharSrc = NULL;
+	pSrc = pSrc->GetTopLevelObj();
+	if (pSrc->IsChar())
+	{
+		pCharSrc = dynamic_cast <const CChar*> (pSrc);
+	}
+
+	for (CClient* pClient = g_Serv.GetClientHead(); pClient != NULL; pClient = pClient->GetNext())
+	{
+		if (pSrc != NULL)
+		{
+			CChar* pChar = pClient->GetChar();
+			if (pChar == NULL)
+				continue;	// not logged in.
+			int iDist = pChar->GetTopDist3D(pSrc);
+			if (iDist > UO_MAP_VIEW_SIZE)	// Must label the text.
+			{
+				continue;
+			}
+		}
+
+		pClient->addBark(pText, pSrc, color, TALKMODE_SYSTEM, font);
+	}
+}
+
+void CWorld::OverHeadMessageUNICODE(const CObjBaseTemplate* pSrc, const NCHAR* pText, COLOR_TYPE color, FONT_TYPE font)
+{
+	if (pSrc == NULL)
+		return;
+	const CChar* pCharSrc = NULL;
+	pSrc = pSrc->GetTopLevelObj();
+	if (pSrc->IsChar())
+	{
+		pCharSrc = dynamic_cast <const CChar*> (pSrc);
+	}
+
+	for (CClient* pClient = g_Serv.GetClientHead(); pClient != NULL; pClient = pClient->GetNext())
+	{
+		if (pSrc != NULL)
+		{
+			CChar* pChar = pClient->GetChar();
+			if (pChar == NULL)
+				continue;	// not logged in.
+			int iDist = pChar->GetTopDist3D(pSrc);
+			if (iDist > UO_MAP_VIEW_SIZE)	// Must label the text.
+			{
+				continue;
+			}
+		}
+
+		pClient->addBarkUNICODE(pText, pSrc, color, TALKMODE_SYSTEM, font);
+	}
+}
+
 void CWorld::Broadcast( const TCHAR *pMsg ) // System broadcast in bold text
 {
 	Speak( NULL, pMsg, COLOR_TEXT_DEF, TALKMODE_BROADCAST, FONT_BOLD );

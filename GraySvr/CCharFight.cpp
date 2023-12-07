@@ -1381,6 +1381,9 @@ void CChar::CallGuards()
 		else if ( ! pChar->IsCriminal())
 			continue;
 
+		if (pChar->OnTrigger(CTRIG_CallGuards, pChar, pGuard->GetUID()))
+			return;
+
 		if ( pGuard == NULL )
 		{
 			// Spawn a new guard.
@@ -1392,8 +1395,6 @@ void CChar::CallGuards()
 			ASSERT(pChar->GetTopPoint().IsValid());
 			pGuard->Spell_Teleport( pChar->GetTopPoint(), false, false );
 		}
-
-		pChar->OnTrigger(CTRIG_CallGuards, pChar, pGuard->GetUID());
 
 		if ( pGuard->NPC_LookAtCharGuard( pChar )) 
 			return;
@@ -1768,7 +1769,7 @@ int CChar::OnTakeDamage( int iDmg, CChar * pSrc, DAMAGE_TYPE uType )
 	{
 		CGString sMsg;
 		sMsg.Format("-%d", iDmg);
-		this->Speak(sMsg, COLOR_RED, TALKMODE_SAY);
+		g_World.OverHeadMessage(this, sMsg, COLOR_RED);
 	}
 
 	UpdateStats( STAT_STR, -iDmg );
@@ -2222,6 +2223,15 @@ int CChar::Hit( CChar * pCharTarg )
 			// Poison delivered.
 			pCharTarg->SetPoison( GetRandVal( Skill_GetAdjusted( SKILL_POISONING )), this );
 		}
+	}
+
+	//trigger if not on magic damage and Source is valid
+	if (pCharTarg && pCharTarg != this)
+	{
+		if (OnTrigger(CTRIG_Hit, pCharTarg, iDmg))//we did damage to opponent
+			return(1);
+		if (pCharTarg->OnTrigger(CTRIG_GetHit, this, iDmg))//we received damage from opponent
+			return(1);
 	}
 
 	return( pCharTarg->OnTakeDamage( iDmg, this, DAMAGE_HIT ) ? 1 : 0 );
