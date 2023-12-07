@@ -41,15 +41,16 @@ so
 ```
 SRC.SYSMESSAGE #0033,3,You have gained a reward!
 ```
+![alt text](http://dragonsoftime.com/junk/coloredsysmessage.png)
+
 (like Lil Sphere)<BR>
-<b>[ DONE! ]</b> 
+<b>[ DONE! ]</b>
 
 -COLORED SPEECH?! 
 ```
 SRC.SAY #0033,3,I talk in color!
 ```
 
-![alt text](http://dragonsoftime.com/junk/coloredsysmessage.png)
 
 <b>[ISSUE 04]</b><BR>
 -COLORED NAMES on NPCs
