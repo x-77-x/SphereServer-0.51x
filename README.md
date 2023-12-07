@@ -54,13 +54,15 @@ SRC.SAY #0033,3,I talk in color!
 
 <b>[ISSUE 04]</b><BR>
 -COLORED NAMES on NPCs
+![alt text](http://dragonsoftime.com/junk/colorednames.png)
+
 ```
 TAG.NAME.HUE 021
 NAMEHUE=021
 ```
 nice to be able to change the color of NPCs name when single clicked
 
-![alt text](http://dragonsoftime.com/junk/colorednames.png)
+
 
 <b>[ISSUE 05]</b><BR>
 -COLORED ITEM NAMES
