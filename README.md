@@ -1,5 +1,5 @@
 # SphereServer-0.51x
-Potential Update to the Recovered 0.51a aka (0.52) Source given by Westy on his deathbed<BR>
+Potential Update to the Recovered 0.51a aka (0.52) Source given by Westy before he passed<BR>
 https://github.com/Sphereserver/Source-Archive/tree/main/0.52
 
 SPHERESERVER 0.51x  WISHLIST  (3/17/21)
