@@ -148,7 +148,9 @@ NEW TRIGGERS !!!???
 
 ONTRIGGER=DROPON_ITEM   in source, but not finished
 
-ONTRIGGER=CLICK  (single click) colored  NAME.HUE!?
+ONTRIGGER=CLICK  (single click) used for colored NAME.HUE!?
+
+ONTRIGGER=ITEMCLICK  (single item click) used for colored item name?  NAME.HUE!?
 
 ONTRIGGER=DROPON_SELF
 	heres a nice lil bag script in the new sphere that will let you only drop runes in a bag...
@@ -169,6 +171,8 @@ ON=@LOGIN  (like lil Sphere)  [DONE!]
 ON=@LOGOUT  (like lil Sphere)  [DONE!]
 
 ON=@GetHit  [DONE?]
+
+ON=@Hit  [DONE?]
 
 a trigger so NPCS will look at eachother 
 
