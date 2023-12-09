@@ -386,12 +386,12 @@ failout:
 	pszName = strip_extra_spaces((char*)&pszName[0]);
 
 	// NOTE: Name must be <= MAX_NAME_SIZE
-	TCHAR szTmp[ MAX_NAME_SIZE + 1 ];
+	TCHAR szTmp[ MAX_VISIBLE_NAME + 1 ];
 	int len = strlen( pszName );
-	if ( len >= MAX_NAME_SIZE )
+	if ( len >= MAX_VISIBLE_NAME)
 	{
-		strncpy( szTmp, pszName, MAX_NAME_SIZE );
-		szTmp[ MAX_NAME_SIZE ] = '\0';
+		strncpy( szTmp, pszName, MAX_VISIBLE_NAME);
+		szTmp[MAX_VISIBLE_NAME] = '\0';
 		pszName = szTmp;
 	}
 

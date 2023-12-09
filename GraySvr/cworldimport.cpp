@@ -262,7 +262,8 @@ bool CImportFile::ImportSCP( CScript & s, WORD wModeFlags )
 			{
 				if ( m_pCurSer != NULL ) 
 					return( false );
-				m_pCurSer = new CImportSer( s.GetArgHex());
+				m_pCurSer = new CImportSer(s.GetArgHex());
+				
 				m_pCurSer->m_pObj = m_pCurObj;
 				m_ListSer.InsertAfter( m_pCurSer );
 				continue;

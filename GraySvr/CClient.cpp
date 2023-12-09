@@ -1200,7 +1200,7 @@ do_resend:
 	case CV_STATIC:
 		if ( s.HasArgs())
 		{
-			Cmd_CreateItem( s.GetArgHex(), true );
+			Cmd_CreateItem(s.GetArgHex(), true );
 		}
 		break;
 	case CV_SUMMON:	// from the spell skill script.
