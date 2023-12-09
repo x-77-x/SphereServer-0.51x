@@ -110,6 +110,10 @@ public:
 	const TCHAR * Write( void ) const;
 
 	void Move( DIR_TYPE dir, int dist = 1 );
+	/// <summary>
+	/// This is to avoid that the point goes outside of usable map
+	/// </summary>
+	void Normalize();
 	DIR_TYPE GetDir( const CPointBase pt, DIR_TYPE DirDefault = DIR_QTY ) const; // Direction to point pt
 	void CalcPath( const CPointBase pSrc, int iSteps );
 

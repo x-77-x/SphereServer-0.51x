@@ -48,6 +48,9 @@
 #define UO_SEX_CENTER_X 	1323	// Center of the sextant world (LB's throne)
 #define UO_SEX_CENTER_Y		1624
 
+#define MAP_SIZE_X			UO_SIZE_X - 1
+#define MAP_SIZE_Y			UO_SIZE_Y - 1
+
 #define PLAYER_HEIGHT 15	// We need x units of room to walk under something. (human) ??? this should vary based on creature type.
 // This is why NPCs walk over blocking objects 
 // the value was too high we'll see if 3 is ok

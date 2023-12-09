@@ -228,6 +228,12 @@ void CPointBase::Move( DIR_TYPE dir, int amount )
 	}
 }
 
+void CPointBase::Normalize()
+{
+	m_x = max(0, min(m_x, MAP_SIZE_X));
+	m_y = max(0, min(m_y, MAP_SIZE_Y));
+}
+
 bool CPointBase::IsInDungeon() const
 {
 	// ??? in the future make this part of the region info !
