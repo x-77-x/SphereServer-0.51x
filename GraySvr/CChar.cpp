@@ -72,7 +72,7 @@ CChar::CChar( CREID_TYPE baseID ) : CObjBase( false )
 		m_Stat[i] = m_StatVal[i].m_val = 1;
 	}
 
-	for ( i=0;i< g_Serv.SKILL_MAX;i++)
+	for ( i=0;i< SKILL_MAX;i++)
 	{
 		m_Skill[i] = 0;
 	}
@@ -383,7 +383,7 @@ bailout:
 		// Make sure players don't get ridiculous stats.
 		if ( GetPrivLevel() <= PLEVEL_Player )
 		{
-			for ( int i=0; i< g_Serv.SKILL_MAX; i++ )
+			for ( int i=0; i< SKILL_MAX; i++ )
 			{
 				int iSkillMax = g_Serv.m_SkillClassDefs[m_pPlayer->m_SkillClass]->m_SkillLevelMax[i];
 				if ( m_Skill[i] < 0 ) Skill_SetBase( (SKILL_TYPE)i, 0 );
@@ -423,7 +423,7 @@ bailout:
 		}
 
 		// An NPC. Don't keep track of unused skills.
-		for ( int i=0; i< g_Serv.SKILL_MAX; i++ )
+		for ( int i=0; i< SKILL_MAX; i++ )
 		{
 			if ( m_Skill[i] && m_Skill[i] <= 10 )
 				Skill_SetBase( (SKILL_TYPE)i, 0 );
@@ -1476,7 +1476,7 @@ bool CChar::r_WriteVal( const TCHAR * pKey, CGString & sVal, CTextConsole * pSrc
 	case 9:	// "SKILLTOTAL"
 		{
 			int iTotal = 0;
-			for ( int i=0; i< g_Serv.SKILL_MAX; i++ )
+			for ( int i=0; i< SKILL_MAX; i++ )
 			{
 				iTotal += Skill_GetBase((SKILL_TYPE)i);
 			}
@@ -1847,7 +1847,7 @@ void CChar::r_Write( CScript & s )
 			continue;
 		s.WriteKeyVal( g_Stat_Name[j], m_Stat[j] );
 	}
-	for ( j=0;j< g_Serv.SKILL_MAX;j++)
+	for ( j=0;j< SKILL_MAX;j++)
 	{
 		if ( ! m_Skill[j] ) 
 			continue;
@@ -2190,7 +2190,7 @@ bool CChar::r_Verb( CScript &s, CTextConsole * pSrc ) // Execute command from sc
 	case CV_ALLSKILLS:
 		{
 			int iVal = s.GetArgVal();
-			for ( int i=0; i< g_Serv.SKILL_MAX; i++ )
+			for ( int i=0; i< SKILL_MAX; i++ )
 			{
 				Skill_SetBase( (SKILL_TYPE)i, iVal );
 			}
@@ -2561,7 +2561,7 @@ void CChar::InitPlayer( CEvent * pBin, CClient * pClient )
 
 	// randomize the skills first.
 	int i = 0;
-	for ( ; i < g_Serv.SKILL_MAX; i++ )
+	for ( ; i < SKILL_MAX; i++ )
 	{
 		Skill_SetBase( (SKILL_TYPE)i, GetRandVal( g_Serv.m_iMaxBaseSkill ));
 	}

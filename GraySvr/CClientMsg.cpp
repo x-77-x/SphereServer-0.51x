@@ -1759,11 +1759,11 @@ void CClient::addSkillWindow( SKILL_TYPE skill ) // Opens the skills list
 	CChar * pChar = m_Prop_UID.CharFind();
 	if ( pChar == NULL ) pChar = m_pChar;
 
-	if ( skill >= g_Serv.SKILL_MAX)
+	if ( skill >= SKILL_MAX)
 	{	// all skills
 		cmd.Skill.m_single = 0;
 		int i=0;
-		for ( ; i< g_Serv.SKILL_MAX; i++ )
+		for ( ; i< SKILL_MAX; i++ )
 		{
 			int iskillval = pChar->Skill_GetBase( (SKILL_TYPE) i);
 			if ( fVer12602 )
@@ -1782,12 +1782,12 @@ void CClient::addSkillWindow( SKILL_TYPE skill ) // Opens the skills list
 		if ( fVer12602 )
 		{
 			cmd.Skill.skills[i].m_index = 0;	// terminator.
-			len += ((g_Serv.SKILL_MAX -1) * sizeof(cmd.Skill.skills[0])) + sizeof(NWORD);
+			len += ((SKILL_MAX -1) * sizeof(cmd.Skill.skills[0])) + sizeof(NWORD);
 		}
 		else
 		{
 			cmd.Skill_v261.skills[i].m_index = 0;	// terminator.
-			len += ((g_Serv.SKILL_MAX -1) * sizeof(cmd.Skill_v261.skills[0])) + sizeof(NWORD);
+			len += ((SKILL_MAX -1) * sizeof(cmd.Skill_v261.skills[0])) + sizeof(NWORD);
 		}
 	}
 	else

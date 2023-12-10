@@ -5707,7 +5707,6 @@ public:
 	CGObArray< const CSpellDef* > m_SpellDefs;	// Defined Spells
 	CGTypedArray<CValStr,CValStr&> m_SkillKeySort;
 	CGObArray< const CSkillDef* > m_SkillDefs;	// Defined Skills
-	static SKILL_TYPE SKILL_MAX;
 
 	CGObArray< const CSkillClassDef* > m_SkillClassDefs;	// Defined Skill classes
 	CAdvanceDef m_StatAdv[STAT_BASE_QTY]; // OSI defined "skill curve"
@@ -5856,6 +5855,10 @@ public:
 
 // extern const CWeaponBase Item_Weapons[]; // ???
 
+/// <summary>
+/// Max skill usable inside this specific server, they can range from 0 to the maximum currently available in original client, (57 Throwing)
+/// </summary>
+static SKILL_TYPE SKILL_MAX = SKILL_NONE;
 extern const TCHAR * g_szServerDescription;
 extern const TCHAR * g_Stat_Name[STAT_QTY];
 extern const CPointMap g_pntLBThrone; // This is OSI's origin for degree, sextant minute coordinates

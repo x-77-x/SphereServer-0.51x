@@ -646,7 +646,7 @@ bool CChar::NPC_OnTrainHear( CChar * pCharSrc, const TCHAR * pCmd )
 	// Did they mention a skill name i recognize ?
 
 	int i=SKILL_NONE+1;
-	for ( ; i< g_Serv.SKILL_MAX; i++ )
+	for ( ; i< SKILL_MAX; i++ )
 	{
 		if ( ! FindStrWord( pCmd, g_Serv.m_SkillDefs[i]->GetKey()))
 			continue;
@@ -676,7 +676,7 @@ bool CChar::NPC_OnTrainHear( CChar * pCharSrc, const TCHAR * pCmd )
 	const TCHAR * pPrvSkill = NULL;
 
 	int iCount = 0;
-	for ( i=SKILL_NONE+1; i< g_Serv.SKILL_MAX; i++ )
+	for ( i=SKILL_NONE+1; i< SKILL_MAX; i++ )
 	{
 		int iDiff = NPC_GetTrainMax( (SKILL_TYPE)i ) - pCharSrc->Skill_GetBase( (SKILL_TYPE) i);
 		if ( iDiff <= 0 )

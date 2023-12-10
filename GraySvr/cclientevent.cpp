@@ -2116,12 +2116,12 @@ void CClient::Event_GumpButton()
 		{
 		case 0: // Right click, cancel and discard any changes
 			m_Prop_UID.ClearUID(); // no longer in /props dialog
-			addSkillWindow(g_Serv.SKILL_MAX); // Reload the real skills
+			addSkillWindow(SKILL_MAX); // Reload the real skills
 			return;
 		case 900: // Cancel and discard any changes
 clear_dialog:
 			m_Prop_UID.ClearUID(); // no longer in /props dialog
-			addSkillWindow(g_Serv.SKILL_MAX); // Reload the real skills
+			addSkillWindow(SKILL_MAX); // Reload the real skills
 			return;
 		case 901: // Apply changes and return
 			// TODO: apply changes here
@@ -3085,7 +3085,7 @@ bool CClient::xDispatchMsg()
 	case XCMD_CharStatReq: // Status Request
 		if ( ! xCheckSize( sizeof( m_bin.CharStatReq ))) return(false);
 		if ( m_bin.CharStatReq.m_type == 4 ) addCharStatWindow( (UINT) m_bin.CharStatReq.m_UID );
-		if ( m_bin.CharStatReq.m_type == 5 ) addSkillWindow(g_Serv.SKILL_MAX);
+		if ( m_bin.CharStatReq.m_type == 5 ) addSkillWindow(SKILL_MAX);
 		break;
 	case XCMD_Skill:	// Skill locking.
 		if ( ! xCheckSize(3)) return(false);
