@@ -74,13 +74,14 @@ nice to be able to change the color of NPCs name when single clicked
 -Show damage above npc when attacked  (like LiL Sphere)<BR>
  
 ![alt text](http://dragonsoftime.com/junk/showdamage.png)<BR>
-<b>[ DONE! ]</b>
+(fix to match Lil Sphere)<BR>
+<b>[ MOSTLY DONE! ]</b>
 
 
 <b>[ISSUE 07]</b><BR>
 -walk and shoot would be nice, shoot and run,<BR>
-but half accuracy when moving?
-must have range!
+but half accuracy and less range when moving?   50% less accurate and only 8 range  ???
+
  
 <b>[ISSUE 08]</b><BR>
 -colored multis??? new sphere you can go debug mode and set the color on a multi and it will change color in game
@@ -198,7 +199,7 @@ another nice one that will change the color of a moused over character
 		ENDIF
 	ENDIF
 ```
- <BR><b>[ MOSTLY DONE! ]</b> 
+ <BR><b>[ DONE! ]</b> 
 	
 <b>[ISSUE 22]</b><BR>
 -Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
@@ -212,15 +213,30 @@ players can communicate cross map by yelling =P
 SET YELLDISTANCE IN SPHERE.INI ???<BR>
 <b>[ DONE? ]</b> 
 
+
 <b>[ISSUE 24]</b><BR>
 -magic resistance... no matter your skill, you take full spell damage, reistance doesnt work
+https://web.archive.org/web/20000306034831fw_/http://uo.stratics.com/resistance.htm
+
 
 <b>[ISSUE 25]</b><BR>
 -multi and/or custom maps?
 
+
 <b>[ISSUE 26]</b><BR>
--animal taming... even with 100.0 skill animals with high INT are almost impossible to tame (nightmares ect...)
-maybe decrease INT check by 50% ??
+-animal taming... <BR>even with 100.0 skill animals with high INT are almost impossible to tame (nightmares ect...)<BR>
+maybe decrease INT check by 50% ??? 
+
+
+<b>[ISSUE 27]</b><BR>
+-spell interupt? in 51a there is no spell interupt,<BR>
+maybe added a SMALL chance (25% or less) of fizzling a spell when taking damage while casting
+
+
+<b>[ISSUE 28]</b><BR>
+-CAST_TIME=10 in spheretables.scp never worked, cast time was hardcoded and could not be changed<BR>
+value made little or no difference
+
 
   
   SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add ALL those features
