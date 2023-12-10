@@ -681,10 +681,12 @@ char* strip_extra_spaces(char* str, bool trim)
 
 		// Trim trailing space
 		end = str + strlen(str) - 1;
-		while (end > str && isspace((unsigned char)*end)) end--;
-
-		// Write new null terminator character
-		end[1] = '\0';
+		while (end > str && isspace((unsigned char)*end))
+		{
+			end--;
+			// Write new null terminator character
+			end[1] = '\0';
+		}
 	}
 
 	int i, x;

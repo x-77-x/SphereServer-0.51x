@@ -2541,6 +2541,10 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 
 int CChar::Spell_GetBaseDifficulty( SPELL_TYPE spell ) // static
 {
+	if (g_Serv.m_SpellDefs[spell]->m_wCastTime > 0)
+	{
+		return g_Serv.m_SpellDefs[spell]->m_wCastTime;
+	}
 	// RETURN 0-100.
 	if ( spell > SPELL_Water_Elem )
 	{
@@ -3147,6 +3151,12 @@ CItem * CChar::Spell_Effect_Create( SPELL_TYPE spell, LAYER_TYPE layer, int iLev
 	pSpell->m_itSpell.m_spell = spell;
 	pSpell->m_itSpell.m_skilllevel = iLevel;	// 0 - 1000
 	pSpell->m_itSpell.m_charges = 1;
+	WORD ldur = g_Serv.m_SpellDefs[spell]->m_wDurationTimeLo;
+	WORD hdur = g_Serv.m_SpellDefs[spell]->m_wDurationTimeHi;
+	if (hdur > 0 && ldur <= hdur)
+	{
+		iDuration = (GetRandVal(hdur - ldur + 1) + ldur)*TICK_PER_SEC;
+	}
 	pSpell->SetDecayTime( iDuration );
 	if ( pSrc )
 	{

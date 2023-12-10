@@ -4928,8 +4928,8 @@ public:
 
 	void Speak( const CObjBaseTemplate * pSrc, const TCHAR * pText, COLOR_TYPE color = COLOR_TEXT_DEF, TALKMODE_TYPE mode = TALKMODE_SAY, FONT_TYPE font = FONT_BOLD );
 	void SpeakUNICODE( const CObjBaseTemplate * pSrc, const NCHAR * pText, COLOR_TYPE color = COLOR_TEXT_DEF, TALKMODE_TYPE mode = TALKMODE_SAY, FONT_TYPE font = FONT_BOLD, const char * pszLanguage = NULL );
-	void OverHeadMessage(const CObjBaseTemplate* pSrc, const TCHAR* pText, COLOR_TYPE color = COLOR_TEXT_DEF, FONT_TYPE font = FONT_BOLD);
-    void OverHeadMessageUNICODE(const CObjBaseTemplate* pSrc, const NCHAR * pText, COLOR_TYPE color = COLOR_TEXT_DEF, FONT_TYPE font = FONT_BOLD);
+	void OverHeadMessage(const CObjBaseTemplate* pSrc, const TCHAR* pText, COLOR_TYPE color = COLOR_TEXT_DEF, FONT_TYPE font = FONT_BOLD, bool sendtoself = true);
+    void OverHeadMessageUNICODE(const CObjBaseTemplate* pSrc, const NCHAR * pText, COLOR_TYPE color = COLOR_TEXT_DEF, FONT_TYPE font = FONT_BOLD, bool sendtoself = true);
 	void Broadcast( const TCHAR * pMsg );
 	CItem * Explode( CChar * pSrc, CPointMap pt, int iDist, int iDamage, WORD wFlags = DAMAGE_GENERAL | DAMAGE_HIT );
 

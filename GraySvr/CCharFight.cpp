@@ -1769,7 +1769,7 @@ int CChar::OnTakeDamage( int iDmg, CChar * pSrc, DAMAGE_TYPE uType )
 	{
 		CGString sMsg;
 		sMsg.Format("-%d", iDmg);
-		g_World.OverHeadMessage(this, sMsg, COLOR_RED);
+		g_World.OverHeadMessage(this, sMsg, COLOR_RED, FONT_BOLD, false);
 	}
 
 	UpdateStats( STAT_STR, -iDmg );

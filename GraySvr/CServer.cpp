@@ -666,7 +666,7 @@ bool CPotionDef::r_LoadVal( CScript &s )
 
 const TCHAR * CSpellDef::sm_SpellsTable[] =
 {
-	"CAST_TIME",
+	"CASTTIME",
 	"DURATION_HI",
 	"DURATION_LO",
 	"EFFECT_HI",
@@ -685,7 +685,7 @@ bool CSpellDef::r_LoadVal( CScript &s )
 {
 	switch ( FindTableSorted( s.GetKey(), sm_SpellsTable, COUNTOF( sm_SpellsTable )))
 	{
-	case 0:	// "CAST_TIME"
+	case 0:	// "CASTTIME"
 		m_wCastTime = s.GetArgVal();	// In tenths.
 		break;
 	case 1:	// "DURATION_HI"
