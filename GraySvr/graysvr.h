@@ -5707,6 +5707,7 @@ public:
 	CGObArray< const CSpellDef* > m_SpellDefs;	// Defined Spells
 	CGTypedArray<CValStr,CValStr&> m_SkillKeySort;
 	CGObArray< const CSkillDef* > m_SkillDefs;	// Defined Skills
+	static SKILL_TYPE SKILL_MAX;
 
 	CGObArray< const CSkillClassDef* > m_SkillClassDefs;	// Defined Skill classes
 	CAdvanceDef m_StatAdv[STAT_BASE_QTY]; // OSI defined "skill curve"

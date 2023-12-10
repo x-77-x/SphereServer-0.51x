@@ -385,7 +385,7 @@ failout:
 	//name must not contain any unwanted spaces
 	pszName = strip_extra_spaces((char*)&pszName[0]);
 
-	// NOTE: Name must be <= MAX_NAME_SIZE
+	// NOTE: Name must be <= MAX_VISIBLE_NAME - items in game contains a lot of chars, so we must try setting the name to the available chars in the buffer
 	TCHAR szTmp[ MAX_VISIBLE_NAME + 1 ];
 	int len = strlen( pszName );
 	if ( len >= MAX_VISIBLE_NAME)

@@ -72,9 +72,9 @@ void CChar::Action_StartSpecial( CREID_TYPE id )
 
 SKILL_TYPE CChar::Skill_GetBest() const // Which skill is the highest for character p
 {
-	SKILL_TYPE best_skill = SKILL_QTY;
+	SKILL_TYPE best_skill = g_Serv.SKILL_MAX;
 	int best_value=-1;
-	for ( int i=0;i<SKILL_QTY;i++)
+	for ( int i=0;i< g_Serv.SKILL_MAX;i++)
 	{
 		int iVal = Skill_GetBase( (SKILL_TYPE)i );
 		if ( iVal > best_value )
@@ -1812,7 +1812,7 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 	ASSERT( sk == SKILL_NONE || IsSkillBase(sk) || IsSkillNPC(sk));
 
 	bool ret = true;
-	if (sk > SKILL_NONE && sk < SKILL_QTY)
+	if (sk > SKILL_NONE && sk < g_Serv.SKILL_MAX)
 		if (OnTrigger(CTRIG_SkillStart, this, sk))
 			return false;
 	// Some skill can start right away. Need no targetting.
@@ -2492,7 +2492,7 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 
 	}
 	
-	if (sk > SKILL_NONE && sk < SKILL_QTY)
+	if (sk > SKILL_NONE && sk < g_Serv.SKILL_MAX)
 	{
 		if (!ret)
 		{
@@ -2846,7 +2846,7 @@ bool CChar::Spell_Resurrection( int iSkillLossPercent )
 	{
 		// Remove some skills / stats as a percent.
 		int i=0;
-		for ( ; i<SKILL_QTY; i++ )
+		for ( ; i< g_Serv.SKILL_MAX; i++ )
 		{
 			int iVal = Skill_GetBase( (SKILL_TYPE) i );
 			if ( iVal <= 250 )

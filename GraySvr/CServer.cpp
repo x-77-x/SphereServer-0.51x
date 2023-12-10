@@ -540,6 +540,10 @@ CSkillDef::CSkillDef( SKILL_TYPE skill, CScript & s )
 			break;
 	}
 	g_Serv.m_SkillKeySort.InsertAt( j, val );
+	if (skill >= g_Serv.SKILL_MAX)
+	{
+		g_Serv.SKILL_MAX = (SKILL_TYPE)(skill + 1);
+	}
 }
 
 bool CSkillDef::r_LoadVal( CScript &s )
@@ -3245,6 +3249,8 @@ STAT_TYPE CServer::FindStatKey( const TCHAR * pszKey ) // static
 {
 	return (STAT_TYPE) FindTable( pszKey, g_Stat_Name, COUNTOF( g_Stat_Name ));
 }
+
+SKILL_TYPE CServer::SKILL_MAX = SKILL_NONE;
 
 SKILL_TYPE CServer::FindSkillKey( const TCHAR * pszKey ) const
 {

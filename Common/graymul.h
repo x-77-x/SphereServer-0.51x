@@ -1959,13 +1959,16 @@ enum SKILL_TYPE	// List of skill numbers (things that can be done at a given tim
 	SKILL_MEDITATION,
 	SKILL_Stealth,			// 47
 	SKILL_RemoveTrap,		// 48
-	SKILL_NECROMANCY,
-	SKILL_FOCUS, //50
-	SKILL_CHIVALRY,//51
-	SKILL_Bushido,//52
-	SKILL_Ninjitsu,//53
-	SKILL_Herboristery,//54
-	SKILL_QTY,	// 55
+	SKILL_Necromancy,
+	SKILL_Focus,
+	SKILL_Chivalry,
+	SKILL_Bushido,
+	SKILL_Ninjitsu,
+	SKILL_Spellweaving,
+	SKILL_Mysticism,
+	SKILL_Imbuing,
+	SKILL_Throwing,
+	SKILL_QTY,	// 58
 
 	// Actions a npc will perform. (no need to track skill level for these)
 	NPCACT_FOLLOW_TARG = 100,	// 100 = following a char.

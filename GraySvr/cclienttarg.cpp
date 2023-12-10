@@ -133,7 +133,7 @@ bool CClient::OnTarg_Obj_Props( CObjUID uid, const CPointMap & pt, ITEMID_TYPE i
 		m_Prop_UID = m_Targ_UID = uid;
 		if ( uid.IsChar())
 		{
-			addSkillWindow( SKILL_QTY ); // load the targets skills
+			addSkillWindow( g_Serv.SKILL_MAX ); // load the targets skills
 		}
 		addGumpPropMenu();
 	}
