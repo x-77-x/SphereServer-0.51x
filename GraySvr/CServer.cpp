@@ -679,6 +679,7 @@ const TCHAR * CSpellDef::sm_SpellsTable[] =
 	"RUNES",
 	"SCROLL_ITEM",
 	"SOUND",
+	"MANAUSE"
 };
 
 bool CSpellDef::r_LoadVal( CScript &s )
@@ -724,6 +725,9 @@ bool CSpellDef::r_LoadVal( CScript &s )
 		break;
 	case 12: // "SOUND"
 		m_sound = s.GetArgVal();
+		break;
+	case 13: // "MANAUSE"
+		m_wManaUse = s.GetArgVal();
 		break;
 	default:
 		return( false );

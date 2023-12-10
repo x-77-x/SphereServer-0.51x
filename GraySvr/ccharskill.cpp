@@ -3304,7 +3304,9 @@ bool CChar::Spell_CanCast( SPELL_TYPE spell, bool fTest, CObjBase * pSrc, bool f
 		}
 	}
 
-	int mana = Spell_ManaReq[ (spell-SPELL_Clumsy)/8 ];
+	int mana = g_Serv.m_SpellDefs[spell]->m_wManaUse;
+	if(mana <= 0)
+		mana = Spell_ManaReq[ (spell-SPELL_Clumsy)/8 ];
 
 	// The magic item must be on your person to use.
 	if ( pSrc != this )
