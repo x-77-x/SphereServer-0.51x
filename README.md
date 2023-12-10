@@ -237,6 +237,12 @@ maybe added a SMALL chance (25% or less) of fizzling a spell when taking damage 
 -CAST_TIME=10 in spheretables.scp never worked, cast time was hardcoded and could not be changed<BR>
 value made little or no difference
 
+<b>[ISSUE 29]</b><BR>
+-weapon speed in sphereitem.scp never worked<BR>
+SPEED=<BR>
+value no difference, BUT you could increase weight to adjust swing speed!
+
+
 
   
   SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add ALL those features
