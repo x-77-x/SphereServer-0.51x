@@ -108,7 +108,7 @@ SKILL_TYPE CCharPlayer::Skill_GetLockType( const TCHAR * pKey ) const
 	{
 		i = g_Serv.FindSkillKey( ppArgs[1] );
 	}
-	if ( i >= SKILL_MAX)
+	if ( i >= g_Serv.SKILL_MAX)
 		return( SKILL_NONE );
 	return( (SKILL_TYPE) i );
 }
@@ -214,7 +214,7 @@ void CCharPlayer::r_Write( CScript & s ) const
 	if ( m_SkillClass )
 		s.WriteKeyVal( "SKILLCLASS", m_SkillClass );
 
-	for ( int j=0;j< SKILL_MAX;j++)	// Don't write all lock states!
+	for ( int j=0;j< g_Serv.SKILL_MAX;j++)	// Don't write all lock states!
 	{
 		if ( ! m_SkillLock[j] )
 			continue;
