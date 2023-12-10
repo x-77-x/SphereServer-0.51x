@@ -385,13 +385,13 @@ failout:
 	//name must not contain any unwanted spaces
 	pszName = strip_extra_spaces((char*)&pszName[0]);
 
-	// NOTE: Name must be <= MAX_NAME_SIZE
-	TCHAR szTmp[ MAX_NAME_SIZE + 1 ];
+	// NOTE: Name must be <= MAX_VISIBLE_NAME - items in game contains a lot of chars, so we must try setting the name to the available chars in the buffer
+	TCHAR szTmp[ MAX_VISIBLE_NAME + 1 ];
 	int len = strlen( pszName );
-	if ( len >= MAX_NAME_SIZE )
+	if ( len >= MAX_VISIBLE_NAME)
 	{
-		strncpy( szTmp, pszName, MAX_NAME_SIZE );
-		szTmp[ MAX_NAME_SIZE ] = '\0';
+		strncpy( szTmp, pszName, MAX_VISIBLE_NAME);
+		szTmp[MAX_VISIBLE_NAME] = '\0';
 		pszName = szTmp;
 	}
 
@@ -513,6 +513,7 @@ void CObjBase::MoveNear( CPointMap pt, int iSteps, WORD wCan )
 		// Move to the right or left?
 		CPointBase pTest = pt;	// Save this so we can go back to it if we hit a blocking object.
 		pt.Move( dir );
+		pt.Normalize();//avoid going outside of map bounds
 		dir = GetDirTurn( dir, GetRandVal(3)-1 );	// stagger ?
 		// Put the item at the correct Z point
 		WORD wBlockRet = wCan;

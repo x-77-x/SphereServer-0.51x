@@ -331,7 +331,8 @@ enum EXTDATA_TYPE
 
 struct CEventCharDef
 {
-#define MAX_NAME_SIZE	30		// imposed by client for protocol
+#define MAX_VISIBLE_NAME 0x7f //for items in game we allow longest string possible
+#define MAX_NAME_SIZE	30			// imposed by client for protocol
 	char m_name[MAX_NAME_SIZE];
 	char m_pass[MAX_NAME_SIZE];
 };

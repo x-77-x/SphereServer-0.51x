@@ -540,6 +540,10 @@ CSkillDef::CSkillDef( SKILL_TYPE skill, CScript & s )
 			break;
 	}
 	g_Serv.m_SkillKeySort.InsertAt( j, val );
+	if (skill >= SKILL_MAX)
+	{
+		SKILL_MAX = (SKILL_TYPE)(skill + 1);
+	}
 }
 
 bool CSkillDef::r_LoadVal( CScript &s )

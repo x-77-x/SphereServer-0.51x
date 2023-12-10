@@ -558,7 +558,7 @@ bool CWorld::LoadSection()
 	}
 	else if ( m_File.IsSectionType( "WORLDITEM" ))
 	{
-		return( CItem::CreateScript((ITEMID_TYPE) m_File.GetArgHex())->r_Load(m_File));
+		return( CItem::CreateScript((ITEMID_TYPE)m_File.GetArgHex())->r_Load(m_File));
 	}
 	else if ( m_File.IsSectionType( "GMPAGE" ))
 	{
