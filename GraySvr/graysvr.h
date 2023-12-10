@@ -5063,6 +5063,7 @@ public:
 	WORD m_wCastTime;	// In tenths.
 	WORD m_wDurationTimeLo;
 	WORD m_wDurationTimeHi;
+	WORD m_wManaUse;
 public:
 	bool IsSpellType( WORD wFlags ) const
 	{
