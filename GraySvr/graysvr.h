@@ -5058,12 +5058,12 @@ public:
 	ITEMID_TYPE m_SpellID = ITEMID_NOTHING;		// The rune graphic for this.
 	ITEMID_TYPE m_ScrollID = ITEMID_NOTHING;		// The scroll graphic item for this.
 	ITEMID_TYPE m_wEffectID = ITEMID_NOTHING;	// Animation effect ID
-	WORD m_wEffectLo = 0;	// Damage or time or effect based on skill of caster.
-	WORD m_wEffectHi = 0;	// Damage or time of effect based on 100% magery
+	WORD m_wEffectLo = 0;	// Damage or effect based on skill of caster.
+	WORD m_wEffectHi = 0;	// Damage or effect based on 100% magery
 	WORD m_wCastTime = 0;	// In tenths.
-	WORD m_wDurationTimeLo = 0;
-	WORD m_wDurationTimeHi = 0;
-	WORD m_wManaUse = 0;
+	WORD m_wDurationTimeLo = 0;//Time of effect, minimum, this is not affected by skill - leaving to zero will use the hardcoded defaults
+	WORD m_wDurationTimeHi = 0;//Time of effect, maximum, this is not affected by skill - leaving to zero will use the hardcoded defaults
+	WORD m_wManaUse = 0;//Mana used for the cast - leaving to zero will use the hardcoded defaults
 public:
 	bool IsSpellType( WORD wFlags ) const
 	{
