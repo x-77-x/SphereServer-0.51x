@@ -2904,7 +2904,7 @@ private:
 	{
 		return( dynamic_cast <const CItemBaseMulti *> (m_pDef));
 	}
-	bool Multi_CreateComponent( ITEMID_TYPE id, int dx, int dy, int dz );
+	bool Multi_CreateComponent( ITEMID_TYPE id, int dx, int dy, int dz, COLOR_TYPE color );
 
 	CItem * Ship_GetTiller();
 	int Ship_GetFaceOffset() const
