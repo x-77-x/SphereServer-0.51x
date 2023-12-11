@@ -242,7 +242,10 @@ value made little or no difference
 SPEED=<BR>
 value no difference, BUT you could increase weight to adjust swing speed!
 
-
+<b>[ISSUE 30]</b><BR>
+NPC spell targets<BR>
+Add healing to self if a monster casts healing<BR>
+Monsters should be able to use greater heal, dispel, magic reflection, cure...<BR>
 
   
   SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add ALL those features
