@@ -3155,7 +3155,7 @@ CItem * CChar::Spell_Effect_Create( SPELL_TYPE spell, LAYER_TYPE layer, int iLev
 	WORD hdur = g_Serv.m_SpellDefs[spell]->m_wDurationTimeHi;
 	if (hdur > 0 && ldur <= hdur)
 	{
-		iDuration = (GetRandVal(hdur - ldur + 1) + ldur)*TICK_PER_SEC;
+		iDuration = (GetRandVal((hdur - ldur) + 1) + ldur)*TICK_PER_SEC;
 	}
 	pSpell->SetDecayTime( iDuration );
 	if ( pSrc )

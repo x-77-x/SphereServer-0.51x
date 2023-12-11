@@ -673,13 +673,13 @@ const TCHAR * CSpellDef::sm_SpellsTable[] =
 	"EFFECT_ID",
 	"EFFECT_LO",
 	"FLAGS",
+	"MANAUSE",
 	"NAME",
 	"REAGENTS",
 	"RUNE_ITEM",
 	"RUNES",
 	"SCROLL_ITEM",
 	"SOUND",
-	"MANAUSE"
 };
 
 bool CSpellDef::r_LoadVal( CScript &s )
@@ -707,28 +707,29 @@ bool CSpellDef::r_LoadVal( CScript &s )
 	case 6: // "FLAGS"
 		m_wFlags = s.GetArgVal();
 		break;
-	case 7: // "NAME"
+	case 7: // "MANAUSE"
+		m_wManaUse = s.GetArgVal();
+		break;
+	case 8: // "NAME"
 		m_sName = s.GetArgStr();
 		break;
-	case 8: // "REAGENTS"
+	case 9: // "REAGENTS"
 		m_sReags = s.GetArgStr();
 		break;
-	case 9: // "RUNE_ITEM"
+	case 10: // "RUNE_ITEM"
 		m_SpellID = (ITEMID_TYPE) s.GetArgVal();
 		break;
-	case 10: // "RUNES"
+	case 11: // "RUNES"
 		// This may only be basic chars !
 		m_sRunes = s.GetArgStr();
 		break;
-	case 11: // "SCROLL_ITEM"
+	case 12: // "SCROLL_ITEM"
 		m_ScrollID = (ITEMID_TYPE) s.GetArgVal();
 		break;
-	case 12: // "SOUND"
+	case 13: // "SOUND"
 		m_sound = s.GetArgVal();
 		break;
-	case 13: // "MANAUSE"
-		m_wManaUse = s.GetArgVal();
-		break;
+	
 	default:
 		return( false );
 	}
