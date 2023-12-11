@@ -89,6 +89,10 @@ after 17 years i just realized you can dye a ship deed and the multi will be aff
 
 ![alt text](http://dragonsoftime.com/junk/coloredmultis.png)
 
+CLASSICUO WILL DISPLAY COLORED MULTIS! ORION AND ORIGINAL CLIENT WILL NOT<BR>
+<b>[ DONE! ]</b>
+
+
 <b>[ISSUE 09]</b><BR>
 -sphere script loading times are abnormally slow compared to the 51a release version<BR>
 <b>[ DONE! ]</b>   
@@ -144,6 +148,7 @@ and TAG.YOURMOM=1 same as VAR. i think, but permanent, great way to tag characte
 <b>[ISSUE 19]</b><BR>
 -books?  the books in SPHEREBook.scp never worked, the pages are empty when you add them in game
 MORE=X  is book #
+<b>[ DONE! ]</b>
 
 
 <b>[ISSUE 20]</b><BR>
@@ -244,6 +249,7 @@ value made little or no difference<BR>
 -weapon speed in sphereitem.scp never worked<BR>
 SPEED=<BR>
 value no difference, BUT you could increase weight to adjust swing speed!
+
 
 <b>[ISSUE 30]</b><BR>
 NPC spell targets<BR>
