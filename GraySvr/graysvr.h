@@ -5055,15 +5055,15 @@ public:
 	SOUND_TYPE m_sound;			// What noise does it make when done.
 	CGString m_sRunes;	// Letter Runes for Words of power.
 	CGString m_sReags;	// What reagents does it take ?
-	ITEMID_TYPE m_SpellID;		// The rune graphic for this.
-	ITEMID_TYPE m_ScrollID;		// The scroll graphic item for this.
-	ITEMID_TYPE m_wEffectID;	// Animation effect ID
-	WORD m_wEffectLo;	// Damage or time or effect based on skill of caster.
-	WORD m_wEffectHi;	// Damage or time of effect based on 100% magery
-	WORD m_wCastTime;	// In tenths.
-	WORD m_wDurationTimeLo;
-	WORD m_wDurationTimeHi;
-	WORD m_wManaUse;
+	ITEMID_TYPE m_SpellID = ITEMID_NOTHING;		// The rune graphic for this.
+	ITEMID_TYPE m_ScrollID = ITEMID_NOTHING;		// The scroll graphic item for this.
+	ITEMID_TYPE m_wEffectID = ITEMID_NOTHING;	// Animation effect ID
+	WORD m_wEffectLo = 0;	// Damage or time or effect based on skill of caster.
+	WORD m_wEffectHi = 0;	// Damage or time of effect based on 100% magery
+	WORD m_wCastTime = 0;	// In tenths.
+	WORD m_wDurationTimeLo = 0;
+	WORD m_wDurationTimeHi = 0;
+	WORD m_wManaUse = 0;
 public:
 	bool IsSpellType( WORD wFlags ) const
 	{
