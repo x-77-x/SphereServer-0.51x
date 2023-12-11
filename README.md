@@ -235,7 +235,10 @@ maybe added a SMALL chance (25% or less) of fizzling a spell when taking damage 
 
 <b>[ISSUE 28]</b><BR>
 -CAST_TIME=10 in spheretables.scp never worked, cast time was hardcoded and could not be changed<BR>
-value made little or no difference
+value made little or no difference<BR>
+-MANAUSE=  add<BR>
+<b>[ DONE! ]</b> 
+
 
 <b>[ISSUE 29]</b><BR>
 -weapon speed in sphereitem.scp never worked<BR>
