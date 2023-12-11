@@ -5061,8 +5061,8 @@ public:
 	WORD m_wEffectLo = 0;	// Damage or effect based on skill of caster.
 	WORD m_wEffectHi = 0;	// Damage or effect based on 100% magery
 	WORD m_wCastTime = 0;	// In tenths.
-	WORD m_wDurationTimeLo = 0;//Time of effect, minimum, this is not affected by skill - leaving to zero will use the hardcoded defaults
-	WORD m_wDurationTimeHi = 0;//Time of effect, maximum, this is not affected by skill - leaving to zero will use the hardcoded defaults
+	WORD m_wDurationTimeLo = 0;//Time of effect, minimum, this is not affected by skill - must be lower than "DURATION_HI" (m_wDurationTimeHi)
+	WORD m_wDurationTimeHi = 0;//Time of effect, maximum, this is not affected by skill - leaving this to zero (0) will use the hardcoded defaults
 	WORD m_wManaUse = 0;//Mana used for the cast - leaving to zero will use the hardcoded defaults
 public:
 	bool IsSpellType( WORD wFlags ) const
