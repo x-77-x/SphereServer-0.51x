@@ -235,14 +235,20 @@ maybe added a SMALL chance (25% or less) of fizzling a spell when taking damage 
 
 <b>[ISSUE 28]</b><BR>
 -CAST_TIME=10 in spheretables.scp never worked, cast time was hardcoded and could not be changed<BR>
-value made little or no difference
+value made little or no difference<BR>
+-MANAUSE=  add<BR>
+<b>[ DONE! ]</b> 
+
 
 <b>[ISSUE 29]</b><BR>
 -weapon speed in sphereitem.scp never worked<BR>
 SPEED=<BR>
 value no difference, BUT you could increase weight to adjust swing speed!
 
-
+<b>[ISSUE 30]</b><BR>
+NPC spell targets<BR>
+Add healing to self if a monster casts healing<BR>
+Monsters should be able to use greater heal, dispel, magic reflection, cure...<BR>
 
   
   SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add ALL those features
