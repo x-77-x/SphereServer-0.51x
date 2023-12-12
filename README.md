@@ -260,14 +260,14 @@ another nice one that will change the color of a moused over character
 <b>[ISSUE 22]</b><BR>
 -Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
 thats way too long, also poison needs to be dehardcoded so the different posion levels damages can be adjusted<BR>
-<b>[ DONE? ]</b>   
+<b>[ DONE! ]</b>   
 
 
 <b>[ISSUE 23]</b><BR>
 -yell distance! ! it would be nice to adjust the distance when players yell in game 20 squares, 50 squares, ect...
 players can communicate cross map by yelling =P
 SET YELLDISTANCE IN SPHERE.INI ???<BR>
-<b>[ DONE? ]</b> 
+<b>[ DONE! ]</b> 
 
 <b>[ISSUE 28]</b><BR>
 -CAST_TIME=10 in spheretables.scp never worked, cast time was hardcoded and could not be changed<BR>
