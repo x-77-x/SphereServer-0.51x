@@ -70,7 +70,7 @@ example... put a npc on the roof of a tower, you can shoot him from the 1st floo
 <b>[ISSUE 12]</b><BR>
 -Provocation - you can use provoc on player in guarded area, then call guards on them after it makes you attack them
 check area for guards?  maybe cant be used on other players?  not really sure how provoc is supposed to work,
-but i know i disabled it 18+ years ago for a reason
+but i know i disabled it 18+ years ago for a reason, maybe provoc cant target a player?
 
 
 
