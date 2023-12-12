@@ -1328,7 +1328,29 @@ void CClient::Event_BBoardRequest( CObjUID uid )
 			pBoard->ContentAdd( pMsgNew );
 		}
 		break;
+	case 6://remove message
+	{
+		if (m_bin.BBoard.m_len < 0x0c)
+		{
+			DEBUG_ERR(("%x:BBoard remove message bad length %d\n", GetSocket(), (int)m_bin.BBoard.m_len));
+			return;
+		}
 
+		if (m_bin.BBoard.m_UID == pBoard->GetUID())//allow message delete to GM and OWNER of the message
+		{
+			CObjUID uidItem(m_bin.BBoard.m_UIDMsg);
+			if (!uidItem || !uidItem.IsItem())
+				return;
+			CItem* pItem = uidItem.ItemFind();
+			if (pItem && pItem->GetParent() == pBoard && (pItem->m_uidLink == m_pChar->GetUID() || IsPriv(PRIV_GM)))
+			{
+				//we can delete the message
+				pItem->Delete();
+			}
+		}
+
+		break;
+	}
 	default:
 		DEBUG_ERR(( "%x:BBoard unknown flag %d\n", GetSocket(), (int) m_bin.BBoard.m_flag ));
 		return;
@@ -2842,7 +2864,7 @@ void CClient::Event_Target()
 	// XCMD_Target
 	// If player clicks on something with the targetting cursor
 	// Assume addTarget was called before this.
-	// NOTE: Make sure they can actually validly trarget this item !
+	// NOTE: Make sure they can actually validly target this item !
 
 	ASSERT(m_pChar);
 	if ( m_bin.Target.m_code != GetTargMode())
@@ -2865,12 +2887,27 @@ void CClient::Event_Target()
 	TARGMODE_TYPE prevmode = GetTargMode();
 	ClearTargMode();
 
-	if ( uid.IsValidUID() && ! IsPriv( PRIV_GM ))
+	if ( uid.IsValidUID() && ! IsPriv( PRIV_GM ) )//GM can target anywhere
 	{
 		if ( ! m_pChar->CanSee( uid.ObjFind()))
 		{
 			addObjectRemoveCantSee( uid, "the target" );
 			return;
+		}
+	}
+	else if (pt.IsValid() && !IsPriv(PRIV_GM))//GM can target anywhere
+	{
+		CPointMap* ppt = &CPointMap::CPointMap();
+		if (!m_pChar->CanSeeLOS(pt, ppt, UO_MAP_VIEW_SIZE))
+		{
+			//LOS or see should be used inside scripts, this is just to avoid targeting hack with targets outside the max view range or with los blocked,
+			//eg: bandage cleaning in water in the other part of the world, this will be valid in case of special tools for players or something similar,
+			//the object los blocked should be at a max 1 tile range behind the choosen point, so the obstacle can be dealt internally (eg: using fountain)
+			if (ppt->GetDist(pt) > 1)
+			{
+				SysMessage("Target is not in line of sight");
+				return;
+			}
 		}
 	}
 

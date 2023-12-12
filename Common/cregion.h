@@ -53,14 +53,14 @@ public:
 
 	bool IsValid() const
 	{
-		if ( m_z <= -UO_SIZE_Z || m_z >= UO_SIZE_Z ) return( false );
+		if ( m_z <= UO_SIZE_MIN_Z || m_z >= UO_SIZE_Z ) return( false );
 		if ( m_x < 0 || m_x >= UO_SIZE_X ) return( false );
 		if ( m_y < 0 || m_y >= UO_SIZE_Y ) return( false );
 		return( true );
 	}
 	bool IsCharValid() const
 	{
-		if ( m_z <= -UO_SIZE_Z || m_z >= UO_SIZE_Z ) return( false );
+		if ( m_z <= UO_SIZE_MIN_Z || m_z >= UO_SIZE_Z ) return( false );
 		if ( m_x <= 0 || m_x >= UO_SIZE_X ) return( false );
 		if ( m_y <= 0 || m_y >= UO_SIZE_Y ) return( false );
 		return( true );
