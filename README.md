@@ -50,7 +50,7 @@ SRC.SYSMESSAGE #0033,3,You have gained a reward!
 ```
 SRC.SAY #0033,3,I talk in color!
 ```
-
+<b>[ DONE! ]</b>
 
 <b>[ISSUE 04]</b><BR>
 -COLORED NAMES on NPCs
