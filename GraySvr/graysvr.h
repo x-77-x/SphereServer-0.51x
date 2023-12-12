@@ -2571,7 +2571,7 @@ public:
 	int  AddSpellbookScroll( CItem * pItem );
 
 	bool IsDoorOpen() const;
-	bool Use_Door( bool fJustOpen );
+	bool Use_Door( bool fIsLinkedDoor);
 	bool Use_Portculis();
 	SOUND_TYPE Use_Music( bool fWell ) const;
 

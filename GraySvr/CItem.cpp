@@ -88,11 +88,13 @@ CItem::~CItem()
 	DeletePrepare();	// Must remove early because virtuals will fail in child destructor.
 	switch ( m_type )
 	{
-	case ITEM_SPAWN_CHAR:
-		Spawn_KillChildren();
-		break;
-	case ITEM_FIGURINE:
-	case ITEM_EQ_HORSE:
+		case ITEM_SPAWN_CHAR:
+		{
+			Spawn_KillChildren();
+			break;
+		}
+		case ITEM_FIGURINE:
+		case ITEM_EQ_HORSE:
 		{	// remove the ridden or linked char.
 			CChar * pHorse = m_itFigurine.m_UID.CharFind();
 			if ( pHorse && pHorse->IsDisconnected() && pHorse->m_pNPC )
@@ -102,14 +104,35 @@ CItem::~CItem()
 				pHorse->m_atRidden.m_FigurineUID.ClearUID();
 				pHorse->Delete();
 			}
+			break;
 		}
-		break;
+#if CUSTOM //this will be active only by enabling the compiler preprocessor in project properties -> C++/C -> Preprocessor directive -> Preprocessor definitions
+		case ITEM_SHIP:
+		case ITEM_MULTI:
+		{
+			//TODO: code to remove all the keys? Maybe a CGList with the "MORE" serial and at save just ignore them if the "MORE" hasn't changed at all? remove all the keys that match the MORE=VALUE and non existant HOUSE/SHIP?
+			break;
+		}
+#endif
 	}
 	if ( m_pDef != NULL )
 	{
 		m_pDef->DelInstance();
 	}
 	g_Serv.StatDec(SERV_STAT_ITEMS);
+#if CUSTOM //this will be active only by enabling the compiler preprocessor in project properties -> C++/C -> Preprocessor directive -> Preprocessor definitions
+	ITEMID_TYPE id = GetDispID();
+	if (id == ITEMID_SIGN_BRASS_1 || id == ITEMID_SIGN_BRASS_2)
+	{
+		//if we remove the external sign of a house, delete the house itself, since it would be no more usable
+		if (m_uidLink && m_uidLink.IsItem())
+		{
+			CItem* pItem = m_uidLink.ItemFind();
+			if (pItem && pItem->m_type == ITEM_MULTI)
+				pItem->Delete();
+		}
+	}
+#endif
 }
 
 CItem * CItem::CreateBase( ITEMID_TYPE id )	// static
@@ -1875,9 +1898,7 @@ bool CItem::r_WriteVal( const TCHAR * pKey, CGString & sVal, CTextConsole * pSrc
 		sVal.FormatHex( m_uidLink );
 		break;
 	case 10:	// "MORE"
-		goto scp_more1;
 	case 11:	// "MORE1"
-scp_more1:
 		sVal.FormatHex( m_itNormal.m_more1 );
 		break;
 	case 12:	// "MORE2"
@@ -1974,10 +1995,29 @@ bool CItem::r_LoadVal( CScript & s ) // Load an item Script
 		return true;
 
 	case 10:	// "MORE"
-		goto scp_more1;
 	case 11:	// "MORE1"
-scp_more1:
 		m_itNormal.m_more1 = s.GetArgHex();	
+		if ((m_type == ITEM_BOOK) && IsBookSystem())
+		{
+			CGString sTitle;
+			CGString sSec;
+			sSec.Format("BOOK %li", m_itBook.m_TimeID);
+
+			CScriptLock s;
+			if (g_Serv.ScriptLock(s, SCPFILE_BOOK_2, sSec) != NULL)
+			{
+				if (s.FindKey("TITLE"))
+				{
+					sTitle = s.GetArgStr();
+					SetName(s.GetArgStr());	// Make sure the book is named.
+				}
+				else
+				{
+					sTitle = GetName();
+					SetName(sTitle);
+				}
+			}
+		}
 		return true;
 	case 12:	// "MORE2"
 		m_itNormal.m_more2 = s.GetArgHex();
@@ -2450,7 +2490,7 @@ bool CItem::IsDoorOpen() const
 	return( false );
 }
 
-bool CItem::Use_Door( bool fJustOpen )
+bool CItem::Use_Door( bool fIsLinkedDoor )
 {
 	// don't call this directly but call CChar::Use_Item() instead.
 	// don't check to see if it is locked here
@@ -2469,8 +2509,8 @@ bool CItem::Use_Door( bool fJustOpen )
 	ITEM_TYPE typelock = m_type;
 
 	bool fClosing = ( doordir & DOOR_OPENED );	// currently open
-	if ( fJustOpen && fClosing )
-		return( true );	// links just open
+	if (fIsLinkedDoor && fClosing )// links just open
+		return( true );	
 
 	CPointMap pt = GetTopPoint();
 	switch ( doordir )

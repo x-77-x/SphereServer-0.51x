@@ -222,7 +222,7 @@ void CClient::Event_Book_Page( CObjUID uid ) // Book window
 		szTemp[len++] = '\t';
 	}
 
-	if (ChkStr((char*)&szTemp[0], "\n\r"))
+	if (ChkStr((char*)&szTemp[0], "\n\r") || len <= 0)
 		return;
 
 	szTemp[--len] = '\0';

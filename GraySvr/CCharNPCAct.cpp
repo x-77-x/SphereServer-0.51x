@@ -1327,8 +1327,9 @@ bool CChar::NPC_LookAtItem( CItem * pItem, int iDist )
 		CanTouch( pItem ) &&
 		!GetRandVal(2))
 	{
-		// Is it opened or closed?
-		if ( pItem->IsDoorOpen())
+		// Is it opened or closed? just ignore SIGNs since they cause an error in debug check
+		ITEMID_TYPE id = pItem->GetDispID();
+		if (id == ITEMID_SIGN_BRASS_1 || id == ITEMID_SIGN_BRASS_2 || pItem->IsDoorOpen())
 			return( false );
 
 		// The door is closed.

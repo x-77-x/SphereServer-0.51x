@@ -880,6 +880,11 @@ bool CChar::Skill_Done()
 	// or stuff that never really fails.
 	switch ( skill )
 	{
+	/*case SKILL_MEDITATION:
+	{
+		g_Serv
+		break;
+	}*/
 	case SKILL_ALCHEMY:
 		//  OK, we know potion being attempted and the bottle
 		//  it's going in....do a loop for each reagent

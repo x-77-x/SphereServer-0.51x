@@ -666,6 +666,7 @@ bool CPotionDef::r_LoadVal( CScript &s )
 
 const TCHAR * CSpellDef::sm_SpellsTable[] =
 {
+	"CAST_TIME",
 	"CASTTIME",
 	"DURATION_HI",
 	"DURATION_LO",
@@ -673,60 +674,69 @@ const TCHAR * CSpellDef::sm_SpellsTable[] =
 	"EFFECT_ID",
 	"EFFECT_LO",
 	"FLAGS",
+	"MANA_USE",
 	"MANAUSE",
 	"NAME",
 	"REAGENTS",
 	"RUNE_ITEM",
+	"RUNEITEM",
 	"RUNES",
 	"SCROLL_ITEM",
+	"SCROLLITEM",
 	"SOUND",
 };
 
 bool CSpellDef::r_LoadVal( CScript &s )
 {
+	//for some KEYS in the server core we had, for example, only "CAST_TIME" but in the script is defined as "CASTTIME"
+	//just enable both to avoid confusion to whatever can be underscore separated
 	switch ( FindTableSorted( s.GetKey(), sm_SpellsTable, COUNTOF( sm_SpellsTable )))
 	{
-	case 0:	// "CASTTIME"
+	case 0: // "CAST_TIME"
+	case 1:	// "CASTTIME"
 		m_wCastTime = s.GetArgVal();	// In tenths.
 		break;
-	case 1:	// "DURATION_HI"
+	case 2:	// "DURATION_HI"
 		m_wDurationTimeHi = s.GetArgVal();
 		break;
-	case 2:	// "DURATION_LO"
+	case 3:	// "DURATION_LO"
 		m_wDurationTimeLo = s.GetArgVal();
 		break;
-	case 3: // "EFFECT_HI"
+	case 4: // "EFFECT_HI"
 		m_wEffectHi = s.GetArgVal();
 		break;
-	case 4: // "EFFECT_ID"
+	case 5: // "EFFECT_ID"
 		m_wEffectID = (ITEMID_TYPE) s.GetArgVal();
 		break;
-	case 5: // "EFFECT_LO"
+	case 6: // "EFFECT_LO"
 		m_wEffectLo = s.GetArgVal();
 		break;
-	case 6: // "FLAGS"
+	case 7: // "FLAGS"
 		m_wFlags = s.GetArgVal();
 		break;
-	case 7: // "MANAUSE"
+	case 8: // "MANA_USE"
+	case 9: // "MANAUSE"
 		m_wManaUse = s.GetArgVal();
 		break;
-	case 8: // "NAME"
+	case 10: // "NAME"
 		m_sName = s.GetArgStr();
 		break;
-	case 9: // "REAGENTS"
+	case 11: // "REAGENTS"
 		m_sReags = s.GetArgStr();
 		break;
-	case 10: // "RUNE_ITEM"
+	case 12: // "RUNE_ITEM"
+	case 13: // "RUNEITEM"
 		m_SpellID = (ITEMID_TYPE) s.GetArgVal();
 		break;
-	case 11: // "RUNES"
+	case 14: // "RUNES"
 		// This may only be basic chars !
 		m_sRunes = s.GetArgStr();
 		break;
-	case 12: // "SCROLL_ITEM"
+	case 15: // "SCROLL_ITEM"
+	case 16: // "SCROLLITEM"
 		m_ScrollID = (ITEMID_TYPE) s.GetArgVal();
 		break;
-	case 13: // "SOUND"
+	case 17: // "SOUND"
 		m_sound = s.GetArgVal();
 		break;
 	
