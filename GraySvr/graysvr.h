@@ -1926,7 +1926,8 @@ enum STONEALIGN_TYPE // Types of Guild/Town stones
 
 enum ITRIG_TYPE
 {
-	ITRIG_DCLICK = 0,	// I have been dclicked.
+	ITRIG_CLICK = 0,
+	ITRIG_DCLICK,	// I have been dclicked.
 	ITRIG_STEP,			// I have been walked on. (or shoved)
 	ITRIG_TIMER,			// My timer has expired.
 	ITRIG_DAMAGE,				// I have been damaged in some way
@@ -1942,6 +1943,8 @@ enum ITRIG_TYPE
 	ITRIG_DROPON_ITEM,		// I have been dropped on this item
 	ITRIG_DROPON_CHAR,		// I have been dropped on this char
 	ITRIG_DROPON_GROUND,		// I have been dropped on the ground here
+	ITRIG_DROPON_SELF,
+	ITRIG_DROPON_TRADE,
 
 	ITRIG_TARGON_ITEM,	// I am being combined with an item
 	ITRIG_TARGON_CHAR,
@@ -2467,7 +2470,7 @@ public:
 	bool  IsStackableException() const;
 	bool  IsStackable( const CItem * pItem ) const;
 	bool  IsSameType( const CObjBase * pObj ) const;
-	bool  Stack( CItem * pItem );
+	bool  Stack( CItem * pItem, bool check = true );
 
 	CREID_TYPE GetCorpseType() const
 	{
@@ -3592,6 +3595,7 @@ enum WAR_SWING_TYPE	// m_Act_War_Swing_State
 
 enum CTRIG_TYPE
 {
+	CTRIG_Click,
 	CTRIG_HearGreeting,		// (NPC only) i have been spoken to for the first time. (no memory of previous hearing)
 	CTRIG_HearUnknown,		//+(NPC only) I heard something i don't understand.
 	CTRIG_SpellCast,		//+Char is casting a spell.

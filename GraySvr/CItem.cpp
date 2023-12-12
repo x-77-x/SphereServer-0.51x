@@ -7,6 +7,7 @@
 
 const TCHAR * CItem::sm_szTrigName[ITRIG_QTY] =	// static
 {
+	"CLICK",
 	"DCLICK",		// I have been dclicked.
 	"STEP",			// I have been walked on.
 	"TIMER",		// My timer has expired.
@@ -23,6 +24,8 @@ const TCHAR * CItem::sm_szTrigName[ITRIG_QTY] =	// static
 	"DROPON_ITEM",		// I have been dropped on this item
 	"DROPON_CHAR",		// I have been dropped on this char
 	"DROPON_GROUND",		// I have been dropped on the ground here
+	"DROPON_SELF",
+	"DROPON_TRADE",
 
 	"TARGON_ITEM",	// I am being combined with an item
 	"TARGON_CHAR",
@@ -1000,14 +1003,14 @@ bool CItem::IsStackable( const CItem * pItem ) const
 	return( true );
 }
 
-bool CItem::Stack( CItem * pItem )
+bool CItem::Stack( CItem * pItem, bool check )
 {
 	// RETURN:
 	//  true = the item got stacked. (it is gone)
-	//  false = the item will not stack. (do somethjing else with it)
+	//  false = the item will not stack. (do something else with it)
 	//
 
-	if ( ! IsStackable( pItem ))
+	if ( check && ! IsStackable( pItem ) )
 		return( false );
 
 	// Lost newbie status.

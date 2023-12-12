@@ -4811,6 +4811,7 @@ bool CChar::MoveToValidSpot( DIR_TYPE dir, int iDist, int iDistStart )
 
 const TCHAR * CChar::sm_szTrigName[CTRIG_QTY] =	// static
 {
+	"@Click",
 	"@HearGreeting",	// NPC i have been spoken to for the first time. (no memory of previous hearing)
 	"@HearUnknown",		// NPC I heard something i don't understand.
 	"@SpellCast",		// Char is casting a spell.

@@ -307,7 +307,7 @@ void CClient::Event_Item_Drop() // Item is dropped
 			CChar * pChar = dynamic_cast <CChar*>( pObjOn );
 			if ( pChar != m_pChar )
 			{
-				if ( ! Cmd_SecureTrade( pChar, pItem ))
+				if (pItem->OnTrigger(ITRIG_DROPON_CHAR, m_pChar, pChar->GetUID()) || ! Cmd_SecureTrade( pChar, pItem ) )
 					goto cantdrop;
 				return;
 			}
@@ -328,7 +328,8 @@ void CClient::Event_Item_Drop() // Item is dropped
 			{
 				// Slyly dropping item in someone elses pack.
 				// or just dropping on their trade window.
-				if ( ! Cmd_SecureTrade( pChar, pItem ))
+
+				if (pItem->OnTrigger(ITRIG_DROPON_CHAR, m_pChar, pChar->GetUID()) || !Cmd_SecureTrade(pChar, pItem) )
 					goto cantdrop;
 				return;
 			}
@@ -340,10 +341,10 @@ void CClient::Event_Item_Drop() // Item is dropped
 			if ( pChar->GetBank()->IsItemInContainer( pContItem ))
 			{
 				// Diff Weight restrict for bank box and items in the bank box.
-				if ( ! pChar->GetBank()->CanContainerHold( pItem, m_pChar ))
+				if (!pChar->GetBank()->CanContainerHold(pItem, m_pChar) || pContItem->OnTrigger(ITRIG_DROPON_SELF, pChar, pItem->GetUID()))
 					goto cantdrop;
 			}
-			else if ( ! pChar->CanCarry( pItem ))
+			else if ( ! pChar->CanCarry( pItem ) || pContItem->OnTrigger(ITRIG_DROPON_SELF, pChar, pItem->GetUID()) )
 			{
 				// SysMessage( "That is too heavy" );
 				goto cantdrop;
@@ -355,14 +356,18 @@ void CClient::Event_Item_Drop() // Item is dropped
 			// Putting it into some sort of container.
 			if ( pContItem->m_type == ITEM_TRASH )
 			{
+				if(pItem->OnTrigger(ITRIG_DROPON_ITEM, m_pChar, pContItem->GetUID()))
+					goto cantdrop;
 				pContItem->Sound( 0x235 ); // a little sound so we know it "ate" it.
 				SysMessage( "You trash the item" );
 				pItem->Delete();
 				return;
 			}
 
-			if ( ! pContItem->CanContainerHold( pItem, m_pChar ))
+			if (!pContItem->CanContainerHold(pItem, m_pChar) || pItem->OnTrigger(ITRIG_DROPON_ITEM, m_pChar, pContItem->GetUID()))
+			{
 				goto cantdrop;
+			}
 		}
 		else
 		{
@@ -372,28 +377,45 @@ void CClient::Event_Item_Drop() // Item is dropped
 			CItem * pItemOn = dynamic_cast <CItem*> ( pObjOn );
 			pObjOn = pItemOn->GetContainer();
 			pt = pItemOn->GetUnkPoint();
-			if ( ! pItem->Stack( pItemOn ))
+			if (!pItem->IsStackable(pItemOn))
 			{
-				if ( pItemOn->m_type == ITEM_SPELLBOOK )
+				if (pItemOn->m_type == ITEM_SPELLBOOK)
 				{
-					if ( pItemOn->AddSpellbookScroll( pItem ))
+					if (pItem->OnTrigger(ITRIG_DROPON_ITEM, m_pChar, pItemOn->GetUID()))
+						goto cantdrop;
+					if (pItemOn->AddSpellbookScroll(pItem))
 					{
-						SysMessage( "Can't add this to the spellbook" );
+						SysMessage("Can't add this to the spellbook");
 						goto cantdrop;
 					}
-					addSound( 0x057, pItemOn );	// add to inv sound.
+					addSound(0x057, pItemOn);	// add to inv sound.
 					return;
 				}
-
+				else if (pObjOn != NULL)
+				{
+					ITRIG_TYPE type = pObjOn->IsItem() ? ITRIG_DROPON_ITEM : pObjOn->IsChar() ? ITRIG_DROPON_CHAR : ITRIG_DROPON_GROUND;
+					if (pItem->OnTrigger(type, m_pChar, pObjOn->GetUID()))
+						goto cantdrop;
+				}
+				else
+				{
+					pItem->OnTrigger(ITRIG_DROPON_GROUND, m_pChar);
+				}
 				// Just drop on top of the current item.
 				// Client probably doesn't allow this anyhow.
+			}
+			else
+			{
+				if (pItem->OnTrigger(ITRIG_DROPON_ITEM, m_pChar, pItemOn->GetUID()))
+					goto cantdrop;
+				pItem->Stack(pItemOn);
 			}
 		}
 		sound = 0x057;	// add to inv sound.
 	}
 	else
 	{
-		if ( ! m_pChar->CanTouch( pt ))	// Must also be LOS !
+		if ( ! m_pChar->CanTouch( pt ) || pItem->OnTrigger(ITRIG_DROPON_GROUND, m_pChar))	// Must also be LOS !
 		{
 	cantdrop:
 			// The item was in the LAYER_DRAGGING.
@@ -2846,13 +2868,17 @@ void CClient::Event_SingleClick( CObjUID uid )
 
 	if ( pObj->IsItem())
 	{
-		addItemName( dynamic_cast <CItem *>(pObj));
+		CItem* pItem = dynamic_cast <CItem*>(pObj);
+		if(!pItem->OnTrigger(ITRIG_CLICK, m_pChar))
+			addItemName(pItem);
 		return;
 	}
 
 	if ( pObj->IsChar())
 	{
-		addCharName( dynamic_cast <CChar*>(pObj) );
+		CChar* pChar = dynamic_cast <CChar*>(pObj);
+		if(!pChar->OnTrigger(CTRIG_Click, m_pChar))
+			addCharName(pChar);
 		return;
 	}
 
