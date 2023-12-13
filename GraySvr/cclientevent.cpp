@@ -356,7 +356,7 @@ void CClient::Event_Item_Drop() // Item is dropped
 			// Putting it into some sort of container.
 			if ( pContItem->m_type == ITEM_TRASH )
 			{
-				if(pItem->OnTrigger(ITRIG_DROPON_ITEM, m_pChar, pContItem->GetUID()))
+				if(pContItem->OnTrigger(ITRIG_DROPON_SELF, m_pChar, pItem->GetUID()))
 					goto cantdrop;
 				pContItem->Sound( 0x235 ); // a little sound so we know it "ate" it.
 				SysMessage( "You trash the item" );
@@ -364,7 +364,7 @@ void CClient::Event_Item_Drop() // Item is dropped
 				return;
 			}
 
-			if (!pContItem->CanContainerHold(pItem, m_pChar) || pItem->OnTrigger(ITRIG_DROPON_ITEM, m_pChar, pContItem->GetUID()))
+			if (!pContItem->CanContainerHold(pItem, m_pChar) || pContItem->OnTrigger(ITRIG_DROPON_SELF, m_pChar, pItem->GetUID()))
 			{
 				goto cantdrop;
 			}
@@ -393,9 +393,27 @@ void CClient::Event_Item_Drop() // Item is dropped
 				}
 				else if (pObjOn != NULL)
 				{
-					ITRIG_TYPE type = pObjOn->IsItem() ? ITRIG_DROPON_ITEM : pObjOn->IsChar() ? ITRIG_DROPON_CHAR : ITRIG_DROPON_GROUND;
-					if (pItem->OnTrigger(type, m_pChar, pObjOn->GetUID()))
-						goto cantdrop;
+					if (pObjOn->IsContainer())
+					{
+						pItemOn = static_cast <CItem*> (pObjOn);
+						if (pItemOn->OnTrigger(ITRIG_DROPON_SELF, m_pChar, pItem->GetUID()))
+							goto cantdrop;
+					}
+					else if (pObjOn->IsChar())
+					{
+						if (pItem->OnTrigger(ITRIG_DROPON_CHAR, m_pChar, pObjOn->GetUID()))
+							goto cantdrop;
+					}
+					else if (pObjOn->IsItem())//this shoudn't be possible, but never say NEVER
+					{
+						if (pItem->OnTrigger(ITRIG_DROPON_CHAR, m_pChar, pObjOn->GetUID()))
+							goto cantdrop;
+					}
+					else//this never happens, but we have to be super sure anyway
+					{
+						if(pItem->OnTrigger(ITRIG_DROPON_GROUND, m_pChar))
+							goto cantdrop;
+					}
 				}
 				else
 				{
