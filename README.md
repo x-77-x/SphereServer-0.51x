@@ -104,26 +104,6 @@ and TAG.YOURMOM=1 same as VAR. i think, but permanent, great way to tag characte
 <b>[ISSUE 21]</b><BR>
 NEW TRIGGERS !!!???
 	
---items--
-
-ONTRIGGER=DROPON_ITEM   in source, but not finished
-
-ONTRIGGER=CLICK  (single click) used for colored NAME.HUE!?
-
-ONTRIGGER=ITEMCLICK  (single item click) used for colored item name?  NAME.HUE!?
-
-ONTRIGGER=DROPON_SELF
-	heres a nice lil bag script in the new sphere that will let you only drop runes in a bag...
- ```
-	ONTRIGGER=DROPON_SELF
-	IF !(<ARGO.TYPE>==t_rune)
-	SRC.SYSMESSAGE You may only place runes inside this bag.
-	RETURN 1
-	ENDIF
-```
-
-since there is no runebooks in 51a, a newbied bag that will only accept runes would be nice
-
 --characters--
 
 a trigger so NPCS will look at eachother 
@@ -256,6 +236,29 @@ another nice one that will change the color of a moused over character
 	ENDIF
 ```
  <BR><b>[ DONE! ]</b> 
+
+ <b>[ISSUE 21]</b><BR>
+NEW TRIGGERS !!!???
+
+--items--
+
+ONTRIGGER=DROPON_ITEM   in source, but not finished
+
+ONTRIGGER=CLICK  (single click) used for colored NAME.HUE!?
+
+ONTRIGGER=ITEMCLICK  (single item click) used for colored item name?  NAME.HUE!?
+
+ONTRIGGER=DROPON_SELF
+	heres a nice lil bag script in the new sphere that will let you only drop runes in a bag...
+ ```
+	ONTRIGGER=DROPON_SELF
+	IF !(<ARGO.TYPE>==t_rune)
+	SRC.SYSMESSAGE You may only place runes inside this bag.
+	RETURN 1
+	ENDIF
+```
+
+since there is no runebooks in 51a, a newbied bag that will only accept runes would be nice
 	
 <b>[ISSUE 22]</b><BR>
 -Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
