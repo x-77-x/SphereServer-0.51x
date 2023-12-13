@@ -252,7 +252,7 @@ ONTRIGGER=DROPON_SELF
 	heres a nice lil bag script in the new sphere that will let you only drop runes in a bag...
  ```
 	ONTRIGGER=DROPON_SELF
-	IF !(<ARGO.TYPE>==t_rune)
+	IF !(<ARGO.TYPE>==20)
 	SRC.SYSMESSAGE You may only place runes inside this bag.
 	RETURN 1
 	ENDIF
