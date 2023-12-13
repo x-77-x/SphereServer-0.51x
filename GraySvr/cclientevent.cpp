@@ -341,10 +341,10 @@ void CClient::Event_Item_Drop() // Item is dropped
 			if ( pChar->GetBank()->IsItemInContainer( pContItem ))
 			{
 				// Diff Weight restrict for bank box and items in the bank box.
-				if (!pChar->GetBank()->CanContainerHold(pItem, m_pChar) || pContItem->OnTrigger(ITRIG_DROPON_SELF, pChar, pItem->GetUID()))
+				if (!pChar->GetBank()->CanContainerHold(pItem, m_pChar))
 					goto cantdrop;
 			}
-			else if ( ! pChar->CanCarry( pItem ) || pContItem->OnTrigger(ITRIG_DROPON_SELF, pChar, pItem->GetUID()) )
+			else if ( ! pChar->CanCarry( pItem ) )
 			{
 				// SysMessage( "That is too heavy" );
 				goto cantdrop;
@@ -353,20 +353,16 @@ void CClient::Event_Item_Drop() // Item is dropped
 
 		if ( pContItem != NULL )
 		{
+			if (pContItem->OnTrigger(ITRIG_DROPON_SELF, m_pChar, pItem->GetUID()))
+				goto cantdrop;
+
 			// Putting it into some sort of container.
 			if ( pContItem->m_type == ITEM_TRASH )
 			{
-				if(pContItem->OnTrigger(ITRIG_DROPON_SELF, m_pChar, pItem->GetUID()))
-					goto cantdrop;
 				pContItem->Sound( 0x235 ); // a little sound so we know it "ate" it.
 				SysMessage( "You trash the item" );
 				pItem->Delete();
 				return;
-			}
-
-			if (!pContItem->CanContainerHold(pItem, m_pChar) || pContItem->OnTrigger(ITRIG_DROPON_SELF, m_pChar, pItem->GetUID()))
-			{
-				goto cantdrop;
 			}
 		}
 		else
@@ -395,7 +391,7 @@ void CClient::Event_Item_Drop() // Item is dropped
 				{
 					if (pObjOn->IsContainer())
 					{
-						pItemOn = static_cast <CItem*> (pObjOn);
+						pContItem = static_cast <CItemContainer*> (pObjOn);
 						if (pItemOn->OnTrigger(ITRIG_DROPON_SELF, m_pChar, pItem->GetUID()))
 							goto cantdrop;
 					}
@@ -406,7 +402,7 @@ void CClient::Event_Item_Drop() // Item is dropped
 					}
 					else if (pObjOn->IsItem())//this shoudn't be possible, but never say NEVER
 					{
-						if (pItem->OnTrigger(ITRIG_DROPON_CHAR, m_pChar, pObjOn->GetUID()))
+						if (pItem->OnTrigger(ITRIG_DROPON_ITEM, m_pChar, pObjOn->GetUID()))
 							goto cantdrop;
 					}
 					else//this never happens, but we have to be super sure anyway
@@ -426,7 +422,7 @@ void CClient::Event_Item_Drop() // Item is dropped
 			{
 				if (pItem->OnTrigger(ITRIG_DROPON_ITEM, m_pChar, pItemOn->GetUID()))
 					goto cantdrop;
-				pItem->Stack(pItemOn);
+				pItem->Stack(pItemOn, false);
 			}
 		}
 		sound = 0x057;	// add to inv sound.
