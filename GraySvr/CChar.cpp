@@ -579,9 +579,9 @@ void CChar::CreateNewCharCheck()
 	// Creating a new char. (Not loading from save file)
 	m_prev_id = GetID();
 	m_prev_color = GetColor();
-	m_StatHealth = Stat_Get(STAT_STR);
-	m_StatStam = Stat_Get(STAT_DEX);
-	m_StatMana = Stat_Get(STAT_INT);
+	m_StatHealth = HitManaStam_Get(STAT_STR);
+	m_StatStam = HitManaStam_Get(STAT_DEX);
+	m_StatMana = HitManaStam_Get(STAT_INT);
 }
 
 void CChar::NPC_LoadScript( bool fRestock )
@@ -2739,7 +2739,7 @@ void CChar::UpdateStats( STAT_TYPE type, int iChange, int iLimit )
 		ASSERT( ((WORD)type) < COUNTOF(m_StatVal));
 
 		int iVal = m_StatVal[type].m_val;
-		if ( ! iLimit ) iLimit = Stat_Get(type);
+		if ( ! iLimit ) iLimit = HitManaStam_Get(type);
 		if ( iChange < 0 )
 		{
 			iVal += iChange;
@@ -2771,7 +2771,7 @@ void CChar::UpdateStats( STAT_TYPE type, int iChange, int iLimit )
 	}
 	if ( IsClient())
 	{
-		cmd.StatChng.m_max = Stat_Get(type);
+		cmd.StatChng.m_max = HitManaStam_Get(type);
 		cmd.StatChng.m_val = m_StatVal[type].m_val;
 		m_pClient->xSendPkt( &cmd, sizeof(cmd.StatChng));
 	}
@@ -4993,7 +4993,7 @@ bool CChar::OnTick()
 			{
 				OnFoodTick();
 			}
-			else if ( m_StatVal[i].m_val != Stat_Get((STAT_TYPE)i))
+			else if ( m_StatVal[i].m_val != HitManaStam_Get((STAT_TYPE)i))
 			{
 				UpdateStats( (STAT_TYPE) i, 1 );
 			}
@@ -5056,3 +5056,19 @@ bool CChar::OnTick()
 	return( true );
 }
 
+short CChar::HitManaStam_Get(STAT_TYPE i) const
+{
+	ASSERT(((WORD)i) < STAT_BASE_QTY);
+	if (m_pPlayer)
+	{
+		return m_Stat[i] * g_Serv.m_iPlayerStatMod[i];
+	}
+	else if(m_pNPC && m_pNPC->m_StatMaxValue[i])
+	{
+		return m_pNPC->m_StatMaxValue[i];
+	}
+	else//backward compatibility
+	{
+		return m_Stat[i];
+	}
+}

@@ -57,7 +57,7 @@ void CChar::SetNPCBrain( NPCBRAIN_TYPE NPCBrain )
 	}
 	if ( m_pNPC == NULL )
 	{
-		m_pNPC = new CCharNPC( NPCBrain );
+		m_pNPC = new CCharNPC( NPCBrain, this );
 	}
 	else
 	{
@@ -86,6 +86,8 @@ CCharPlayer::CCharPlayer( CAccount * pAccount ) :
 	m_Plot2 = 0;
 	m_SkillClass = 0;
 	memset( m_SkillLock, 0, sizeof( m_SkillLock ));
+	m_LastWalk = 0;
+	m_LastPick = 0;
 }
 
 SKILL_TYPE CCharPlayer::Skill_GetLockType( const TCHAR * pKey ) const
@@ -287,11 +289,16 @@ bool CChar::Player_OnVerb( CScript &s, CTextConsole * pSrc ) // Execute command 
 //////////////////////////
 // -CCharNPC
 
-CCharNPC::CCharNPC( NPCBRAIN_TYPE NPCBrain )
+CCharNPC::CCharNPC( NPCBRAIN_TYPE NPCBrain, CChar* NPCChar )
 {
 	m_Brain = NPCBrain;
 	m_Home_Dist_Wander = 0xFFFF;	// as far as i want.
 	m_Act_Motivation = 0;
+	for (int i = 0; i < STAT_BASE_QTY; ++i)
+	{
+		m_StatMaxValue[i] = 0;
+	}
+	m_pNPCChar = NPCChar;
 }
 
 const TCHAR * CCharNPC::sm_KeyTable[] =
@@ -301,6 +308,11 @@ const TCHAR * CCharNPC::sm_KeyTable[] =
 	"DESIRES",
 	"HOMEDIST",
 	"KNOWLEDGE",
+	"MAXHITPOINTS",
+	"MAXHITS",
+	"MAXMANA",
+	"MAXSTAM",
+	"MAXSTAMINA",
 	"MOTIVES",
 	"NEED",
 	"NPC",
@@ -329,14 +341,26 @@ scp_desires:
 scp_speech:
 		// ??? Check that it is not already part of m_pDef->m_Speech
 		return( m_Speech.r_LoadVal( s ));
-	case 5: // "MOTIVES"
+	case 5: // "MAXHITPOINTS"
+	case 6: // "MAXHITS"
+		m_StatMaxValue[STAT_STR] = s.GetArgVal();
+		break;
+	case 7: // "MAXMANA"
+		m_StatMaxValue[STAT_INT] = s.GetArgVal();
+		break;
+	case 8: // "MAXSTAM"
+	case 9: // "MAXSTAMINA"
+		m_StatMaxValue[STAT_DEX] = s.GetArgVal();
+		break;
+	
+	case 10: // "MOTIVES"
 		goto scp_desires;
-	case 6: // "NEED"
+	case 11: // "NEED"
 		m_sNeed = s.GetArgStr();
 		break;
-	case 7:// "NPC",
+	case 12:// "NPC",
 		goto scp_brain;
-	case 8:// "SPEECH",
+	case 13:// "SPEECH",
 		goto scp_speech;
 	default:
 		return(false );
@@ -375,14 +399,25 @@ scp_desires:
 scp_speech:
 		m_Speech.WriteFragList( sVal );
 		break;
-	case 5: // "MOTIVES"
+	case 5: // "MAXHITPOINTS"
+	case 6: // "MAXHITS"
+		sVal.FormatVal(m_pNPCChar->HitManaStam_Get(STAT_STR));
+		break;
+	case 7: // "MAXMANA"
+		sVal.FormatVal(m_pNPCChar->HitManaStam_Get(STAT_INT));
+		break;
+	case 8: // "MAXSTAM"
+	case 9: // "MAXSTAMINA"
+		sVal.FormatVal(m_pNPCChar->HitManaStam_Get(STAT_DEX));
+		break;
+	case 10: // "MOTIVES"
 		goto scp_desires;
-	case 6: // "NEED"
+	case 11: // "NEED"
 		sVal = m_sNeed;
 		break;
-	case 7:// "NPC",
+	case 12:// "NPC",
 		goto scp_brain;
-	case 8:// "SPEECH",
+	case 13:// "SPEECH",
 		goto scp_speech;
 	default:
 		return( false );
@@ -407,7 +442,9 @@ void CCharNPC::r_Write( CScript & s ) const
 	{
 		s.WriteKey( "NEED", m_sNeed );	// Write out my inventory here !!!
 	}
+
+	s.WriteKeyVal("MAXHITS", m_StatMaxValue[STAT_STR]);
+	s.WriteKeyVal("MAXMANA", m_StatMaxValue[STAT_INT]);
+	s.WriteKeyVal("MAXSTAM", m_StatMaxValue[STAT_DEX]);
 }
-
-
 

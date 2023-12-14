@@ -1003,6 +1003,10 @@ CServer::CServer() : CServRef( GRAY_TITLE, SOCKET_LOCAL_ADDRESS )
 	m_fAutoResurrect = false;
 	m_iWhisperColor = 0x03b1;
 	m_fEnableChat = false;
+	for (int i = 0; i < STAT_BASE_QTY; ++i)
+	{
+		m_iPlayerStatMod[i] = 1;
+	}
 }
 
 CServer::~CServer()
@@ -1626,7 +1630,10 @@ enum SC_TYPE
 	SC_NPCTRAINPERCENT,			// m_iTrainSkillPercent
 	SC_NTSERVICE,				// m_fUseNTService
 	SC_PLAYERGHOSTSOUNDS,	// m_fPlayerGhostSounds
+	SC_PLAYERHITSPERCENT,
+	SC_PLAYERMANAPERCENT,
 	SC_PLAYERNEUTRAL,		// m_iPlayerKarmaNeutral
+	SC_PLAYERSTAMPERCENT,
 	SC_POLLSERVERS,				// m_iPollServers
 	SC_PROFILE,
 	SC_REAGENTLOSSFAIL,			// m_fReagentLossFail
@@ -1713,7 +1720,10 @@ const TCHAR * CServer::sm_KeyTable[SC_QTY] =
 	"NPCTRAINPERCENT",			// m_iTrainSkillPercent
 	"NTSERVICE",				// m_fUseNTService
 	"PLAYERGHOSTSOUNDS",	// m_fPlayerGhostSounds
+	"PLAYERHITSPERCENT",
+	"PLAYERMANAPERCENT",
 	"PLAYERNEUTRAL",		// m_iPlayerKarmaNeutral
+	"PLAYERSTAMPERCENT",
 	"POLLSERVERS",				// m_iPollServers
 	"PROFILE",
 	"REAGENTLOSSFAIL",			// m_fReagentLossFail
@@ -2001,6 +2011,15 @@ do_mulfiles:
 		break;
 	case SC_ENABLECHAT:
 		m_fEnableChat = s.GetArgVal();
+		break;
+	case SC_PLAYERHITSPERCENT:
+		m_iPlayerStatMod[STAT_STR] = (s.GetArgVal() * 0.01f);
+		break;
+	case SC_PLAYERMANAPERCENT:
+		m_iPlayerStatMod[STAT_INT] = (s.GetArgVal() * 0.01f);
+		break;
+	case SC_PLAYERSTAMPERCENT:
+		m_iPlayerStatMod[STAT_DEX] = (s.GetArgVal() * 0.01f);
 		break;
 	default:
 		if ( s.IsKeyHead( "MULFILE", 7 ))

@@ -1916,7 +1916,7 @@ void CClient::addCharStatWindow( CObjUID uid ) // Opens the status window
 	if (pChar == m_pChar)
 	{
 		cmd.Status.m_health = pChar->m_StatHealth;
-		cmd.Status.m_maxhealth = pChar->Stat_Get(STAT_STR);
+		cmd.Status.m_maxhealth = pChar->HitManaStam_Get(STAT_STR);
 	}
 	else
 	{
@@ -1950,9 +1950,9 @@ void CClient::addCharStatWindow( CObjUID uid ) // Opens the status window
 		cmd.Status.m_dex = pChar->Stat_Get(STAT_DEX);
 		cmd.Status.m_int = pChar->Stat_Get(STAT_INT);
 		cmd.Status.m_stam =	pChar->m_StatStam ;
-		cmd.Status.m_maxstam = pChar->Stat_Get(STAT_DEX);
+		cmd.Status.m_maxstam = pChar->HitManaStam_Get(STAT_DEX);
 		cmd.Status.m_mana =	pChar->m_StatMana ;
-		cmd.Status.m_maxmana = pChar->Stat_Get(STAT_INT);
+		cmd.Status.m_maxmana = pChar->HitManaStam_Get(STAT_INT);
 		cmd.Status.m_gold = pChar->ContentCount( ITEMID_GOLD_C1 );	/// ??? optimize this count is too often.
 		cmd.Status.m_armor = pChar->m_defense + pChar->m_pDef->m_defense;
 		cmd.Status.m_weight = pChar->GetTotalWeight() / WEIGHT_UNITS;

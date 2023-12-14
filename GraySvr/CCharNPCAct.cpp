@@ -854,11 +854,11 @@ int CChar::NPC_WalkToPoint( bool fRun )
 	// How fast can they move.
 	if ( fRun )
 	{
-		SetTimeout( TICK_PER_SEC/4 + GetRandVal( (100-m_Stat[STAT_DEX])/4 ) * TICK_PER_SEC / 10 );
+		SetTimeout( TICK_PER_SEC/4 + GetRandVal( (100-Stat_Get(STAT_DEX))/4 ) * TICK_PER_SEC / 10 );
 	}
 	else
 	{
-		SetTimeout( TICK_PER_SEC/2 + GetRandVal( (150-m_Stat[STAT_DEX])/2 ) * TICK_PER_SEC / 10 );
+		SetTimeout( TICK_PER_SEC/2 + GetRandVal( (150- Stat_Get(STAT_DEX))/2 ) * TICK_PER_SEC / 10 );
 	}
 
 	return( 1 );
@@ -1802,7 +1802,7 @@ void CChar::NPC_Act_Fight()
 	}
 
 	// Can only do that with full stamina !
-	if ( m_StatStam >= Stat_Get(STAT_DEX))
+	if ( m_StatStam >= HitManaStam_Get(STAT_DEX))
 	{
 		// If I am a dragon maybe I will breath fire.
 		if ( m_pNPC->m_Brain == NPCBRAIN_DRAGON &&
@@ -2123,7 +2123,7 @@ void CChar::NPC_Act_Idle()
 	}
 
 	// Specific creature actions.
-	if ( m_StatStam >= Stat_Get(STAT_DEX) && ! GetRandVal( 3 ))
+	if ( m_StatStam >= HitManaStam_Get(STAT_DEX) && ! GetRandVal( 3 ))
 	{
 		switch ( GetDispID())
 		{

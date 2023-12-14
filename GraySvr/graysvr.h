@@ -3500,6 +3500,7 @@ public:
 	NPCBRAIN_TYPE m_Brain;	// For NPCs: Number of the assigned basic AI block
 	WORD	m_Home_Dist_Wander;	// Distance to allow to "wander".
 	BYTE    m_Act_Motivation;		// 0-100 (100=very greatly) how bad do i want to do the current action.
+	short   m_StatMaxValue[STAT_BASE_QTY];
 	CPointBase m_Act_p_Prev;	// Location before we started this action (so we can get back if necessary)
 
 	// We respond to what we here with this.
@@ -3508,9 +3509,10 @@ public:
 	CGString m_sNeed;	// What items might i need/Desire ? (coded as resource scripts) ex "10 gold,20 logs" etc.
 
 	static const TCHAR * sm_KeyTable[];
+	CChar* m_pNPCChar;
 
 public:
-	CCharNPC( NPCBRAIN_TYPE NPCBrain );
+	CCharNPC( NPCBRAIN_TYPE NPCBrain, CChar* NPCChar );
 
 	bool r_WriteVal( const TCHAR * pKey, CGString & s );
 	void r_Write( CScript & s ) const;
@@ -3558,6 +3560,8 @@ public:
 	// PATRON_TYPE m_Patron;	// Religion Plot stuff.
 
 	static const TCHAR * sm_KeyTable[];
+	time_t m_LastWalk;
+	time_t m_LastPick;
 
 public:
 	CCharPlayer( CAccount * pAccount );
@@ -3941,6 +3945,8 @@ public:
 		ASSERT(((WORD)i)<STAT_QTY );
 		return m_Stat[i];
 	}
+
+	short HitManaStam_Get(STAT_TYPE i) const;
 
 	// Location and movement ------------------------------------
 private:
@@ -5679,6 +5685,7 @@ public:
 	bool m_fAutoResurrect;     // allow instaress as an option in config file, false per default
 	int  m_iWhisperColor;	// default whisper color - pre-set to 0x03b1 - set to ZERO to allow players to select it from clients
 	bool m_fEnableChat;			//false per default, enables chat use in game
+	float m_iPlayerStatMod[STAT_BASE_QTY];// percentage of the stat vs the HITSMAX - eg. 200% -> 1 str == 2 hits
 
 private:
 	// Web status pages.

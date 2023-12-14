@@ -1120,7 +1120,7 @@ bool CChar::Use_Drink( CItem * pItem )
 			UpdateStats( STAT_INT, 10+(iSkillQuality/100));
 			break;
 		case POTION_MANA_TOTAL:
-			UpdateStats( STAT_INT, 20+(iSkillQuality/50), Stat_Get(STAT_INT) + 20 );
+			UpdateStats( STAT_INT, 20+(iSkillQuality/50), HitManaStam_Get(STAT_INT) + 20 );
 			break;
 		case POTION_LAVA:
 			break;
@@ -1152,7 +1152,7 @@ bool CChar::Use_Drink( CItem * pItem )
 			UpdateStats( STAT_STR, 13+GetRandVal(5)+(iSkillQuality/200));
 			break;
 		case POTION_HEAL_GREAT:
-			UpdateStats( STAT_STR, 15+GetRandVal(9)+(iSkillQuality/100), m_Stat[STAT_STR] + 20 );
+			UpdateStats( STAT_STR, 15+GetRandVal(9)+(iSkillQuality/100), HitManaStam_Get(STAT_STR) + 20 );
 			break;
 		case POTION_NIGHTSIGHT:
 			Spell_Effect_Create( SPELL_Night_Sight, LAYER_FLAG_Potion, iSkillQuality, 2*60*60*TICK_PER_SEC, this );
@@ -1168,7 +1168,7 @@ bool CChar::Use_Drink( CItem * pItem )
 			UpdateStats(STAT_DEX, 20+GetRandVal(15)+(iSkillQuality/200));
 			break;
 		case POTION_REFRESH_TOTAL:
-			UpdateStats(STAT_DEX, 50+GetRandVal(20)+(iSkillQuality/100), Stat_Get(STAT_DEX) + 20 );
+			UpdateStats(STAT_DEX, 50+GetRandVal(20)+(iSkillQuality/100), HitManaStam_Get(STAT_DEX) + 20 );
 			break;
 		case POTION_STR:
 			Spell_Effect_Create( SPELL_Strength, LAYER_FLAG_Potion, 10+iSkillQuality/200, 120*TICK_PER_SEC, this );

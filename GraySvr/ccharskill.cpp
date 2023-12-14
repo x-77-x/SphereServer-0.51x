@@ -127,9 +127,9 @@ short CChar::Skill_GetAdjusted( SKILL_TYPE skill ) const
 
 	ASSERT( IsSkillBase( skill ));
 	int iPureBonus =
-		( g_Serv.m_SkillDefs[skill]->m_StatBonus[STAT_STR] * m_Stat[STAT_STR] ) +
-		( g_Serv.m_SkillDefs[skill]->m_StatBonus[STAT_INT] * m_Stat[STAT_INT] ) +
-		( g_Serv.m_SkillDefs[skill]->m_StatBonus[STAT_DEX] * m_Stat[STAT_DEX] );
+		( g_Serv.m_SkillDefs[skill]->m_StatBonus[STAT_STR] * Stat_Get(STAT_STR) ) +
+		( g_Serv.m_SkillDefs[skill]->m_StatBonus[STAT_INT] * Stat_Get(STAT_INT) ) +
+		( g_Serv.m_SkillDefs[skill]->m_StatBonus[STAT_DEX] * Stat_Get(STAT_DEX) );
 
 	int iAdjSkill = IMULDIV( 100 - g_Serv.m_SkillDefs[skill]->m_SkillStat, iPureBonus, 10000 );
 	return( Skill_GetBase( (SKILL_TYPE) skill ) + iAdjSkill );
@@ -326,7 +326,7 @@ void CChar::Skill_Experience( SKILL_TYPE skill, int difficulty )
 				}
 			}
 
-			int iStatVal = m_Stat[imin];
+			int iStatVal = Stat_Get((STAT_TYPE)imin);
 			if ( iStatVal > 10 )
 			{
 				Stat_Set( (STAT_TYPE)imin, iStatVal-1 );
@@ -1663,7 +1663,7 @@ makeit:
 
 	case SKILL_MEDITATION:
 		// Try to regen your mana even faster than normal.
-		if ( m_StatMana >= Stat_Get(STAT_INT))
+		if ( m_StatMana >= HitManaStam_Get(STAT_INT))
 			return( false );
 		UpdateStats( STAT_INT, 1 );
 		// next update. (depends on skill)
@@ -2406,7 +2406,7 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 				ret = (false);
 				break;
 			}
-			if ( pChar->m_StatHealth >= pChar->Stat_Get(STAT_STR) )
+			if ( pChar->m_StatHealth >= pChar->HitManaStam_Get(STAT_STR) )
 			{
 				SysMessage("Your target is already fully healed");	
 				ret = (false);
@@ -2434,7 +2434,7 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 
 	case SKILL_MEDITATION:
 		// Might depend on creatures in the area ?
-		if ( m_StatMana >= Stat_Get(STAT_INT))
+		if ( m_StatMana >= HitManaStam_Get(STAT_INT))
 		{
 			SysMessage( "You are at peace." );
 			ret = (false);
@@ -2823,7 +2823,7 @@ bool CChar::Spell_Resurrection( int iSkillLossPercent )
 	SetID( m_prev_id );
 	ClearStat( STATF_DEAD | STATF_Insubstantial );
 	SetColor( m_prev_color );
-	m_StatHealth = IMULDIV( Stat_Get(STAT_STR), g_Serv.m_iHitpointPercentOnRez, 100 );
+	m_StatHealth = IMULDIV( HitManaStam_Get(STAT_STR), g_Serv.m_iHitpointPercentOnRez, 100 );
 
 	if ( m_pPlayer )
 	{
@@ -2919,7 +2919,7 @@ void CChar::Spell_Effect_Remove( CItem * pSpell )
 		{
 			for ( int i=STAT_STR; i<STAT_BASE_QTY; i++ )
 			{
-				Stat_Set( (STAT_TYPE) i, m_Stat[i] - pSpell->m_itSpell.m_skilllevel );
+				Stat_Set( (STAT_TYPE) i, Stat_Get((STAT_TYPE)i) - pSpell->m_itSpell.m_skilllevel );
 			}
 		}
 		break;
@@ -2928,7 +2928,7 @@ void CChar::Spell_Effect_Remove( CItem * pSpell )
 		{
 			for ( int i=STAT_STR; i<STAT_BASE_QTY; i++ )
 			{
-				Stat_Set( (STAT_TYPE) i, m_Stat[i] + pSpell->m_itSpell.m_skilllevel );
+				Stat_Set( (STAT_TYPE) i, Stat_Get((STAT_TYPE)i) + pSpell->m_itSpell.m_skilllevel );
 			}
 		}
 		break;
@@ -2977,10 +2977,10 @@ void CChar::Spell_Effect_Remove( CItem * pSpell )
 			// poly back to orig form.
 			SetID( m_prev_id );
 			// set back to original stats as well.
-			Stat_Set( STAT_STR, Stat_Get(STAT_STR) - pSpell->m_itSpell.m_PolyStr );
-			Stat_Set( STAT_DEX, Stat_Get(STAT_DEX) - pSpell->m_itSpell.m_PolyDex );
-			m_StatHealth = min( m_StatHealth, Stat_Get(STAT_STR));
-			m_StatStam = min( m_StatStam, Stat_Get(STAT_DEX));
+			Stat_Set(STAT_STR, Stat_Get(STAT_STR) -pSpell->m_itSpell.m_PolyStr );
+			Stat_Set(STAT_DEX, Stat_Get(STAT_DEX) -pSpell->m_itSpell.m_PolyDex );
+			m_StatHealth = min( m_StatHealth, HitManaStam_Get(STAT_STR));
+			m_StatStam = min( m_StatStam, HitManaStam_Get(STAT_DEX));
 			Update();
 			ClearStat( STATF_Polymorph );
 		}
@@ -3077,7 +3077,7 @@ void CChar::Spell_Effect_Add( CItem * pSpell )
 		{
 			for ( int i=STAT_STR; i<STAT_BASE_QTY; i++ )
 			{
-				Stat_Set( (STAT_TYPE) i, m_Stat[i] + pSpell->m_itSpell.m_skilllevel );
+				Stat_Set( (STAT_TYPE) i, Stat_Get((STAT_TYPE)i) + pSpell->m_itSpell.m_skilllevel );
 			}
 		}
 		break;
