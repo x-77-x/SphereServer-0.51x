@@ -1469,7 +1469,7 @@ bool CClient::OnTarg_Use_Item( CObjUID uid, const CPointMap & pt, ITEMID_TYPE id
 	{
 		trigtype = ITRIG_TARGON_ITEM;
 	}
-	if ( pItemUse->OnTrigger( trigtype, m_pChar ))
+	if ( pItemUse->OnTrigger( trigtype, m_pChar, pObjTarg ? pObjTarg->GetUID() : 0 ))
 	{
 		return true;
 	}

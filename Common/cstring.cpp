@@ -223,7 +223,7 @@ int FindTable( const TCHAR * pFind, const TCHAR * const * ppTable, int iCount, i
 	return( -1 );
 }
 
-int GetBareText( TCHAR * pszOut, const TCHAR * pszInp, int iMaxSize, const TCHAR * pszStrip )
+int GetBareText( TCHAR * pszOut, const TCHAR * pszInp, int iMaxSize, const TCHAR * pszStrip, BYTE mask )
 {
 	// Allow only the basic set of chars. Non UNICODE !
 	// That the client can deal with.
@@ -241,7 +241,7 @@ int GetBareText( TCHAR * pszOut, const TCHAR * pszInp, int iMaxSize, const TCHAR
 		TCHAR ch = pszInp[i];
 		if ( ch )
 		{
-			if ( ch < ' ' || ch >= 127 ) 
+			if ( ch < ' ' || ch >= mask ) 
 				continue;	// Special format chars.
 			int k=0;
 			while ( pszStrip[k] && pszStrip[k] != ch ) 

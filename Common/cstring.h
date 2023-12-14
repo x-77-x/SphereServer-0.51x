@@ -229,7 +229,7 @@ enum MATCH_TYPE			// match result defines
 extern MATCH_TYPE Text_Match( const TCHAR *pPattern, const TCHAR * pText );
 
 extern TCHAR * GetTempStr();
-extern int GetBareText( TCHAR * pszOut, const TCHAR * pszInp, int iMaxSize, const TCHAR * pszStrip = NULL );
+extern int GetBareText( TCHAR * pszOut, const TCHAR * pszInp, int iMaxSize, const TCHAR * pszStrip = NULL, BYTE mask = 127);
 extern TCHAR * MakeFilteredStr( TCHAR * pStr );
 extern int strcpylen( TCHAR * pDst, const TCHAR * pSrc );
 extern int strcpylen( TCHAR * pDst, const TCHAR * pSrc, int imaxlen );

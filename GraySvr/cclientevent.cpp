@@ -1882,7 +1882,7 @@ void CClient::Event_Talk( const TCHAR * pszText, COLOR_TYPE color, TALKMODE_TYPE
 	m_pAccount->m_lang[0] = 0;	// default.
 	// Rip out the unprintables first.
 	TCHAR szText[MAX_TALK_BUFFER];
-	int len = GetBareText( szText, pszText, sizeof(szText));
+	int len = GetBareText( szText, pszText, sizeof(szText), NULL, 0xFF);
 	if (len <= 0 || ChkStr((char*)szText, "\n\r"))
 		return;
 	pszText = szText;
@@ -1894,10 +1894,6 @@ void CClient::Event_Talk( const TCHAR * pszText, COLOR_TYPE color, TALKMODE_TYPE
 			g_Log.Event( LOGM_PLAYER_SPEAK, "%x:'%s' Says '%s' mode=%d\n", GetSocket(), m_pChar->GetName(), szText, mode );
 		}
 		m_pChar->Speak( szText, color, mode );	// echo this back.
-	}
-	else
-	{
-
 	}
 
 	Event_Talk_Common( (TCHAR *) pszText );

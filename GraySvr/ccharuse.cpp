@@ -956,8 +956,8 @@ bool CChar::Use_Repair( CItem * pItemArmor )
 			pItemArmor->Delete();
 		return( false );
 	}
-
-	pItemArmor->m_itArmor.m_Hits_Max = pItemArmor->m_itArmor.m_Hits_Cur;
+	pItemArmor->m_itArmor.m_Hits_Max -= (GetRandVal(2) + 1);//1 to 2 hp loss in armor hits max
+	pItemArmor->m_itArmor.m_Hits_Cur = pItemArmor->m_itArmor.m_Hits_Max;
 	SysMessage( "You repair the item" );
 	return( true );
 }
