@@ -3188,6 +3188,13 @@ void CChar::UpdateDir( const CObjBaseTemplate * pObj )
 	pObj = pObj->GetTopLevelObj();
 	if ( pObj == this )		// In our own pack.
 		return;
+	if (pObj->IsChar())
+	{
+		CChar* targ = pObj->CharFind();
+		//don't turn character to face a gamemaster, they must not be aware that we're here!
+		if (targ == NULL || (targ->GetPrivLevel() >= PLEVEL_Counsel && !CanSee(targ)))
+			return;
+	}
 	UpdateDir( pObj->GetTopPoint());
 }
 

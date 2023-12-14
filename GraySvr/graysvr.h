@@ -1976,7 +1976,7 @@ public:
 #define ATTR_NEWBIE			0x0004	// Not lost on death or sellable ?
 #define ATTR_MOVE_ALWAYS	0x0008	// Always movable (else Default as stored in client) (even if MUL says not movalble) NEVER DECAYS !
 #define ATTR_MOVE_NEVER		0x0010	// Never movable (else Default as stored in client) NEVER DECAYS !
-#define ATTR_MAGIC			0x0020	// DON'T SET THIS WHILE WORN! This item is magic as apposed to marked or markable.
+#define ATTR_MAGIC			0x0020	// DON'T SET THIS WHILE WORN! This item is magic as opposed to marked or markable.
 #define ATTR_OWNED			0x0040	// This is owned by the town. You need to steal it. NEVER DECAYS !
 #define ATTR_INVIS			0x0080	// Gray hidden item (to GM's or owners?) 
 #define ATTR_CURSED			0x0100

@@ -709,6 +709,8 @@ public:
 	bool IsDisconnected() const	{	return( m_UID.IsDisconnected() ); }
 	bool IsTopLevel() const		{	return( m_UID.IsTopLevel() ); }
 	bool IsValidUID() const		{	return( m_UID.IsValidUID() ); }
+	CChar* CharFind() const		{	return( m_UID.CharFind()); }
+	CItem* ItemFind() const		{	return( m_UID.ItemFind()); }
 
 #if defined(_DEBUG) && defined(GRAY_SVR)	// CObjBaseTemplate
 	bool IsValidContainer() const;	// am i really in the container i say i am ?

@@ -1000,6 +1000,11 @@ bool CItem::IsStackable( const CItem * pItem ) const
 	if ( pItem->GetAmount() > 0xFFFF - GetAmount())
 		return( false );
 
+	const WORD andwords = ATTR_MAGIC | ATTR_CURSED2 | ATTR_BLESSED2;
+	//Different attributes, EG Magic on non magic, or special cursed and blessed, don't STACK, the attributes must match extractly!!
+	if (!pItem->IsMovable() || ((pItem->m_Attr & andwords) != (m_Attr & andwords)))
+		return false;
+
 	return( true );
 }
 
