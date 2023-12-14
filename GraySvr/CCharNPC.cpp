@@ -443,8 +443,11 @@ void CCharNPC::r_Write( CScript & s ) const
 		s.WriteKey( "NEED", m_sNeed );	// Write out my inventory here !!!
 	}
 
-	s.WriteKeyVal("MAXHITS", m_StatMaxValue[STAT_STR]);
-	s.WriteKeyVal("MAXMANA", m_StatMaxValue[STAT_INT]);
-	s.WriteKeyVal("MAXSTAM", m_StatMaxValue[STAT_DEX]);
+	if (m_pNPCChar)
+	{
+		s.WriteKeyVal("MAXHITS", m_pNPCChar->HitManaStam_Get(STAT_STR));
+		s.WriteKeyVal("MAXMANA", m_pNPCChar->HitManaStam_Get(STAT_INT));
+		s.WriteKeyVal("MAXSTAM", m_pNPCChar->HitManaStam_Get(STAT_DEX));
+	}
 }
 
