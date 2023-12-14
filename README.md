@@ -36,21 +36,6 @@ so
 
 ![alt text](http://dragonsoftime.com/junk/taskbar.png)
 
-<b>[ISSUE 03]</b>
--COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
-```
-SRC.SYSMESSAGE #0033,3,You have gained a reward!
-```
-![alt text](http://dragonsoftime.com/junk/coloredsysmessage.png)
-
-(like Lil Sphere)<BR>
-<b>[ DONE! ]</b>
-
--COLORED SPEECH?! 
-```
-SRC.SAY #0033,3,I talk in color!
-```
-
 
 <b>[ISSUE 04]</b><BR>
 -COLORED NAMES on NPCs
@@ -64,45 +49,16 @@ NAMEHUE=021
 nice to be able to change the color of NPCs name when single clicked
 
 
-
 <b>[ISSUE 05]</b><BR>
 -COLORED ITEM NAMES
 	
 ![alt text](http://dragonsoftime.com/junk/coloreditems.png)	
 
-<b>[ISSUE 06]</b><BR>
--Show damage above npc when attacked  (like LiL Sphere)<BR>
- 
-![alt text](http://dragonsoftime.com/junk/showdamage.png)<BR>
-(fix to match Lil Sphere)<BR>
-<b>[ MOSTLY DONE! ]</b>
 
 
 <b>[ISSUE 07]</b><BR>
 -walk and shoot would be nice, shoot and run,<BR>
 but half accuracy and less range when moving?   50% less accurate and only 8 range  ???
-
- 
-<b>[ISSUE 08]</b><BR>
--colored multis??? new sphere you can go debug mode and set the color on a multi and it will change color in game
-after 17 years i just realized you can dye a ship deed and the multi will be affected, but only the parts are colored =)
-
-![alt text](http://dragonsoftime.com/junk/coloredmultis.png)
-
-CLASSICUO WILL DISPLAY COLORED MULTIS! ORION AND ORIGINAL CLIENT WILL NOT<BR>
-<b>[ DONE! ]</b>
-
-
-<b>[ISSUE 09]</b><BR>
--sphere script loading times are abnormally slow compared to the 51a release version<BR>
-<b>[ DONE! ]</b>   
-	
-OTHER STUFF...
-	
-<b>[ISSUE 10]</b><BR>
--when you run from an npc with a bow, he shoots a LOT of arrow animations,  you get hit multiple times!
-one arrow per step, so when a npc runs at you, its like a machine gun<BR>
-[DONE?]
 
 
 <b>[ISSUE 11]</b><BR>
@@ -114,12 +70,8 @@ example... put a npc on the roof of a tower, you can shoot him from the 1st floo
 <b>[ISSUE 12]</b><BR>
 -Provocation - you can use provoc on player in guarded area, then call guards on them after it makes you attack them
 check area for guards?  maybe cant be used on other players?  not really sure how provoc is supposed to work,
-but i know i disabled it 18+ years ago for a reason
+but i know i disabled it 18+ years ago for a reason, maybe provoc cant target a player?
 
-
-<b>[ISSUE 13]</b><BR>
--TRACKING - make sure "tracking players" actually track players only, ect... (i remember something wrong with tracking)<BR>
- [DONE!]
 
 
 <b>[ISSUE 14]</b><BR>
@@ -145,12 +97,6 @@ and TAG.YOURMOM=1 same as VAR. i think, but permanent, great way to tag characte
 -tillerman, arent you supposed to pin a map and drop it on the tiller man and hes supposed to go there?
 
 
-<b>[ISSUE 19]</b><BR>
--books?  the books in SPHEREBook.scp never worked, the pages are empty when you add them in game
-MORE=X  is book #
-<b>[ DONE! ]</b>
-
-
 <b>[ISSUE 20]</b><BR>
 -explosion potions, be able to set the low and high damage. you can raise the more 2, but the range is so big
 
@@ -158,65 +104,11 @@ MORE=X  is book #
 <b>[ISSUE 21]</b><BR>
 NEW TRIGGERS !!!???
 	
---items--
-
-ONTRIGGER=DROPON_ITEM   in source, but not finished
-
-ONTRIGGER=CLICK  (single click) used for colored NAME.HUE!?
-
-ONTRIGGER=ITEMCLICK  (single item click) used for colored item name?  NAME.HUE!?
-
-ONTRIGGER=DROPON_SELF
-	heres a nice lil bag script in the new sphere that will let you only drop runes in a bag...
- ```
-	ONTRIGGER=DROPON_SELF
-	IF !(<ARGO.TYPE>==t_rune)
-	SRC.SYSMESSAGE You may only place runes inside this bag.
-	RETURN 1
-	ENDIF
-```
-
-since there is no runebooks in 51a, a newbied bag that will only accept runes would be nice
-
 --characters--
-
-ON=@LOGIN  (like lil Sphere)  [DONE!]
-
-ON=@LOGOUT  (like lil Sphere)  [DONE!]
-
-ON=@GetHit  [DONE?]
-
-ON=@Hit  [DONE?]
 
 a trigger so NPCS will look at eachother 
 
 ON=@SeeNewNPC ??  a way to get npcs to fight (besides berserker brain)
-
-ON=@NotoSend
-another nice one that will change the color of a moused over character
-```
-	ON=@NotoSend//2 ALLY 5 ENEMY 6 RED	
-	IF (<SRC.TAG0.MILITARY>)
-	 IF !<GUILD>
-		ARGN1=5
-		ELIF <GUILD>
-		ARGN1=2
-		ENDIF
-	ENDIF
-```
- <BR><b>[ DONE! ]</b> 
-	
-<b>[ISSUE 22]</b><BR>
--Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
-thats way too long, also poison needs to be dehardcoded so the different posion levels damages can be adjusted<BR>
-<b>[ DONE? ]</b>   
-
-
-<b>[ISSUE 23]</b><BR>
--yell distance! ! it would be nice to adjust the distance when players yell in game 20 squares, 50 squares, ect...
-players can communicate cross map by yelling =P
-SET YELLDISTANCE IN SPHERE.INI ???<BR>
-<b>[ DONE? ]</b> 
 
 
 <b>[ISSUE 24]</b><BR>
@@ -238,13 +130,6 @@ maybe decrease INT check by 50% ???
 maybe added a SMALL chance (25% or less) of fizzling a spell when taking damage while casting
 
 
-<b>[ISSUE 28]</b><BR>
--CAST_TIME=10 in spheretables.scp never worked, cast time was hardcoded and could not be changed<BR>
-value made little or no difference<BR>
--MANAUSE=  add<BR>
-<b>[ DONE! ]</b> 
-
-
 <b>[ISSUE 29]</b><BR>
 -weapon speed in sphereitem.scp never worked<BR>
 SPEED=<BR>
@@ -256,6 +141,7 @@ NPC spell targets<BR>
 Add healing to self if a monster casts healing<BR>
 Monsters should be able to use greater heal, dispel, magic reflection, cure...<BR>
 
+<P><BR><P><BR>
   
   SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add ALL those features
   and add a few new things and tidy up the 0.51a source for those who still have old server files...
@@ -273,3 +159,122 @@ https://web.archive.org/web/20000706193639/http://menace.ne.mediaone.net/
 https://web.archive.org/web/20000819050744/http://www.sphereserver.com/
 
 https://web.archive.org/web/20000621160908/http://sphereserver.dslwatch.com/
+
+
+FINISHED ITEMS!!!
+---------------------------
+
+<b>[ISSUE 03]</b>
+-COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
+```
+SRC.SYSMESSAGE #0033,3,You have gained a reward!
+```
+![alt text](http://dragonsoftime.com/junk/coloredsysmessage.png)
+
+(like Lil Sphere)<BR>
+<b>[ DONE! ]</b>
+
+-COLORED SPEECH?! 
+```
+SRC.SAY #0033,3,I talk in color!
+```
+<b>[ DONE! ]</b>
+
+<b>[ISSUE 06]</b><BR>
+-Show damage above npc when attacked  (like LiL Sphere)<BR>
+ 
+![alt text](http://dragonsoftime.com/junk/showdamage.png)<BR>
+(fix to match Lil Sphere)<BR>
+<b>[ MOSTLY DONE! ]</b>
+
+<b>[ISSUE 08]</b><BR>
+-colored multis??? new sphere you can go debug mode and set the color on a multi and it will change color in game
+after 17 years i just realized you can dye a ship deed and the multi will be affected, but only the parts are colored =)
+
+![alt text](http://dragonsoftime.com/junk/coloredmultis.png)
+
+CLASSICUO WILL DISPLAY COLORED MULTIS! ORION AND ORIGINAL CLIENT WILL NOT<BR>
+<b>[ DONE! ]</b>
+
+<b>[ISSUE 09]</b><BR>
+-sphere script loading times are abnormally slow compared to the 51a release version<BR>
+<b>[ DONE! ]</b>   
+	
+<b>[ISSUE 10]</b><BR>
+-when you run from an npc with a bow, he shoots a LOT of arrow animations,  you get hit multiple times!
+one arrow per step, so when a npc runs at you, its like a machine gun<BR>
+[DONE?]
+
+<b>[ISSUE 13]</b><BR>
+-TRACKING - make sure "tracking players" actually track players only, ect... (i remember something wrong with tracking)<BR>
+ [DONE!]
+
+<b>[ISSUE 19]</b><BR>
+-books?  the books in SPHEREBook.scp never worked, the pages are empty when you add them in game
+MORE=X  is book #
+<b>[ DONE! ]</b>
+
+New Triggers
+ON=@LOGIN  (like lil Sphere)  [DONE!]
+
+ON=@LOGOUT  (like lil Sphere)  [DONE!]
+
+ON=@GetHit  [DONE?]
+
+ON=@Hit  [DONE?]
+
+ON=@NotoSend
+another nice one that will change the color of a moused over character
+```
+	ON=@NotoSend//2 ALLY 5 ENEMY 6 RED	
+	IF (<SRC.TAG0.MILITARY>)
+	 IF !<GUILD>
+		ARGN1=5
+		ELIF <GUILD>
+		ARGN1=2
+		ENDIF
+	ENDIF
+```
+ <BR><b>[ DONE! ]</b> 
+
+ <b>[ISSUE 21]</b><BR>
+NEW TRIGGERS !!!???
+
+--items--
+
+ONTRIGGER=DROPON_ITEM   in source, but not finished
+
+ONTRIGGER=CLICK  (single click) used for colored NAME.HUE!?
+
+ONTRIGGER=ITEMCLICK  (single item click) used for colored item name?  NAME.HUE!?
+
+ONTRIGGER=DROPON_SELF
+	heres a nice lil bag script in the new sphere that will let you only drop runes in a bag...
+ ```
+	ONTRIGGER=DROPON_SELF
+	IF !(<ARGO.TYPE>==20)
+	SRC.SYSMESSAGE You may only place runes inside this bag.
+	RETURN 1
+	ENDIF
+```
+
+since there is no runebooks in 51a, a newbied bag that will only accept runes would be nice
+	
+<b>[ISSUE 22]</b><BR>
+-Poison - when posion is cast on someone, the timer on the memory item is 120 ticks before the poison effect starts.
+thats way too long, also poison needs to be dehardcoded so the different posion levels damages can be adjusted<BR>
+<b>[ DONE! ]</b>   
+
+
+<b>[ISSUE 23]</b><BR>
+-yell distance! ! it would be nice to adjust the distance when players yell in game 20 squares, 50 squares, ect...
+players can communicate cross map by yelling =P
+SET YELLDISTANCE IN SPHERE.INI ???<BR>
+<b>[ DONE! ]</b> 
+
+<b>[ISSUE 28]</b><BR>
+-CAST_TIME=10 in spheretables.scp never worked, cast time was hardcoded and could not be changed<BR>
+value made little or no difference<BR>
+-MANAUSE=  add<BR>
+<b>[ DONE! ]</b> 
+
