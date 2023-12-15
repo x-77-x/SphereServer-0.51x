@@ -3156,6 +3156,7 @@ CItem * CChar::Spell_Effect_Create( SPELL_TYPE spell, LAYER_TYPE layer, int iLev
 	pSpell->m_itSpell.m_spell = spell;
 	pSpell->m_itSpell.m_skilllevel = iLevel;	// 0 - 1000
 	pSpell->m_itSpell.m_charges = 1;
+	pSpell->m_itSpell.m_Ticks = 0;
 	WORD ldur = g_Serv.m_SpellDefs[spell]->m_wDurationTimeLo;
 	WORD hdur = g_Serv.m_SpellDefs[spell]->m_wDurationTimeHi;
 	if (hdur > 0 && ldur <= hdur)
@@ -3274,6 +3275,7 @@ void CChar::Spell_Field( CPointMap pntTarg, ITEMID_TYPE idEW, ITEMID_TYPE idNS, 
 		pSpell->m_itSpell.m_skilllevel = 15 + iSkill/25;
 		pSpell->m_itSpell.m_charges = 1;
 		pSpell->m_uidLink = GetUID();	// Link it back to you
+		pSpell->m_itSpell.m_Ticks = 0;
 		pSpell->SetDecayTime( pSpell->m_itSpell.m_skilllevel*TICK_PER_SEC + GetRandVal(60*TICK_PER_SEC) );
 		pSpell->MoveTo( pg );
 		}
@@ -4158,7 +4160,8 @@ reflectit:
 			}
 			return false;
 		}
-		if ( ! OnAttackedBy( pCharSrc, false ))
+		
+		if (!OnAttackedBy( pCharSrc, false ))
 			return false;
 	}
 

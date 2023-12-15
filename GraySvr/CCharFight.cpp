@@ -898,7 +898,7 @@ void CChar::OnNoticeCrime( CChar * pCriminal, const CChar * pCharMark )
 	if ( this != pCharMark )	// it's not me.
 	{
 		// Thieves and beggars don't care.
-		if ( m_pNPC->m_Brain == NPCBRAIN_THEIF || m_pNPC->m_Brain == NPCBRAIN_BEGGAR )
+		if ( m_pNPC->m_Brain == NPCBRAIN_THIEF || m_pNPC->m_Brain == NPCBRAIN_BEGGAR )
 			return;
 		if ( NPC_IsOwnedBy( pCriminal ))	// I won't rat you out.
 			return;
@@ -1381,9 +1381,6 @@ void CChar::CallGuards()
 		else if ( ! pChar->IsCriminal())
 			continue;
 
-		if (pChar->OnTrigger(CTRIG_CallGuards, pChar, pGuard->GetUID()))
-			return;
-
 		if ( pGuard == NULL )
 		{
 			// Spawn a new guard.
@@ -1395,6 +1392,9 @@ void CChar::CallGuards()
 			ASSERT(pChar->GetTopPoint().IsValid());
 			pGuard->Spell_Teleport( pChar->GetTopPoint(), false, false );
 		}
+
+		if (pChar->OnTrigger(CTRIG_CallGuards, pChar, pGuard->GetUID()))
+			return;
 
 		if ( pGuard->NPC_LookAtCharGuard( pChar )) 
 			return;

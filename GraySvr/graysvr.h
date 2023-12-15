@@ -2074,7 +2074,8 @@ public:
 		// ITEM_FIRE
 		struct
 		{
-			UINT m_junk1;
+			WORD m_junk1;
+			WORD m_Ticks;
 			short m_PolyStr;	// more2l=polymorph effect of this.
 			short m_PolyDex;	// more2h=
 			WORD m_spell;		// morex=SPELL_TYPE = The magic spell cast on this. (daemons breath)(boots of strength) etc
@@ -3365,7 +3366,7 @@ enum NPCBRAIN_TYPE	// General AI type.
 	NPCBRAIN_VENDOR,	// 6 = will sell from vendor boxes.
 	NPCBRAIN_BEGGAR,	// 7 = begs.
 	NPCBRAIN_STABLE,	// 8 = will store your animals for you.
-	NPCBRAIN_THEIF,		// 9 = should try to steal ?
+	NPCBRAIN_THIEF,		// 9 = should try to steal ?
 	NPCBRAIN_MONSTER,	// 10 = not tamable. normally evil.
 	NPCBRAIN_BESERK,	// 11 = attack closest (blades, vortex)
 	NPCBRAIN_UNDEAD,	// 12 = disapears in the light.

@@ -245,6 +245,6 @@ extern int FindTableSorted( const TCHAR * pFind, const TCHAR * const * ppTable, 
 
 extern int ChkStrn(char* s, const char* sym, DWORD len);
 extern int ChkStr(char* s, const char* sym);
-extern char* strip_extra_spaces(char* str, bool trim = true);
+extern char* strip_extra_spaces(char* str, bool trim);
 
 #endif // _INC_CSTRING_H

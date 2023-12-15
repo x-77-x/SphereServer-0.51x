@@ -35,7 +35,7 @@ bool CChar::NPC_OnVerb( CScript &s, CTextConsole * pSrc ) // Execute command fro
 		"WALK",
 	};
 
-	CChar * pCharSrc = pSrc->GetChar();
+	CChar * pCharSrc = pSrc ? pSrc->GetChar() : NULL;
 
 	switch ( FindTableSorted( s.GetKey(), table, COUNTOF(table)))
 	{
@@ -1460,7 +1460,7 @@ bool CChar::NPC_LookAtChar( CChar * pChar, int iDist )
 	case NPCBRAIN_STABLE:
 	case NPCBRAIN_ANIMAL:
 	case NPCBRAIN_HUMAN:
-	case NPCBRAIN_THEIF:
+	case NPCBRAIN_THIEF:
 		if ( NPC_LookAtCharHuman( pChar ))
 			return( true );
 		break;
@@ -2352,7 +2352,7 @@ bool CChar::NPC_OnItemGive( CChar * pCharSrc, CItem * pItem )
 		break;
 
 	case NPCBRAIN_BEGGAR:
-	case NPCBRAIN_THEIF:
+	case NPCBRAIN_THIEF:
 		if ( pItem->m_type == ITEM_FOOD && 
 			Use_Eat( pItem ))
 		{

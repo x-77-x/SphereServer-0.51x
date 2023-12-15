@@ -776,6 +776,10 @@ void CClient::Event_Walking( BYTE rawdir, BYTE count, UINT dwEcho ) // Player mo
 		fMove = false;
 	}
 
+	if (m_pChar->m_pPlayer)
+	{
+		m_pChar->m_pPlayer->m_LastWalk = g_World.GetTime();
+	}
 	// Ack the move. ( if this does not go back we get rubber banding )
 	m_WalkCount = count;
 	CCommand cmd;
@@ -1582,6 +1586,9 @@ void CClient::Event_PromptResp( const TCHAR * pszText, int len )
 	else
 	{
 		len = GetBareText( szText, pszText, sizeof(szText), "|~,=[]{|}~" );
+		//also remove any unwanted spaces
+		TCHAR* iPtr = &szText[0];
+		iPtr = strip_extra_spaces(szText, true);
 	}
 
 	const TCHAR * pszReName = NULL;
@@ -1672,7 +1679,7 @@ void CClient::Event_PromptResp( const TCHAR * pszText, int len )
 
 	if ( pItem == NULL || szText[0] == '\0' )
 	{
-		SysMessagef( "%s Renaming Canceled", pszReName );
+		SysMessagef( "%s Renaming Cancelled", pszReName );
 		return;
 	}
 
@@ -2011,7 +2018,8 @@ void CClient::Event_SetName( CObjUID uid )
 	if (ChkStr((char*)&pChar[0], "\n\r[]@\\^£$%&=#§*<>|1234567890,.-;:_/\"!?()°+ηςΰωθιμ"))
 		return;
 
-	pChar->SetName( m_bin.CharName.m_name );
+	//name must not contain any unwanted spaces
+	pChar->SetName(strip_extra_spaces(m_bin.CharName.m_name, true));
 }
 
 void CClient::Event_GumpTextIn()
@@ -2027,7 +2035,7 @@ void CClient::Event_GumpTextIn()
 
 	BYTE retcode = m_bin.GumpText.m_retcode; // 0=canceled, 1=okayed
 	WORD textlen = m_bin.GumpText.m_textlen; // length of text entered
-	TCHAR * pszText = m_bin.GumpText.m_text;
+	TCHAR * pszText = strip_extra_spaces(m_bin.GumpText.m_text, false);
 
 	CGString sStr;
 

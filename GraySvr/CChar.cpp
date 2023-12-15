@@ -1538,9 +1538,7 @@ bool CChar::r_WriteVal( const TCHAR * pKey, CGString & sVal, CTextConsole * pSrc
 		sVal.FormatVal( m_food);
 		break;
 	case CC_HITPOINTS:
-		goto hitpoints;
 	case CC_HITS:
-hitpoints:
 		sVal.FormatVal( m_StatHealth );
 		break;
 	case CC_HOME:
@@ -1549,32 +1547,25 @@ hitpoints:
 	case CC_MANA:
 		sVal.FormatVal( m_StatMana );
 		break;
-	// case CC_NPC:
+	case CC_XBODY: // not used anymore.
 	case CC_OBODY:
-scp_obody:
 		sVal.FormatHex( m_prev_id);
 		break;
+	case CC_XSKIN:	// not used anymore.
 	case CC_OSKIN:
-scp_oskin:
 		sVal.FormatHex( m_prev_color);
 		break;
 	//case CC_P
 	case CC_STAM:
-stamina:
-		sVal.FormatVal( m_StatStam );
-		break;
 	case CC_STAMINA:
-		goto stamina;
+		sVal.FormatVal(m_StatStam);
+		break;
 	case CC_STONE:
 		sVal.FormatVal( IsStat( STATF_Stone ));
 		break;
 	case CC_TITLE:
 		sVal = m_sTitle;
 		break;
-	case CC_XBODY: // not used anymore.
-		goto scp_obody;
-	case CC_XSKIN:	// not used anymore.
-		goto scp_oskin;
 
 	default:
 		if ( m_pPlayer )
@@ -1667,9 +1658,7 @@ bool CChar::r_LoadVal( CScript & s )
 		m_food = s.GetArgVal();
 		return true;
 	case CC_HITPOINTS:
-		goto scp_hitpoints;
 	case CC_HITS:
-scp_hitpoints:
 		m_StatHealth = s.GetArgRange();
 		UpdateStatsFlag();
 		return true;
@@ -1686,8 +1675,8 @@ scp_hitpoints:
 	case CC_NPC:
 		SetNPCBrain( (NPCBRAIN_TYPE) s.GetArgVal());
 		return true;
+	case CC_XBODY:
 	case CC_OBODY:
-scp_obody:
 		m_prev_id = (CREID_TYPE) s.GetArgHex();
 		if ( ! CCharBase::FindCharBase( m_prev_id ))
 		{
@@ -1695,8 +1684,8 @@ scp_obody:
 			m_prev_id = CREID_MAN;
 		}
 		return true;
+	case CC_XSKIN:
 	case CC_OSKIN:
-scp_oskin:
 		m_prev_color = s.GetArgHex();
 		return true;
 	case CC_P:
@@ -1736,10 +1725,6 @@ scp_oskin:
 	case CC_TITLE:
 		m_sTitle = s.GetArgStr();
 		return true;
-	case CC_XBODY:
-		goto scp_obody;
-	case CC_XSKIN:
-		goto scp_oskin;
 	}
 
 	if ( m_pPlayer )
@@ -2167,10 +2152,10 @@ bool CChar::r_Verb( CScript &s, CTextConsole * pSrc ) // Execute command from sc
 	};
 
 	DEBUG_CHECK( pSrc );
-	if ( this != pSrc )
+	if (pSrc != NULL && this != pSrc)
 	{
 		// Check Priv level for person doing this to me.
-		if ( pSrc->GetPrivLevel() < GetPrivLevel())
+		if ( pSrc->GetPrivLevel() < GetPrivLevel() )
 		{
 			pSrc->SysMessage( "Target is more privileged than you\n" );
 			return false;
@@ -2183,7 +2168,7 @@ bool CChar::r_Verb( CScript &s, CTextConsole * pSrc ) // Execute command from sc
 			return( true );
 	}
 
-	CChar * pCharSrc = pSrc->GetChar();
+	CChar* pCharSrc = pSrc ? pSrc->GetChar() : NULL;
 
 	switch ( FindTableSorted( s.GetKey(), table, COUNTOF(table)))
 	{
@@ -4619,9 +4604,14 @@ bool CChar::CheckLocation( bool fStanding )
 			Sound( 0x15f ); // ??? Fire noise.
 			return( false );
 		case ITEM_SPELL:
-			OnSpellEffect( (SPELL_TYPE) pItem->m_itSpell.m_spell, NULL, 50 );
-			Sound( g_Serv.m_SpellDefs[ (SPELL_TYPE) pItem->m_itSpell.m_spell]->m_sound  );
-			return( false );
+		{
+			CChar* pSrcLink = NULL;
+			if (pItem->m_uidLink && pItem->m_itSpell.m_Ticks == 0)
+				pSrcLink = pItem->m_uidLink.CharFind();
+			OnSpellEffect((SPELL_TYPE)pItem->m_itSpell.m_spell, pSrcLink, 50);
+			Sound(g_Serv.m_SpellDefs[(SPELL_TYPE)pItem->m_itSpell.m_spell]->m_sound);
+			return(false);
+		}
 		case ITEM_TRAP:
 		case ITEM_TRAP_ACTIVE:
 		// case ITEM_TRAP_INACTIVE: // reactive it?
@@ -4970,18 +4960,26 @@ bool CChar::OnTick()
 		for ( int i=0; i<COUNTOF(m_StatVal); i++ )
 		{
 			m_StatVal[i].m_regen += iTimeDiff;
-			int iRate = sm_Stat_Val_Regen[i];
+			unsigned short iRate = sm_Stat_Val_Regen[i];
 			if ( i == STAT_STR )	// HitPoints regen rate is related to food and stam.
 			{
 				if ( m_pPlayer )
 				{
-					if ( ! m_food )
-						continue; // iRate += iRate/2;	// much slower with no food.
-					if ( IsStat(STATF_Fly))
-						continue;
+					if (IsStat(STATF_Fly))//when running no regen? I viewed this, but it doesn't seem really nice, check if we are standing still so reget regen rate normally
+					{
+						if (m_pPlayer->m_LastWalk + 10 * TICK_PER_SEC <= g_World.GetTime())
+							ModStat(STATF_Fly, false);
+						else
+							continue;
+					}
+
+					if (!m_food)
+					{
+						iRate += iRate / 2;	// much slower with no food.
+					}
 				}
 
-				// Fast metabolism bonus ?
+				// Fast metabolism bonus ? considering that mobiles can have much more stam that current dex, it's OK to check this
 				iRate += iRate / ( 2 * ( 1 + m_StatStam / 32 ));
 			}
 

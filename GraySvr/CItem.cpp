@@ -1828,6 +1828,7 @@ const TCHAR * CItem::sm_KeyTable[] =
 	"DISPIDDEC",
 	"FRUIT",
 	"HITPOINTS",	// for weapons
+	"HITS",			// for weapons
 	"ID",
 	"LAYER",
 	"LINK",
@@ -1894,44 +1895,45 @@ bool CItem::r_WriteVal( const TCHAR * pKey, CGString & sVal, CTextConsole * pSrc
 	case 5: // "FRUIT"
 		goto dodefault;
 	case 6: // "HITPOINTS"
-		if ( ! IsArmorWeapon()) 
-			return( false );
-		sVal.FormatVal( m_itArmor.m_Hits_Cur );
+	case 7: // "HITS"
+		if (!IsArmorWeapon())
+			return(false);
+		sVal.FormatVal(m_itArmor.m_Hits_Cur);
 		break;
-	case 7:	// "ID"
+	case 8:	// "ID"
 		goto dodefault;
-	case 8:	// "LAYER"
+	case 9:	// "LAYER"
 		goto dodefault;
-	case 9: // "LINK"
+	case 10: // "LINK"
 		sVal.FormatHex( m_uidLink );
 		break;
-	case 10:	// "MORE"
-	case 11:	// "MORE1"
+	case 11:	// "MORE"
+	case 12:	// "MORE1"
 		sVal.FormatHex( m_itNormal.m_more1 );
 		break;
-	case 12:	// "MORE2"
+	case 13:	// "MORE2"
 		sVal.FormatHex( m_itNormal.m_more2 );
 		break;
-	case 13: // "MOREP"
+	case 14: // "MOREP"
 		sVal = m_itNormal.m_morep.Write();
 		break;
-	case 14: // "MOREX",
+	case 15: // "MOREX",
 		sVal.FormatVal( m_itNormal.m_morep.m_x );
 		break;
-	case 15: // "MOREY",
+	case 16: // "MOREY",
 		sVal.FormatVal( m_itNormal.m_morep.m_y );
 		break;
-	case 16: // "MOREZ",
+	case 17: // "MOREZ",
 		sVal.FormatVal( m_itNormal.m_morep.m_z );
 		break;
-	case 17: // "P"
+	case 18: // "P"
 		goto dodefault;
-	case 18: // "PRICE"
+	case 19: // "PRICE"
 		if ( ! IsAttr( ATTR_FORSALE )) 
 			return( false );
 		sVal.FormatVal( GetPlayerVendorPrice() );
 		break;
-	case 19: // "TYPE"
+	case 20: // "TYPE"
 		sVal.FormatVal( m_type );
 		break;
 	default:
@@ -1978,19 +1980,20 @@ bool CItem::r_LoadVal( CScript & s ) // Load an item Script
 		m_itPlant.m_Reap_ID = (ITEMID_TYPE) s.GetArgHex();
 		return true;
 	case 6:	// "HITPOINTS" = from ITEMS.SCP only
-		if ( IsArmorWeapon())
+	case 7:	// "HITS" = from ITEMS.SCP only
+		if (IsArmorWeapon())
 		{
 			m_itArmor.m_Hits_Cur = m_itArmor.m_Hits_Max = s.GetArgVal();
 			return true;
 		}
 		else
 		{
-			DEBUG_ERR(( "Item:Hitpoints assigned for non-weapon 0%x\n", GetID()));
+			DEBUG_ERR(("Item:Hitpoints assigned for non-weapon 0%x\n", GetID()));
 		}
 		break;
-	case 7:	// "ID"
+	case 8:	// "ID"
 		return SetDispID((ITEMID_TYPE) s.GetArgHex());
-	case 8: // "LAYER"
+	case 9: // "LAYER"
 		// used only during load.
 		if ( ! IsDisconnected() && ! IsInContainer()) 
 		{
@@ -1998,12 +2001,12 @@ bool CItem::r_LoadVal( CScript & s ) // Load an item Script
 		}
 		SetUnkZ( s.GetArgVal()); // GetEquipLayer()
 		return true;
-	case 9: // "LINK"
+	case 10: // "LINK"
 		m_uidLink = s.GetArgHex();
 		return true;
 
-	case 10:	// "MORE"
-	case 11:	// "MORE1"
+	case 11:	// "MORE"
+	case 12:	// "MORE1"
 		m_itNormal.m_more1 = s.GetArgHex();	
 		if ((m_type == ITEM_BOOK) && IsBookSystem())
 		{
@@ -2027,22 +2030,22 @@ bool CItem::r_LoadVal( CScript & s ) // Load an item Script
 			}
 		}
 		return true;
-	case 12:	// "MORE2"
+	case 13:	// "MORE2"
 		m_itNormal.m_more2 = s.GetArgHex();
 		return true;
-	case 13: // "MOREP"
+	case 14: // "MOREP"
 		m_itNormal.m_morep.Read(s.GetArgStr());
 		return true;
-	case 14: // "MOREX",
+	case 15: // "MOREX",
 		m_itNormal.m_morep.m_x = s.GetArgVal();
 		return true;
-	case 15: // "MOREY",
+	case 16: // "MOREY",
 		m_itNormal.m_morep.m_y = s.GetArgVal();
 		return true;
-	case 16: // "MOREZ",
+	case 17: // "MOREZ",
 		m_itNormal.m_morep.m_z = s.GetArgVal();
 		return true;
-	case 17: // "P"
+	case 18: // "P"
 		// Loading or import.
 		if ( ! IsDisconnected() && ! IsInContainer()) 
 		{
@@ -2052,13 +2055,13 @@ bool CItem::r_LoadVal( CScript & s ) // Load an item Script
 		SetUnkPoint( s.GetArgStr());
 		return true;
 
-	case 18:	// "PRICE"
+	case 19:	// "PRICE"
 		if ( IsAttr( ATTR_FORSALE ))
 		{
 			SetPlayerVendorPrice( s.GetArgVal());
 		}
 		return true;
-	case 19: // "TYPE"
+	case 20: // "TYPE"
 		m_type = (ITEM_TYPE) s.GetArgVal();
 		return true;
 	}
@@ -3621,6 +3624,9 @@ bool CItem::OnTick()
 	case ITEM_PLANT:
 		if ( Plant_OnTick())
 			return true;
+		break;
+	case ITEM_SPELL:
+		m_itSpell.m_Ticks++;
 		break;
 	}
 
