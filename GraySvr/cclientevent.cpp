@@ -246,6 +246,13 @@ void CClient::Event_Item_Pickup( CObjUID uid, int amount ) // Client grabs an it
 		return;
 	}
 
+	//Allow for speedy pickup in own containers, but not on ground or other containers, to avoid speed-looting
+	if (pItem->GetTopLevelObj() != m_pChar && m_LastPick > GetTickCount())
+	{
+		goto cancelpick;
+	}
+	m_LastPick = GetTickCount() + g_Serv.m_iPickUpSpeed;
+
 	// Where is the item coming from ? (just in case we have to toss it back)
 	CObjBase * pObjParent = dynamic_cast <CObjBase *>(pItem->GetParent());
 	m_Targ_PrvUID = ( pObjParent ) ? (UINT) pObjParent->GetUID() : UID_CLEAR;
@@ -254,6 +261,7 @@ void CClient::Event_Item_Pickup( CObjUID uid, int amount ) // Client grabs an it
 	amount = m_pChar->ItemPickup( pItem, amount );
 	if ( amount < 0 )
 	{
+		cancelpick:
 		addItemDragCancel(0);
 		return;
 	}

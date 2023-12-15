@@ -4967,7 +4967,7 @@ bool CChar::OnTick()
 				{
 					if (IsStat(STATF_Fly))//when running no regen? I viewed this, but it doesn't seem really nice, check if we are standing still so reget regen rate normally
 					{
-						if (m_pPlayer->m_LastWalk + 10 * TICK_PER_SEC <= g_World.GetTime())
+						if ((m_pPlayer->m_LastWalk + 3) <= g_World.GetTime())
 							ModStat(STATF_Fly, false);
 						else
 							continue;

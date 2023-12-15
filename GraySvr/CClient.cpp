@@ -40,6 +40,8 @@ CClient::CClient( SOCKET client ) : CGSocket( client )
 	m_Walk_InvalidEchos = 0;
 	m_Walk_CodeQty = -1;	// how many valid codes in here ?
 
+	m_LastPick = 0;
+
 	g_Serv.ClientsInc();
 	g_Serv.m_Clients.InsertAfter( this );
 

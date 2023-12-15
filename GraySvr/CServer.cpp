@@ -1007,6 +1007,7 @@ CServer::CServer() : CServRef( GRAY_TITLE, SOCKET_LOCAL_ADDRESS )
 	{
 		m_iPlayerStatMod[i] = 1;
 	}
+	m_iPickUpSpeed = 200;//200ms minimum from one pick to another one
 }
 
 CServer::~CServer()
@@ -1629,6 +1630,7 @@ enum SC_TYPE
 	SC_NPCTRAINMAX,			// m_iTrainSkillMax
 	SC_NPCTRAINPERCENT,			// m_iTrainSkillPercent
 	SC_NTSERVICE,				// m_fUseNTService
+	SC_PICKUPSPEED,			// m_iPickUpSpeed
 	SC_PLAYERGHOSTSOUNDS,	// m_fPlayerGhostSounds
 	SC_PLAYERHITSPERCENT,
 	SC_PLAYERMANAPERCENT,
@@ -1719,6 +1721,7 @@ const TCHAR * CServer::sm_KeyTable[SC_QTY] =
 	"NPCTRAINMAX",			// m_iTrainSkillMax
 	"NPCTRAINPERCENT",			// m_iTrainSkillPercent
 	"NTSERVICE",				// m_fUseNTService
+	"PICKUPSPEED",			// m_iPickUpSpeed
 	"PLAYERGHOSTSOUNDS",	// m_fPlayerGhostSounds
 	"PLAYERHITSPERCENT",
 	"PLAYERMANAPERCENT",
@@ -2011,6 +2014,9 @@ do_mulfiles:
 		break;
 	case SC_ENABLECHAT:
 		m_fEnableChat = s.GetArgVal();
+		break;
+	case SC_PICKUPSPEED:
+		m_iPickUpSpeed = s.GetArgVal();
 		break;
 	case SC_PLAYERHITSPERCENT:
 		m_iPlayerStatMod[STAT_STR] = (s.GetArgVal() * 0.01f);

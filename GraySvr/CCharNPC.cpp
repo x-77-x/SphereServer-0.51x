@@ -87,7 +87,6 @@ CCharPlayer::CCharPlayer( CAccount * pAccount ) :
 	m_SkillClass = 0;
 	memset( m_SkillLock, 0, sizeof( m_SkillLock ));
 	m_LastWalk = 0;
-	m_LastPick = 0;
 }
 
 SKILL_TYPE CCharPlayer::Skill_GetLockType( const TCHAR * pKey ) const

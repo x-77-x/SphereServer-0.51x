@@ -1558,6 +1558,8 @@ public:
 		m_Targ_PrvMode = m_Targ_Mode;
 		m_Targ_Mode = TARGMODE_NONE;
 	}
+
+	DWORD m_LastPick;
 };
 
 enum ITEM_TYPE		// double click type action.
@@ -3562,7 +3564,6 @@ public:
 
 	static const TCHAR * sm_KeyTable[];
 	time_t m_LastWalk;
-	time_t m_LastPick;
 
 public:
 	CCharPlayer( CAccount * pAccount );
@@ -5687,6 +5688,7 @@ public:
 	int  m_iWhisperColor;	// default whisper color - pre-set to 0x03b1 - set to ZERO to allow players to select it from clients
 	bool m_fEnableChat;			//false per default, enables chat use in game
 	float m_iPlayerStatMod[STAT_BASE_QTY];// percentage of the stat vs the HITSMAX - eg. 200% -> 1 str == 2 hits
+	int  m_iPickUpSpeed;
 
 private:
 	// Web status pages.
