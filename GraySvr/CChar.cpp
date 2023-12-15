@@ -2516,7 +2516,16 @@ void CChar::InitPlayer( CEvent * pBin, CClient * pClient )
 	}
 	else
 	{
-		SetName( pBin->Create.m_name );
+		char name[MAX_NAME_SIZE];
+		//we absolutely don't want those chars on a player name, also we must avoid potential issues with things like [eof] or such, if the name is made only of those, just skip to unnamed and launch a warning in console/log
+		int len = GetBareText(name, pBin->Create.m_name, sizeof(name), "!\"#$%&()*,/:;<=>?@[\\]^{|}~");
+		if (len < 1)
+		{
+			g_Log.Event(LOGL_WARN, "%x:Probable unacceptable chars on name '%s' for account '%s'\n", pClient->GetSocket(), pBin->Create.m_name, pClient->GetAccount()->GetName());
+			SetName("unnamed");
+		}
+		else
+			SetName(name);
 	}
 
 	COLOR_TYPE color;

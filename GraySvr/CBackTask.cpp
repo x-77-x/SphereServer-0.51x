@@ -252,7 +252,7 @@ get_email:
 	case SC_LANG:
 		{
 			TCHAR szLang[ 32 ];
-			int len = GetBareText( szLang, s.GetArgStr(), sizeof(szLang), "<>/\"\\" );
+			int len = GetBareText( szLang, s.GetArgStr(), sizeof(szLang), "<>/\"\\[]" );
 			if ( g_Serv.IsObscene(szLang))	// Is the name unacceptable?
 				return( false );
 			m_sLang = szLang;
@@ -282,7 +282,7 @@ get_email:
 		// make sure there are no bad HTML tags in here ?
 		{
 			TCHAR szTmp[256];
-			int len = GetBareText( szTmp, s.GetArgStr(), COUNTOF(szTmp), "<>/" );	// no tags 
+			int len = GetBareText( szTmp, s.GetArgStr(), COUNTOF(szTmp), "<>/[]" );	// no tags 
 			if ( g_Serv.IsObscene( szTmp ))	// Is the name unacceptable?
 				return( false );
 			m_sNotes = szTmp;

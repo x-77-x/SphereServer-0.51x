@@ -643,8 +643,10 @@ bool CObjBase::r_LoadVal( CScript & s )
 	case 1: // "DISTANCE"
 		return( false );
 	case 2:	// "NAME"
-		SetName( s.GetArgStr());
+	{
+		SetName(s.GetArgStr());
 		break;
+	}
 	case 3:	// "P"
 		return( false );
 	case 4: // "SERIAL"

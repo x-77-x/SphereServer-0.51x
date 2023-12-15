@@ -1593,7 +1593,7 @@ void CClient::Event_PromptResp( const TCHAR * pszText, int len )
 	}
 	else
 	{
-		len = GetBareText( szText, pszText, sizeof(szText), "|~,=[]{|}~" );
+		len = GetBareText( szText, pszText, sizeof(szText), "|,=[]{}~[]" );
 		//also remove any unwanted spaces
 		TCHAR* iPtr = &szText[0];
 		iPtr = strip_extra_spaces(szText, true);
