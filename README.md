@@ -4,32 +4,6 @@ https://github.com/Sphereserver/Source-Archive/tree/main/0.52
 
 SPHERESERVER 0.51x  WISHLIST  (3/17/21)
 -----------------------------
-<b>[ISSUE 01]</b><BR>
--HITPOINTS - on NPCS, there needs to be a seperation between STR and hitpoints, 
-i want npc characters with 200STR AND 1000hp.<BR>
-by default HITPOINTS will drain until they are equal with STR. so maybe add...
-```
-MAXHITS=1000
-MAXSTAM=1000
-MAXMANA=1000
-```
-and correct the regen???
-
-so if players and npcs are over their maxhits, hp drains to equal their maxhits
-and if players and npcs are under their maxhits, they heal to equal their maxhits not STR
-	
-![alt text](http://dragonsoftime.com/junk/maxstats2.png)
-
-(optional)
-AND FOR PLAYERS i want players to have x2 multiplyer for hitpoints, stamina, mana
-so 
-```
-125 STR = 250 hitpoints
-125 DEX = 250 stamina
-125 INT = 250 mana
-```
-(this is option in sphere.ini of course!)
-
 
 <b>[ISSUE 02]</b><BR>
 -sphere to run in the notification area next to the clock!!!
@@ -58,7 +32,7 @@ nice to be able to change the color of NPCs name when single clicked
 
 <b>[ISSUE 07]</b><BR>
 -walk and shoot would be nice, shoot and run,<BR>
-but half accuracy and less range when moving?   50% less accurate and only 8 range  ???
+but half accuracy and less range when moving?   <B>50% less accurate and only 8 range  ???</b>
 
 
 <b>[ISSUE 11]</b><BR>
@@ -122,7 +96,7 @@ https://web.archive.org/web/20000306034831fw_/http://uo.stratics.com/resistance.
 
 <b>[ISSUE 26]</b><BR>
 -animal taming... <BR>even with 100.0 skill animals with high INT are almost impossible to tame (nightmares ect...)<BR>
-maybe decrease INT check by 50% ??? 
+<B>maybe decrease INT check by 50% ??? </b>
 
 
 <b>[ISSUE 27]</b><BR>
@@ -160,9 +134,37 @@ https://web.archive.org/web/20000819050744/http://www.sphereserver.com/
 
 https://web.archive.org/web/20000621160908/http://sphereserver.dslwatch.com/
 
+<P><BR><P><BR>
+
 
 FINISHED ITEMS!!!
 ---------------------------
+
+<b>[ISSUE 01]</b><BR>
+-HITPOINTS - on NPCS, there needs to be a seperation between STR and hitpoints, 
+i want npc characters with 200STR AND 1000hp.<BR>
+by default HITPOINTS will drain until they are equal with STR. so maybe add...
+```
+MAXHITS=1000
+MAXSTAM=1000
+MAXMANA=1000
+```
+and correct the regen???
+
+so if players and npcs are over their maxhits, hp drains to equal their maxhits
+and if players and npcs are under their maxhits, they heal to equal their maxhits not STR
+	
+![alt text](http://dragonsoftime.com/junk/maxstats2.png)
+
+(optional)
+AND FOR PLAYERS i want players to have x2 multiplyer for hitpoints, stamina, mana
+so 
+```
+125 STR = 250 hitpoints
+125 DEX = 250 stamina
+125 INT = 250 mana
+```
+(this is option in sphere.ini of course!)
 
 <b>[ISSUE 03]</b>
 -COLORED SYSMESSAGE, that lil sphere im using has it... looks like this
@@ -185,7 +187,7 @@ SRC.SAY #0033,3,I talk in color!
  
 ![alt text](http://dragonsoftime.com/junk/showdamage.png)<BR>
 (fix to match Lil Sphere)<BR>
-<b>[ MOSTLY DONE! ]</b>
+<b>[ DONE! ]</b>
 
 <b>[ISSUE 08]</b><BR>
 -colored multis??? new sphere you can go debug mode and set the color on a multi and it will change color in game
@@ -193,7 +195,7 @@ after 17 years i just realized you can dye a ship deed and the multi will be aff
 
 ![alt text](http://dragonsoftime.com/junk/coloredmultis.png)
 
-CLASSICUO WILL DISPLAY COLORED MULTIS! ORION AND ORIGINAL CLIENT WILL NOT<BR>
+CLASSICUO WILL DISPLAY COLORED MULTIS! ORION AND ORIGINAL CLIENT WILL NOT!<BR>
 <b>[ DONE! ]</b>
 
 <b>[ISSUE 09]</b><BR>
