@@ -157,8 +157,8 @@ bool CChar::NPC_IsOwnedBy( const CChar * pChar, bool fAllowGM ) const
 {
 	// fAllowGM = consider GM's to be owners of all NPC's
 
-	//if (this == pChar)
-	//	return( true );
+	if (!pChar->m_pNPC && this == pChar)
+		return( true );
 
 	if ( fAllowGM && pChar->IsPriv( PRIV_GM ))
 		return( pChar->GetPrivLevel() > GetPrivLevel());

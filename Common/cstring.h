@@ -229,7 +229,7 @@ enum MATCH_TYPE			// match result defines
 extern MATCH_TYPE Text_Match( const TCHAR *pPattern, const TCHAR * pText );
 
 extern TCHAR * GetTempStr();
-extern int GetBareText( TCHAR * pszOut, const TCHAR * pszInp, int iMaxSize, const TCHAR * pszStrip = NULL );
+extern int GetBareText( TCHAR * pszOut, const TCHAR * pszInp, int iMaxSize, const TCHAR * pszStrip = NULL, BYTE mask = 127);
 extern TCHAR * MakeFilteredStr( TCHAR * pStr );
 extern int strcpylen( TCHAR * pDst, const TCHAR * pSrc );
 extern int strcpylen( TCHAR * pDst, const TCHAR * pSrc, int imaxlen );
@@ -245,6 +245,6 @@ extern int FindTableSorted( const TCHAR * pFind, const TCHAR * const * ppTable, 
 
 extern int ChkStrn(char* s, const char* sym, DWORD len);
 extern int ChkStr(char* s, const char* sym);
-extern char* strip_extra_spaces(char* str, bool trim = true);
+extern char* strip_extra_spaces(char* str, bool trim);
 
 #endif // _INC_CSTRING_H

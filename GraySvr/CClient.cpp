@@ -40,6 +40,8 @@ CClient::CClient( SOCKET client ) : CGSocket( client )
 	m_Walk_InvalidEchos = 0;
 	m_Walk_CodeQty = -1;	// how many valid codes in here ?
 
+	m_LastPick = 0;
+
 	g_Serv.ClientsInc();
 	g_Serv.m_Clients.InsertAfter( this );
 
@@ -361,7 +363,6 @@ bool CClient::UseInterWorldGate( const CItem * pItemGate )
 
 	return( Login_Relay( pItemGate->m_itDreamGate.m_Server_Index )); // Relay player to a selected IP
 }
-
 
 /////////////////////////////////////////////
 
@@ -2070,6 +2071,8 @@ bool CClient::Cmd_SecureTrade( CChar * pChar, CItem * pItem )
 		return( pChar->NPC_OnItemGive( m_pChar, pItem ));
 	}
 
+	if (pItem->OnTrigger(ITRIG_DROPON_TRADE, m_pChar, pChar->GetUID()))
+		return false;
 	// Is there already a trade window open for this client ?
 	CItem * pItemCont = m_pChar->GetContentHead();
 	for ( ; pItemCont != NULL; pItemCont = pItemCont->GetNext())

@@ -540,9 +540,9 @@ CSkillDef::CSkillDef( SKILL_TYPE skill, CScript & s )
 			break;
 	}
 	g_Serv.m_SkillKeySort.InsertAt( j, val );
-	if (skill >= SKILL_MAX)
+	if (skill >= g_Serv.SKILL_MAX)
 	{
-		SKILL_MAX = (SKILL_TYPE)(skill + 1);
+		g_Serv.SKILL_MAX = (SKILL_TYPE)(skill + 1);
 	}
 }
 
@@ -667,64 +667,79 @@ bool CPotionDef::r_LoadVal( CScript &s )
 const TCHAR * CSpellDef::sm_SpellsTable[] =
 {
 	"CAST_TIME",
+	"CASTTIME",
 	"DURATION_HI",
 	"DURATION_LO",
 	"EFFECT_HI",
 	"EFFECT_ID",
 	"EFFECT_LO",
 	"FLAGS",
+	"MANA_USE",
+	"MANAUSE",
 	"NAME",
 	"REAGENTS",
 	"RUNE_ITEM",
+	"RUNEITEM",
 	"RUNES",
 	"SCROLL_ITEM",
+	"SCROLLITEM",
 	"SOUND",
 };
 
 bool CSpellDef::r_LoadVal( CScript &s )
 {
+	//for some KEYS in the server core we had, for example, only "CAST_TIME" but in the script is defined as "CASTTIME"
+	//just enable both to avoid confusion to whatever can be underscore separated
 	switch ( FindTableSorted( s.GetKey(), sm_SpellsTable, COUNTOF( sm_SpellsTable )))
 	{
-	case 0:	// "CAST_TIME"
+	case 0: // "CAST_TIME"
+	case 1:	// "CASTTIME"
 		m_wCastTime = s.GetArgVal();	// In tenths.
 		break;
-	case 1:	// "DURATION_HI"
+	case 2:	// "DURATION_HI"
 		m_wDurationTimeHi = s.GetArgVal();
 		break;
-	case 2:	// "DURATION_LO"
+	case 3:	// "DURATION_LO"
 		m_wDurationTimeLo = s.GetArgVal();
 		break;
-	case 3: // "EFFECT_HI"
+	case 4: // "EFFECT_HI"
 		m_wEffectHi = s.GetArgVal();
 		break;
-	case 4: // "EFFECT_ID"
+	case 5: // "EFFECT_ID"
 		m_wEffectID = (ITEMID_TYPE) s.GetArgVal();
 		break;
-	case 5: // "EFFECT_LO"
+	case 6: // "EFFECT_LO"
 		m_wEffectLo = s.GetArgVal();
 		break;
-	case 6: // "FLAGS"
+	case 7: // "FLAGS"
 		m_wFlags = s.GetArgVal();
 		break;
-	case 7: // "NAME"
+	case 8: // "MANA_USE"
+	case 9: // "MANAUSE"
+		m_wManaUse = s.GetArgVal();
+		break;
+	case 10: // "NAME"
 		m_sName = s.GetArgStr();
 		break;
-	case 8: // "REAGENTS"
+	case 11: // "REAGENTS"
 		m_sReags = s.GetArgStr();
 		break;
-	case 9: // "RUNE_ITEM"
+	case 12: // "RUNE_ITEM"
+	case 13: // "RUNEITEM"
 		m_SpellID = (ITEMID_TYPE) s.GetArgVal();
 		break;
-	case 10: // "RUNES"
+	case 14: // "RUNES"
 		// This may only be basic chars !
 		m_sRunes = s.GetArgStr();
 		break;
-	case 11: // "SCROLL_ITEM"
+	case 15: // "SCROLL_ITEM"
+	case 16: // "SCROLLITEM"
 		m_ScrollID = (ITEMID_TYPE) s.GetArgVal();
 		break;
-	case 12: // "SOUND"
+	case 17: // "SOUND"
 		m_sound = s.GetArgVal();
 		break;
+	
 	default:
 		return( false );
 	}
@@ -988,6 +1003,11 @@ CServer::CServer() : CServRef( GRAY_TITLE, SOCKET_LOCAL_ADDRESS )
 	m_fAutoResurrect = false;
 	m_iWhisperColor = 0x03b1;
 	m_fEnableChat = false;
+	for (int i = 0; i < STAT_BASE_QTY; ++i)
+	{
+		m_iPlayerStatMod[i] = 1;
+	}
+	m_iPickUpSpeed = 200;//200ms minimum from one pick to another one
 }
 
 CServer::~CServer()
@@ -1610,8 +1630,12 @@ enum SC_TYPE
 	SC_NPCTRAINMAX,			// m_iTrainSkillMax
 	SC_NPCTRAINPERCENT,			// m_iTrainSkillPercent
 	SC_NTSERVICE,				// m_fUseNTService
+	SC_PICKUPSPEED,			// m_iPickUpSpeed
 	SC_PLAYERGHOSTSOUNDS,	// m_fPlayerGhostSounds
+	SC_PLAYERHITSPERCENT,
+	SC_PLAYERMANAPERCENT,
 	SC_PLAYERNEUTRAL,		// m_iPlayerKarmaNeutral
+	SC_PLAYERSTAMPERCENT,
 	SC_POLLSERVERS,				// m_iPollServers
 	SC_PROFILE,
 	SC_REAGENTLOSSFAIL,			// m_fReagentLossFail
@@ -1697,8 +1721,12 @@ const TCHAR * CServer::sm_KeyTable[SC_QTY] =
 	"NPCTRAINMAX",			// m_iTrainSkillMax
 	"NPCTRAINPERCENT",			// m_iTrainSkillPercent
 	"NTSERVICE",				// m_fUseNTService
+	"PICKUPSPEED",			// m_iPickUpSpeed
 	"PLAYERGHOSTSOUNDS",	// m_fPlayerGhostSounds
+	"PLAYERHITSPERCENT",
+	"PLAYERMANAPERCENT",
 	"PLAYERNEUTRAL",		// m_iPlayerKarmaNeutral
+	"PLAYERSTAMPERCENT",
 	"POLLSERVERS",				// m_iPollServers
 	"PROFILE",
 	"REAGENTLOSSFAIL",			// m_fReagentLossFail
@@ -1986,6 +2014,18 @@ do_mulfiles:
 		break;
 	case SC_ENABLECHAT:
 		m_fEnableChat = s.GetArgVal();
+		break;
+	case SC_PICKUPSPEED:
+		m_iPickUpSpeed = s.GetArgVal();
+		break;
+	case SC_PLAYERHITSPERCENT:
+		m_iPlayerStatMod[STAT_STR] = (s.GetArgVal() * 0.01f);
+		break;
+	case SC_PLAYERMANAPERCENT:
+		m_iPlayerStatMod[STAT_INT] = (s.GetArgVal() * 0.01f);
+		break;
+	case SC_PLAYERSTAMPERCENT:
+		m_iPlayerStatMod[STAT_DEX] = (s.GetArgVal() * 0.01f);
 		break;
 	default:
 		if ( s.IsKeyHead( "MULFILE", 7 ))
@@ -3263,6 +3303,8 @@ SKILL_TYPE CServer::FindSkillKey( const TCHAR * pszKey ) const
 
 	return( (SKILL_TYPE)( m_SkillKeySort[i].GetValue()));
 }
+
+SKILL_TYPE CServer::SKILL_MAX = SKILL_NONE;
 
 bool CServer::LoadDefs()
 {

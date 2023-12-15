@@ -222,7 +222,7 @@ void CClient::Event_Book_Page( CObjUID uid ) // Book window
 		szTemp[len++] = '\t';
 	}
 
-	if (ChkStr((char*)&szTemp[0], "\n\r"))
+	if (ChkStr((char*)&szTemp[0], "\n\r") || len <= 0)
 		return;
 
 	szTemp[--len] = '\0';
@@ -246,6 +246,13 @@ void CClient::Event_Item_Pickup( CObjUID uid, int amount ) // Client grabs an it
 		return;
 	}
 
+	//Allow for speedy pickup in own containers, but not on ground or other containers, to avoid speed-looting
+	if (pItem->GetTopLevelObj() != m_pChar && m_LastPick > GetTickCount())
+	{
+		goto cancelpick;
+	}
+	m_LastPick = GetTickCount() + g_Serv.m_iPickUpSpeed;
+
 	// Where is the item coming from ? (just in case we have to toss it back)
 	CObjBase * pObjParent = dynamic_cast <CObjBase *>(pItem->GetParent());
 	m_Targ_PrvUID = ( pObjParent ) ? (UINT) pObjParent->GetUID() : UID_CLEAR;
@@ -254,6 +261,7 @@ void CClient::Event_Item_Pickup( CObjUID uid, int amount ) // Client grabs an it
 	amount = m_pChar->ItemPickup( pItem, amount );
 	if ( amount < 0 )
 	{
+		cancelpick:
 		addItemDragCancel(0);
 		return;
 	}
@@ -307,7 +315,7 @@ void CClient::Event_Item_Drop() // Item is dropped
 			CChar * pChar = dynamic_cast <CChar*>( pObjOn );
 			if ( pChar != m_pChar )
 			{
-				if ( ! Cmd_SecureTrade( pChar, pItem ))
+				if (pItem->OnTrigger(ITRIG_DROPON_CHAR, m_pChar, pChar->GetUID()) || ! Cmd_SecureTrade( pChar, pItem ) )
 					goto cantdrop;
 				return;
 			}
@@ -328,7 +336,8 @@ void CClient::Event_Item_Drop() // Item is dropped
 			{
 				// Slyly dropping item in someone elses pack.
 				// or just dropping on their trade window.
-				if ( ! Cmd_SecureTrade( pChar, pItem ))
+
+				if (pItem->OnTrigger(ITRIG_DROPON_CHAR, m_pChar, pChar->GetUID()) || !Cmd_SecureTrade(pChar, pItem) )
 					goto cantdrop;
 				return;
 			}
@@ -340,10 +349,10 @@ void CClient::Event_Item_Drop() // Item is dropped
 			if ( pChar->GetBank()->IsItemInContainer( pContItem ))
 			{
 				// Diff Weight restrict for bank box and items in the bank box.
-				if ( ! pChar->GetBank()->CanContainerHold( pItem, m_pChar ))
+				if (!pChar->GetBank()->CanContainerHold(pItem, m_pChar))
 					goto cantdrop;
 			}
-			else if ( ! pChar->CanCarry( pItem ))
+			else if ( ! pChar->CanCarry( pItem ) )
 			{
 				// SysMessage( "That is too heavy" );
 				goto cantdrop;
@@ -352,6 +361,9 @@ void CClient::Event_Item_Drop() // Item is dropped
 
 		if ( pContItem != NULL )
 		{
+			if (pContItem->OnTrigger(ITRIG_DROPON_SELF, m_pChar, pItem->GetUID()))
+				goto cantdrop;
+
 			// Putting it into some sort of container.
 			if ( pContItem->m_type == ITEM_TRASH )
 			{
@@ -360,9 +372,6 @@ void CClient::Event_Item_Drop() // Item is dropped
 				pItem->Delete();
 				return;
 			}
-
-			if ( ! pContItem->CanContainerHold( pItem, m_pChar ))
-				goto cantdrop;
 		}
 		else
 		{
@@ -372,28 +381,63 @@ void CClient::Event_Item_Drop() // Item is dropped
 			CItem * pItemOn = dynamic_cast <CItem*> ( pObjOn );
 			pObjOn = pItemOn->GetContainer();
 			pt = pItemOn->GetUnkPoint();
-			if ( ! pItem->Stack( pItemOn ))
+			if (!pItem->IsStackable(pItemOn))
 			{
-				if ( pItemOn->m_type == ITEM_SPELLBOOK )
+				if (pItemOn->m_type == ITEM_SPELLBOOK)
 				{
-					if ( pItemOn->AddSpellbookScroll( pItem ))
+					if (pItem->OnTrigger(ITRIG_DROPON_ITEM, m_pChar, pItemOn->GetUID()))
+						goto cantdrop;
+					if (pItemOn->AddSpellbookScroll(pItem))
 					{
-						SysMessage( "Can't add this to the spellbook" );
+						SysMessage("Can't add this to the spellbook");
 						goto cantdrop;
 					}
-					addSound( 0x057, pItemOn );	// add to inv sound.
+					addSound(0x057, pItemOn);	// add to inv sound.
 					return;
 				}
-
+				else if (pObjOn != NULL)
+				{
+					if (pObjOn->IsContainer())
+					{
+						pContItem = static_cast <CItemContainer*> (pObjOn);
+						if (pItemOn->OnTrigger(ITRIG_DROPON_SELF, m_pChar, pItem->GetUID()))
+							goto cantdrop;
+					}
+					else if (pObjOn->IsChar())
+					{
+						if (pItem->OnTrigger(ITRIG_DROPON_CHAR, m_pChar, pObjOn->GetUID()))
+							goto cantdrop;
+					}
+					else if (pObjOn->IsItem())//this shoudn't be possible, but never say NEVER
+					{
+						if (pItem->OnTrigger(ITRIG_DROPON_ITEM, m_pChar, pObjOn->GetUID()))
+							goto cantdrop;
+					}
+					else//this never happens, but we have to be super sure anyway
+					{
+						if(pItem->OnTrigger(ITRIG_DROPON_GROUND, m_pChar))
+							goto cantdrop;
+					}
+				}
+				else
+				{
+					pItem->OnTrigger(ITRIG_DROPON_GROUND, m_pChar);
+				}
 				// Just drop on top of the current item.
 				// Client probably doesn't allow this anyhow.
+			}
+			else
+			{
+				if (pItem->OnTrigger(ITRIG_DROPON_ITEM, m_pChar, pItemOn->GetUID()))
+					goto cantdrop;
+				pItem->Stack(pItemOn, false);
 			}
 		}
 		sound = 0x057;	// add to inv sound.
 	}
 	else
 	{
-		if ( ! m_pChar->CanTouch( pt ))	// Must also be LOS !
+		if ( ! m_pChar->CanTouch( pt ) || pItem->OnTrigger(ITRIG_DROPON_GROUND, m_pChar))	// Must also be LOS !
 		{
 	cantdrop:
 			// The item was in the LAYER_DRAGGING.
@@ -740,6 +784,10 @@ void CClient::Event_Walking( BYTE rawdir, BYTE count, UINT dwEcho ) // Player mo
 		fMove = false;
 	}
 
+	if (m_pChar->m_pPlayer)
+	{
+		m_pChar->m_pPlayer->m_LastWalk = g_World.GetTime();
+	}
 	// Ack the move. ( if this does not go back we get rubber banding )
 	m_WalkCount = count;
 	CCommand cmd;
@@ -1328,7 +1376,29 @@ void CClient::Event_BBoardRequest( CObjUID uid )
 			pBoard->ContentAdd( pMsgNew );
 		}
 		break;
+	case 6://remove message
+	{
+		if (m_bin.BBoard.m_len < 0x0c)
+		{
+			DEBUG_ERR(("%x:BBoard remove message bad length %d\n", GetSocket(), (int)m_bin.BBoard.m_len));
+			return;
+		}
 
+		if (m_bin.BBoard.m_UID == pBoard->GetUID())//allow message delete to GM and OWNER of the message
+		{
+			CObjUID uidItem(m_bin.BBoard.m_UIDMsg);
+			if (!uidItem || !uidItem.IsItem())
+				return;
+			CItem* pItem = uidItem.ItemFind();
+			if (pItem && pItem->GetParent() == pBoard && (pItem->m_uidLink == m_pChar->GetUID() || IsPriv(PRIV_GM)))
+			{
+				//we can delete the message
+				pItem->Delete();
+			}
+		}
+
+		break;
+	}
 	default:
 		DEBUG_ERR(( "%x:BBoard unknown flag %d\n", GetSocket(), (int) m_bin.BBoard.m_flag ));
 		return;
@@ -1524,6 +1594,9 @@ void CClient::Event_PromptResp( const TCHAR * pszText, int len )
 	else
 	{
 		len = GetBareText( szText, pszText, sizeof(szText), "|~,=[]{|}~" );
+		//also remove any unwanted spaces
+		TCHAR* iPtr = &szText[0];
+		iPtr = strip_extra_spaces(szText, true);
 	}
 
 	const TCHAR * pszReName = NULL;
@@ -1614,7 +1687,7 @@ void CClient::Event_PromptResp( const TCHAR * pszText, int len )
 
 	if ( pItem == NULL || szText[0] == '\0' )
 	{
-		SysMessagef( "%s Renaming Canceled", pszReName );
+		SysMessagef( "%s Renaming Cancelled", pszReName );
 		return;
 	}
 
@@ -1824,7 +1897,7 @@ void CClient::Event_Talk( const TCHAR * pszText, COLOR_TYPE color, TALKMODE_TYPE
 	m_pAccount->m_lang[0] = 0;	// default.
 	// Rip out the unprintables first.
 	TCHAR szText[MAX_TALK_BUFFER];
-	int len = GetBareText( szText, pszText, sizeof(szText));
+	int len = GetBareText( szText, pszText, sizeof(szText), NULL, 0xFF);
 	if (len <= 0 || ChkStr((char*)szText, "\n\r"))
 		return;
 	pszText = szText;
@@ -1836,10 +1909,6 @@ void CClient::Event_Talk( const TCHAR * pszText, COLOR_TYPE color, TALKMODE_TYPE
 			g_Log.Event( LOGM_PLAYER_SPEAK, "%x:'%s' Says '%s' mode=%d\n", GetSocket(), m_pChar->GetName(), szText, mode );
 		}
 		m_pChar->Speak( szText, color, mode );	// echo this back.
-	}
-	else
-	{
-
 	}
 
 	Event_Talk_Common( (TCHAR *) pszText );
@@ -1957,7 +2026,8 @@ void CClient::Event_SetName( CObjUID uid )
 	if (ChkStr((char*)&pChar[0], "\n\r[]@\\^£$%&=#§*<>|1234567890,.-;:_/\"!?()°+ηςΰωθιμ"))
 		return;
 
-	pChar->SetName( m_bin.CharName.m_name );
+	//name must not contain any unwanted spaces
+	pChar->SetName(strip_extra_spaces(m_bin.CharName.m_name, true));
 }
 
 void CClient::Event_GumpTextIn()
@@ -1973,7 +2043,7 @@ void CClient::Event_GumpTextIn()
 
 	BYTE retcode = m_bin.GumpText.m_retcode; // 0=canceled, 1=okayed
 	WORD textlen = m_bin.GumpText.m_textlen; // length of text entered
-	TCHAR * pszText = m_bin.GumpText.m_text;
+	TCHAR * pszText = strip_extra_spaces(m_bin.GumpText.m_text, false);
 
 	CGString sStr;
 
@@ -2116,12 +2186,12 @@ void CClient::Event_GumpButton()
 		{
 		case 0: // Right click, cancel and discard any changes
 			m_Prop_UID.ClearUID(); // no longer in /props dialog
-			addSkillWindow(SKILL_MAX); // Reload the real skills
+			addSkillWindow(g_Serv.SKILL_MAX); // Reload the real skills
 			return;
 		case 900: // Cancel and discard any changes
 clear_dialog:
 			m_Prop_UID.ClearUID(); // no longer in /props dialog
-			addSkillWindow(SKILL_MAX); // Reload the real skills
+			addSkillWindow(g_Serv.SKILL_MAX); // Reload the real skills
 			return;
 		case 901: // Apply changes and return
 			// TODO: apply changes here
@@ -2824,13 +2894,17 @@ void CClient::Event_SingleClick( CObjUID uid )
 
 	if ( pObj->IsItem())
 	{
-		addItemName( dynamic_cast <CItem *>(pObj));
+		CItem* pItem = dynamic_cast <CItem*>(pObj);
+		if(!pItem->OnTrigger(ITRIG_CLICK, m_pChar))
+			addItemName(pItem);
 		return;
 	}
 
 	if ( pObj->IsChar())
 	{
-		addCharName( dynamic_cast <CChar*>(pObj) );
+		CChar* pChar = dynamic_cast <CChar*>(pObj);
+		if(!pChar->OnTrigger(CTRIG_Click, m_pChar))
+			addCharName(pChar);
 		return;
 	}
 
@@ -2842,7 +2916,7 @@ void CClient::Event_Target()
 	// XCMD_Target
 	// If player clicks on something with the targetting cursor
 	// Assume addTarget was called before this.
-	// NOTE: Make sure they can actually validly trarget this item !
+	// NOTE: Make sure they can actually validly target this item !
 
 	ASSERT(m_pChar);
 	if ( m_bin.Target.m_code != GetTargMode())
@@ -2865,12 +2939,27 @@ void CClient::Event_Target()
 	TARGMODE_TYPE prevmode = GetTargMode();
 	ClearTargMode();
 
-	if ( uid.IsValidUID() && ! IsPriv( PRIV_GM ))
+	if ( uid.IsValidUID() && ! IsPriv( PRIV_GM ) )//GM can target anywhere
 	{
 		if ( ! m_pChar->CanSee( uid.ObjFind()))
 		{
 			addObjectRemoveCantSee( uid, "the target" );
 			return;
+		}
+	}
+	else if (pt.IsValid() && !IsPriv(PRIV_GM))//GM can target anywhere
+	{
+		CPointMap* ppt = &CPointMap::CPointMap();
+		if (!m_pChar->CanSeeLOS(pt, ppt, UO_MAP_VIEW_SIZE))
+		{
+			//LOS or see should be used inside scripts, this is just to avoid targeting hack with targets outside the max view range or with los blocked,
+			//eg: bandage cleaning in water in the other part of the world, this will be valid in case of special tools for players or something similar,
+			//the object los blocked should be at a max 1 tile range behind the choosen point, so the obstacle can be dealt internally (eg: using fountain)
+			if (ppt->GetDist(pt) > 1)
+			{
+				SysMessage("Target is not in line of sight");
+				return;
+			}
 		}
 	}
 
@@ -3085,7 +3174,7 @@ bool CClient::xDispatchMsg()
 	case XCMD_CharStatReq: // Status Request
 		if ( ! xCheckSize( sizeof( m_bin.CharStatReq ))) return(false);
 		if ( m_bin.CharStatReq.m_type == 4 ) addCharStatWindow( (UINT) m_bin.CharStatReq.m_UID );
-		if ( m_bin.CharStatReq.m_type == 5 ) addSkillWindow(SKILL_MAX);
+		if ( m_bin.CharStatReq.m_type == 5 ) addSkillWindow(g_Serv.SKILL_MAX);
 		break;
 	case XCMD_Skill:	// Skill locking.
 		if ( ! xCheckSize(3)) return(false);

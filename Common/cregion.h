@@ -53,14 +53,14 @@ public:
 
 	bool IsValid() const
 	{
-		if ( m_z <= -UO_SIZE_Z || m_z >= UO_SIZE_Z ) return( false );
+		if ( m_z <= UO_SIZE_MIN_Z || m_z >= UO_SIZE_Z ) return( false );
 		if ( m_x < 0 || m_x >= UO_SIZE_X ) return( false );
 		if ( m_y < 0 || m_y >= UO_SIZE_Y ) return( false );
 		return( true );
 	}
 	bool IsCharValid() const
 	{
-		if ( m_z <= -UO_SIZE_Z || m_z >= UO_SIZE_Z ) return( false );
+		if ( m_z <= UO_SIZE_MIN_Z || m_z >= UO_SIZE_Z ) return( false );
 		if ( m_x <= 0 || m_x >= UO_SIZE_X ) return( false );
 		if ( m_y <= 0 || m_y >= UO_SIZE_Y ) return( false );
 		return( true );
@@ -709,6 +709,8 @@ public:
 	bool IsDisconnected() const	{	return( m_UID.IsDisconnected() ); }
 	bool IsTopLevel() const		{	return( m_UID.IsTopLevel() ); }
 	bool IsValidUID() const		{	return( m_UID.IsValidUID() ); }
+	CChar* CharFind() const		{	return( m_UID.CharFind()); }
+	CItem* ItemFind() const		{	return( m_UID.ItemFind()); }
 
 #if defined(_DEBUG) && defined(GRAY_SVR)	// CObjBaseTemplate
 	bool IsValidContainer() const;	// am i really in the container i say i am ?

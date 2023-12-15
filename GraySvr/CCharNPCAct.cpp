@@ -35,7 +35,7 @@ bool CChar::NPC_OnVerb( CScript &s, CTextConsole * pSrc ) // Execute command fro
 		"WALK",
 	};
 
-	CChar * pCharSrc = pSrc->GetChar();
+	CChar * pCharSrc = pSrc ? pSrc->GetChar() : NULL;
 
 	switch ( FindTableSorted( s.GetKey(), table, COUNTOF(table)))
 	{
@@ -646,7 +646,7 @@ bool CChar::NPC_OnTrainHear( CChar * pCharSrc, const TCHAR * pCmd )
 	// Did they mention a skill name i recognize ?
 
 	int i=SKILL_NONE+1;
-	for ( ; i< SKILL_MAX; i++ )
+	for ( ; i< g_Serv.SKILL_MAX; i++ )
 	{
 		if ( ! FindStrWord( pCmd, g_Serv.m_SkillDefs[i]->GetKey()))
 			continue;
@@ -676,7 +676,7 @@ bool CChar::NPC_OnTrainHear( CChar * pCharSrc, const TCHAR * pCmd )
 	const TCHAR * pPrvSkill = NULL;
 
 	int iCount = 0;
-	for ( i=SKILL_NONE+1; i< SKILL_MAX; i++ )
+	for ( i=SKILL_NONE+1; i< g_Serv.SKILL_MAX; i++ )
 	{
 		int iDiff = NPC_GetTrainMax( (SKILL_TYPE)i ) - pCharSrc->Skill_GetBase( (SKILL_TYPE) i);
 		if ( iDiff <= 0 )
@@ -854,11 +854,11 @@ int CChar::NPC_WalkToPoint( bool fRun )
 	// How fast can they move.
 	if ( fRun )
 	{
-		SetTimeout( TICK_PER_SEC/4 + GetRandVal( (100-m_Stat[STAT_DEX])/4 ) * TICK_PER_SEC / 10 );
+		SetTimeout( TICK_PER_SEC/4 + GetRandVal( (100-Stat_Get(STAT_DEX))/4 ) * TICK_PER_SEC / 10 );
 	}
 	else
 	{
-		SetTimeout( TICK_PER_SEC/2 + GetRandVal( (150-m_Stat[STAT_DEX])/2 ) * TICK_PER_SEC / 10 );
+		SetTimeout( TICK_PER_SEC/2 + GetRandVal( (150- Stat_Get(STAT_DEX))/2 ) * TICK_PER_SEC / 10 );
 	}
 
 	return( 1 );
@@ -1327,8 +1327,9 @@ bool CChar::NPC_LookAtItem( CItem * pItem, int iDist )
 		CanTouch( pItem ) &&
 		!GetRandVal(2))
 	{
-		// Is it opened or closed?
-		if ( pItem->IsDoorOpen())
+		// Is it opened or closed? just ignore SIGNs since they cause an error in debug check
+		ITEMID_TYPE id = pItem->GetDispID();
+		if (id == ITEMID_SIGN_BRASS_1 || id == ITEMID_SIGN_BRASS_2 || pItem->IsDoorOpen())
 			return( false );
 
 		// The door is closed.
@@ -1459,7 +1460,7 @@ bool CChar::NPC_LookAtChar( CChar * pChar, int iDist )
 	case NPCBRAIN_STABLE:
 	case NPCBRAIN_ANIMAL:
 	case NPCBRAIN_HUMAN:
-	case NPCBRAIN_THEIF:
+	case NPCBRAIN_THIEF:
 		if ( NPC_LookAtCharHuman( pChar ))
 			return( true );
 		break;
@@ -1801,7 +1802,7 @@ void CChar::NPC_Act_Fight()
 	}
 
 	// Can only do that with full stamina !
-	if ( m_StatStam >= Stat_Get(STAT_DEX))
+	if ( m_StatStam >= HitManaStam_Get(STAT_DEX))
 	{
 		// If I am a dragon maybe I will breath fire.
 		if ( m_pNPC->m_Brain == NPCBRAIN_DRAGON &&
@@ -2122,7 +2123,7 @@ void CChar::NPC_Act_Idle()
 	}
 
 	// Specific creature actions.
-	if ( m_StatStam >= Stat_Get(STAT_DEX) && ! GetRandVal( 3 ))
+	if ( m_StatStam >= HitManaStam_Get(STAT_DEX) && ! GetRandVal( 3 ))
 	{
 		switch ( GetDispID())
 		{
@@ -2351,7 +2352,7 @@ bool CChar::NPC_OnItemGive( CChar * pCharSrc, CItem * pItem )
 		break;
 
 	case NPCBRAIN_BEGGAR:
-	case NPCBRAIN_THEIF:
+	case NPCBRAIN_THIEF:
 		if ( pItem->m_type == ITEM_FOOD && 
 			Use_Eat( pItem ))
 		{

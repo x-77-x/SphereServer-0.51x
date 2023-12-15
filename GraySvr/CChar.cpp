@@ -72,7 +72,7 @@ CChar::CChar( CREID_TYPE baseID ) : CObjBase( false )
 		m_Stat[i] = m_StatVal[i].m_val = 1;
 	}
 
-	for ( i=0;i< SKILL_MAX;i++)
+	for ( i=0;i< g_Serv.SKILL_MAX;i++)
 	{
 		m_Skill[i] = 0;
 	}
@@ -383,7 +383,7 @@ bailout:
 		// Make sure players don't get ridiculous stats.
 		if ( GetPrivLevel() <= PLEVEL_Player )
 		{
-			for ( int i=0; i< SKILL_MAX; i++ )
+			for ( int i=0; i< g_Serv.SKILL_MAX; i++ )
 			{
 				int iSkillMax = g_Serv.m_SkillClassDefs[m_pPlayer->m_SkillClass]->m_SkillLevelMax[i];
 				if ( m_Skill[i] < 0 ) Skill_SetBase( (SKILL_TYPE)i, 0 );
@@ -423,7 +423,7 @@ bailout:
 		}
 
 		// An NPC. Don't keep track of unused skills.
-		for ( int i=0; i< SKILL_MAX; i++ )
+		for ( int i=0; i< g_Serv.SKILL_MAX; i++ )
 		{
 			if ( m_Skill[i] && m_Skill[i] <= 10 )
 				Skill_SetBase( (SKILL_TYPE)i, 0 );
@@ -579,9 +579,9 @@ void CChar::CreateNewCharCheck()
 	// Creating a new char. (Not loading from save file)
 	m_prev_id = GetID();
 	m_prev_color = GetColor();
-	m_StatHealth = Stat_Get(STAT_STR);
-	m_StatStam = Stat_Get(STAT_DEX);
-	m_StatMana = Stat_Get(STAT_INT);
+	m_StatHealth = HitManaStam_Get(STAT_STR);
+	m_StatStam = HitManaStam_Get(STAT_DEX);
+	m_StatMana = HitManaStam_Get(STAT_INT);
 }
 
 void CChar::NPC_LoadScript( bool fRestock )
@@ -1476,7 +1476,7 @@ bool CChar::r_WriteVal( const TCHAR * pKey, CGString & sVal, CTextConsole * pSrc
 	case 9:	// "SKILLTOTAL"
 		{
 			int iTotal = 0;
-			for ( int i=0; i< SKILL_MAX; i++ )
+			for ( int i=0; i< g_Serv.SKILL_MAX; i++ )
 			{
 				iTotal += Skill_GetBase((SKILL_TYPE)i);
 			}
@@ -1538,9 +1538,7 @@ bool CChar::r_WriteVal( const TCHAR * pKey, CGString & sVal, CTextConsole * pSrc
 		sVal.FormatVal( m_food);
 		break;
 	case CC_HITPOINTS:
-		goto hitpoints;
 	case CC_HITS:
-hitpoints:
 		sVal.FormatVal( m_StatHealth );
 		break;
 	case CC_HOME:
@@ -1549,32 +1547,25 @@ hitpoints:
 	case CC_MANA:
 		sVal.FormatVal( m_StatMana );
 		break;
-	// case CC_NPC:
+	case CC_XBODY: // not used anymore.
 	case CC_OBODY:
-scp_obody:
 		sVal.FormatHex( m_prev_id);
 		break;
+	case CC_XSKIN:	// not used anymore.
 	case CC_OSKIN:
-scp_oskin:
 		sVal.FormatHex( m_prev_color);
 		break;
 	//case CC_P
 	case CC_STAM:
-stamina:
-		sVal.FormatVal( m_StatStam );
-		break;
 	case CC_STAMINA:
-		goto stamina;
+		sVal.FormatVal(m_StatStam);
+		break;
 	case CC_STONE:
 		sVal.FormatVal( IsStat( STATF_Stone ));
 		break;
 	case CC_TITLE:
 		sVal = m_sTitle;
 		break;
-	case CC_XBODY: // not used anymore.
-		goto scp_obody;
-	case CC_XSKIN:	// not used anymore.
-		goto scp_oskin;
 
 	default:
 		if ( m_pPlayer )
@@ -1667,9 +1658,7 @@ bool CChar::r_LoadVal( CScript & s )
 		m_food = s.GetArgVal();
 		return true;
 	case CC_HITPOINTS:
-		goto scp_hitpoints;
 	case CC_HITS:
-scp_hitpoints:
 		m_StatHealth = s.GetArgRange();
 		UpdateStatsFlag();
 		return true;
@@ -1686,8 +1675,8 @@ scp_hitpoints:
 	case CC_NPC:
 		SetNPCBrain( (NPCBRAIN_TYPE) s.GetArgVal());
 		return true;
+	case CC_XBODY:
 	case CC_OBODY:
-scp_obody:
 		m_prev_id = (CREID_TYPE) s.GetArgHex();
 		if ( ! CCharBase::FindCharBase( m_prev_id ))
 		{
@@ -1695,8 +1684,8 @@ scp_obody:
 			m_prev_id = CREID_MAN;
 		}
 		return true;
+	case CC_XSKIN:
 	case CC_OSKIN:
-scp_oskin:
 		m_prev_color = s.GetArgHex();
 		return true;
 	case CC_P:
@@ -1736,10 +1725,6 @@ scp_oskin:
 	case CC_TITLE:
 		m_sTitle = s.GetArgStr();
 		return true;
-	case CC_XBODY:
-		goto scp_obody;
-	case CC_XSKIN:
-		goto scp_oskin;
 	}
 
 	if ( m_pPlayer )
@@ -1847,7 +1832,7 @@ void CChar::r_Write( CScript & s )
 			continue;
 		s.WriteKeyVal( g_Stat_Name[j], m_Stat[j] );
 	}
-	for ( j=0;j< SKILL_MAX;j++)
+	for ( j=0;j< g_Serv.SKILL_MAX;j++)
 	{
 		if ( ! m_Skill[j] ) 
 			continue;
@@ -2167,10 +2152,10 @@ bool CChar::r_Verb( CScript &s, CTextConsole * pSrc ) // Execute command from sc
 	};
 
 	DEBUG_CHECK( pSrc );
-	if ( this != pSrc )
+	if (pSrc != NULL && this != pSrc)
 	{
 		// Check Priv level for person doing this to me.
-		if ( pSrc->GetPrivLevel() < GetPrivLevel())
+		if ( pSrc->GetPrivLevel() < GetPrivLevel() )
 		{
 			pSrc->SysMessage( "Target is more privileged than you\n" );
 			return false;
@@ -2183,14 +2168,14 @@ bool CChar::r_Verb( CScript &s, CTextConsole * pSrc ) // Execute command from sc
 			return( true );
 	}
 
-	CChar * pCharSrc = pSrc->GetChar();
+	CChar* pCharSrc = pSrc ? pSrc->GetChar() : NULL;
 
 	switch ( FindTableSorted( s.GetKey(), table, COUNTOF(table)))
 	{
 	case CV_ALLSKILLS:
 		{
 			int iVal = s.GetArgVal();
-			for ( int i=0; i< SKILL_MAX; i++ )
+			for ( int i=0; i< g_Serv.SKILL_MAX; i++ )
 			{
 				Skill_SetBase( (SKILL_TYPE)i, iVal );
 			}
@@ -2561,7 +2546,7 @@ void CChar::InitPlayer( CEvent * pBin, CClient * pClient )
 
 	// randomize the skills first.
 	int i = 0;
-	for ( ; i < SKILL_MAX; i++ )
+	for ( ; i < g_Serv.SKILL_MAX; i++ )
 	{
 		Skill_SetBase( (SKILL_TYPE)i, GetRandVal( g_Serv.m_iMaxBaseSkill ));
 	}
@@ -2739,7 +2724,7 @@ void CChar::UpdateStats( STAT_TYPE type, int iChange, int iLimit )
 		ASSERT( ((WORD)type) < COUNTOF(m_StatVal));
 
 		int iVal = m_StatVal[type].m_val;
-		if ( ! iLimit ) iLimit = Stat_Get(type);
+		if ( ! iLimit ) iLimit = HitManaStam_Get(type);
 		if ( iChange < 0 )
 		{
 			iVal += iChange;
@@ -2771,7 +2756,7 @@ void CChar::UpdateStats( STAT_TYPE type, int iChange, int iLimit )
 	}
 	if ( IsClient())
 	{
-		cmd.StatChng.m_max = Stat_Get(type);
+		cmd.StatChng.m_max = HitManaStam_Get(type);
 		cmd.StatChng.m_val = m_StatVal[type].m_val;
 		m_pClient->xSendPkt( &cmd, sizeof(cmd.StatChng));
 	}
@@ -3188,6 +3173,13 @@ void CChar::UpdateDir( const CObjBaseTemplate * pObj )
 	pObj = pObj->GetTopLevelObj();
 	if ( pObj == this )		// In our own pack.
 		return;
+	if (pObj->IsChar())
+	{
+		CChar* targ = pObj->CharFind();
+		//don't turn character to face a gamemaster, they must not be aware that we're here!
+		if (targ == NULL || (targ->GetPrivLevel() >= PLEVEL_Counsel && !CanSee(targ)))
+			return;
+	}
 	UpdateDir( pObj->GetTopPoint());
 }
 
@@ -4612,9 +4604,14 @@ bool CChar::CheckLocation( bool fStanding )
 			Sound( 0x15f ); // ??? Fire noise.
 			return( false );
 		case ITEM_SPELL:
-			OnSpellEffect( (SPELL_TYPE) pItem->m_itSpell.m_spell, NULL, 50 );
-			Sound( g_Serv.m_SpellDefs[ (SPELL_TYPE) pItem->m_itSpell.m_spell]->m_sound  );
-			return( false );
+		{
+			CChar* pSrcLink = NULL;
+			if (pItem->m_uidLink && pItem->m_itSpell.m_Ticks == 0)
+				pSrcLink = pItem->m_uidLink.CharFind();
+			OnSpellEffect((SPELL_TYPE)pItem->m_itSpell.m_spell, pSrcLink, 50);
+			Sound(g_Serv.m_SpellDefs[(SPELL_TYPE)pItem->m_itSpell.m_spell]->m_sound);
+			return(false);
+		}
 		case ITEM_TRAP:
 		case ITEM_TRAP_ACTIVE:
 		// case ITEM_TRAP_INACTIVE: // reactive it?
@@ -4811,6 +4808,7 @@ bool CChar::MoveToValidSpot( DIR_TYPE dir, int iDist, int iDistStart )
 
 const TCHAR * CChar::sm_szTrigName[CTRIG_QTY] =	// static
 {
+	"@Click",
 	"@HearGreeting",	// NPC i have been spoken to for the first time. (no memory of previous hearing)
 	"@HearUnknown",		// NPC I heard something i don't understand.
 	"@SpellCast",		// Char is casting a spell.
@@ -4962,18 +4960,26 @@ bool CChar::OnTick()
 		for ( int i=0; i<COUNTOF(m_StatVal); i++ )
 		{
 			m_StatVal[i].m_regen += iTimeDiff;
-			int iRate = sm_Stat_Val_Regen[i];
+			unsigned short iRate = sm_Stat_Val_Regen[i];
 			if ( i == STAT_STR )	// HitPoints regen rate is related to food and stam.
 			{
 				if ( m_pPlayer )
 				{
-					if ( ! m_food )
-						continue; // iRate += iRate/2;	// much slower with no food.
-					if ( IsStat(STATF_Fly))
-						continue;
+					if (IsStat(STATF_Fly))//when running no regen? I viewed this, but it doesn't seem really nice, check if we are standing still so reget regen rate normally
+					{
+						if ((m_pPlayer->m_LastWalk + 3) <= g_World.GetTime())
+							ModStat(STATF_Fly, false);
+						else
+							continue;
+					}
+
+					if (!m_food)
+					{
+						iRate += iRate / 2;	// much slower with no food.
+					}
 				}
 
-				// Fast metabolism bonus ?
+				// Fast metabolism bonus ? considering that mobiles can have much more stam that current dex, it's OK to check this
 				iRate += iRate / ( 2 * ( 1 + m_StatStam / 32 ));
 			}
 
@@ -4985,7 +4991,7 @@ bool CChar::OnTick()
 			{
 				OnFoodTick();
 			}
-			else if ( m_StatVal[i].m_val != Stat_Get((STAT_TYPE)i))
+			else if ( m_StatVal[i].m_val != HitManaStam_Get((STAT_TYPE)i))
 			{
 				UpdateStats( (STAT_TYPE) i, 1 );
 			}
@@ -5048,3 +5054,19 @@ bool CChar::OnTick()
 	return( true );
 }
 
+short CChar::HitManaStam_Get(STAT_TYPE i) const
+{
+	ASSERT(((WORD)i) < STAT_BASE_QTY);
+	if (m_pPlayer)
+	{
+		return m_Stat[i] * g_Serv.m_iPlayerStatMod[i];
+	}
+	else if(m_pNPC && m_pNPC->m_StatMaxValue[i])
+	{
+		return m_pNPC->m_StatMaxValue[i];
+	}
+	else//backward compatibility
+	{
+		return m_Stat[i];
+	}
+}

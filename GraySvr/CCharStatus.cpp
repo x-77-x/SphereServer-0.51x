@@ -9,7 +9,7 @@
 
 int CChar::GetHealthPercent() const
 {
-	return( IMULDIV( m_StatHealth, 100, Stat_Get(STAT_STR)));
+	return( IMULDIV( m_StatHealth, 100, HitManaStam_Get(STAT_STR)));
 }
 
 bool CChar::IsSwimming() const

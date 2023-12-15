@@ -1759,11 +1759,11 @@ void CClient::addSkillWindow( SKILL_TYPE skill ) // Opens the skills list
 	CChar * pChar = m_Prop_UID.CharFind();
 	if ( pChar == NULL ) pChar = m_pChar;
 
-	if ( skill >= SKILL_MAX)
+	if ( skill >= g_Serv.SKILL_MAX)
 	{	// all skills
 		cmd.Skill.m_single = 0;
 		int i=0;
-		for ( ; i< SKILL_MAX; i++ )
+		for ( ; i< g_Serv.SKILL_MAX; i++ )
 		{
 			int iskillval = pChar->Skill_GetBase( (SKILL_TYPE) i);
 			if ( fVer12602 )
@@ -1782,12 +1782,12 @@ void CClient::addSkillWindow( SKILL_TYPE skill ) // Opens the skills list
 		if ( fVer12602 )
 		{
 			cmd.Skill.skills[i].m_index = 0;	// terminator.
-			len += ((SKILL_MAX -1) * sizeof(cmd.Skill.skills[0])) + sizeof(NWORD);
+			len += ((g_Serv.SKILL_MAX -1) * sizeof(cmd.Skill.skills[0])) + sizeof(NWORD);
 		}
 		else
 		{
 			cmd.Skill_v261.skills[i].m_index = 0;	// terminator.
-			len += ((SKILL_MAX -1) * sizeof(cmd.Skill_v261.skills[0])) + sizeof(NWORD);
+			len += ((g_Serv.SKILL_MAX -1) * sizeof(cmd.Skill_v261.skills[0])) + sizeof(NWORD);
 		}
 	}
 	else
@@ -1916,7 +1916,7 @@ void CClient::addCharStatWindow( CObjUID uid ) // Opens the status window
 	if (pChar == m_pChar)
 	{
 		cmd.Status.m_health = pChar->m_StatHealth;
-		cmd.Status.m_maxhealth = pChar->Stat_Get(STAT_STR);
+		cmd.Status.m_maxhealth = pChar->HitManaStam_Get(STAT_STR);
 	}
 	else
 	{
@@ -1950,9 +1950,9 @@ void CClient::addCharStatWindow( CObjUID uid ) // Opens the status window
 		cmd.Status.m_dex = pChar->Stat_Get(STAT_DEX);
 		cmd.Status.m_int = pChar->Stat_Get(STAT_INT);
 		cmd.Status.m_stam =	pChar->m_StatStam ;
-		cmd.Status.m_maxstam = pChar->Stat_Get(STAT_DEX);
+		cmd.Status.m_maxstam = pChar->HitManaStam_Get(STAT_DEX);
 		cmd.Status.m_mana =	pChar->m_StatMana ;
-		cmd.Status.m_maxmana = pChar->Stat_Get(STAT_INT);
+		cmd.Status.m_maxmana = pChar->HitManaStam_Get(STAT_INT);
 		cmd.Status.m_gold = pChar->ContentCount( ITEMID_GOLD_C1 );	/// ??? optimize this count is too often.
 		cmd.Status.m_armor = pChar->m_defense + pChar->m_pDef->m_defense;
 		cmd.Status.m_weight = pChar->GetTotalWeight() / WEIGHT_UNITS;

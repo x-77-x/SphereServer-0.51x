@@ -133,7 +133,7 @@ bool CClient::OnTarg_Obj_Props( CObjUID uid, const CPointMap & pt, ITEMID_TYPE i
 		m_Prop_UID = m_Targ_UID = uid;
 		if ( uid.IsChar())
 		{
-			addSkillWindow( SKILL_MAX ); // load the targets skills
+			addSkillWindow( g_Serv.SKILL_MAX ); // load the targets skills
 		}
 		addGumpPropMenu();
 	}
@@ -1469,7 +1469,7 @@ bool CClient::OnTarg_Use_Item( CObjUID uid, const CPointMap & pt, ITEMID_TYPE id
 	{
 		trigtype = ITRIG_TARGON_ITEM;
 	}
-	if ( pItemUse->OnTrigger( trigtype, m_pChar ))
+	if ( pItemUse->OnTrigger( trigtype, m_pChar, pObjTarg ? pObjTarg->GetUID() : 0 ))
 	{
 		return true;
 	}

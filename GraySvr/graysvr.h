@@ -1558,6 +1558,8 @@ public:
 		m_Targ_PrvMode = m_Targ_Mode;
 		m_Targ_Mode = TARGMODE_NONE;
 	}
+
+	DWORD m_LastPick;
 };
 
 enum ITEM_TYPE		// double click type action.
@@ -1926,7 +1928,8 @@ enum STONEALIGN_TYPE // Types of Guild/Town stones
 
 enum ITRIG_TYPE
 {
-	ITRIG_DCLICK = 0,	// I have been dclicked.
+	ITRIG_CLICK = 0,
+	ITRIG_DCLICK,	// I have been dclicked.
 	ITRIG_STEP,			// I have been walked on. (or shoved)
 	ITRIG_TIMER,			// My timer has expired.
 	ITRIG_DAMAGE,				// I have been damaged in some way
@@ -1942,6 +1945,8 @@ enum ITRIG_TYPE
 	ITRIG_DROPON_ITEM,		// I have been dropped on this item
 	ITRIG_DROPON_CHAR,		// I have been dropped on this char
 	ITRIG_DROPON_GROUND,		// I have been dropped on the ground here
+	ITRIG_DROPON_SELF,
+	ITRIG_DROPON_TRADE,
 
 	ITRIG_TARGON_ITEM,	// I am being combined with an item
 	ITRIG_TARGON_CHAR,
@@ -1973,7 +1978,7 @@ public:
 #define ATTR_NEWBIE			0x0004	// Not lost on death or sellable ?
 #define ATTR_MOVE_ALWAYS	0x0008	// Always movable (else Default as stored in client) (even if MUL says not movalble) NEVER DECAYS !
 #define ATTR_MOVE_NEVER		0x0010	// Never movable (else Default as stored in client) NEVER DECAYS !
-#define ATTR_MAGIC			0x0020	// DON'T SET THIS WHILE WORN! This item is magic as apposed to marked or markable.
+#define ATTR_MAGIC			0x0020	// DON'T SET THIS WHILE WORN! This item is magic as opposed to marked or markable.
 #define ATTR_OWNED			0x0040	// This is owned by the town. You need to steal it. NEVER DECAYS !
 #define ATTR_INVIS			0x0080	// Gray hidden item (to GM's or owners?) 
 #define ATTR_CURSED			0x0100
@@ -2071,7 +2076,8 @@ public:
 		// ITEM_FIRE
 		struct
 		{
-			UINT m_junk1;
+			WORD m_junk1;
+			WORD m_Ticks;
 			short m_PolyStr;	// more2l=polymorph effect of this.
 			short m_PolyDex;	// more2h=
 			WORD m_spell;		// morex=SPELL_TYPE = The magic spell cast on this. (daemons breath)(boots of strength) etc
@@ -2467,7 +2473,7 @@ public:
 	bool  IsStackableException() const;
 	bool  IsStackable( const CItem * pItem ) const;
 	bool  IsSameType( const CObjBase * pObj ) const;
-	bool  Stack( CItem * pItem );
+	bool  Stack( CItem * pItem, bool check = true );
 
 	CREID_TYPE GetCorpseType() const
 	{
@@ -2571,7 +2577,7 @@ public:
 	int  AddSpellbookScroll( CItem * pItem );
 
 	bool IsDoorOpen() const;
-	bool Use_Door( bool fJustOpen );
+	bool Use_Door( bool fIsLinkedDoor);
 	bool Use_Portculis();
 	SOUND_TYPE Use_Music( bool fWell ) const;
 
@@ -2904,7 +2910,7 @@ private:
 	{
 		return( dynamic_cast <const CItemBaseMulti *> (m_pDef));
 	}
-	bool Multi_CreateComponent( ITEMID_TYPE id, int dx, int dy, int dz );
+	bool Multi_CreateComponent( ITEMID_TYPE id, int dx, int dy, int dz, COLOR_TYPE color );
 
 	CItem * Ship_GetTiller();
 	int Ship_GetFaceOffset() const
@@ -3362,7 +3368,7 @@ enum NPCBRAIN_TYPE	// General AI type.
 	NPCBRAIN_VENDOR,	// 6 = will sell from vendor boxes.
 	NPCBRAIN_BEGGAR,	// 7 = begs.
 	NPCBRAIN_STABLE,	// 8 = will store your animals for you.
-	NPCBRAIN_THEIF,		// 9 = should try to steal ?
+	NPCBRAIN_THIEF,		// 9 = should try to steal ?
 	NPCBRAIN_MONSTER,	// 10 = not tamable. normally evil.
 	NPCBRAIN_BESERK,	// 11 = attack closest (blades, vortex)
 	NPCBRAIN_UNDEAD,	// 12 = disapears in the light.
@@ -3497,6 +3503,7 @@ public:
 	NPCBRAIN_TYPE m_Brain;	// For NPCs: Number of the assigned basic AI block
 	WORD	m_Home_Dist_Wander;	// Distance to allow to "wander".
 	BYTE    m_Act_Motivation;		// 0-100 (100=very greatly) how bad do i want to do the current action.
+	short   m_StatMaxValue[STAT_BASE_QTY];
 	CPointBase m_Act_p_Prev;	// Location before we started this action (so we can get back if necessary)
 
 	// We respond to what we here with this.
@@ -3505,9 +3512,10 @@ public:
 	CGString m_sNeed;	// What items might i need/Desire ? (coded as resource scripts) ex "10 gold,20 logs" etc.
 
 	static const TCHAR * sm_KeyTable[];
+	CChar* m_pNPCChar;
 
 public:
-	CCharNPC( NPCBRAIN_TYPE NPCBrain );
+	CCharNPC( NPCBRAIN_TYPE NPCBrain, CChar* NPCChar );
 
 	bool r_WriteVal( const TCHAR * pKey, CGString & s );
 	void r_Write( CScript & s ) const;
@@ -3555,6 +3563,7 @@ public:
 	// PATRON_TYPE m_Patron;	// Religion Plot stuff.
 
 	static const TCHAR * sm_KeyTable[];
+	time_t m_LastWalk;
 
 public:
 	CCharPlayer( CAccount * pAccount );
@@ -3592,6 +3601,7 @@ enum WAR_SWING_TYPE	// m_Act_War_Swing_State
 
 enum CTRIG_TYPE
 {
+	CTRIG_Click,
 	CTRIG_HearGreeting,		// (NPC only) i have been spoken to for the first time. (no memory of previous hearing)
 	CTRIG_HearUnknown,		//+(NPC only) I heard something i don't understand.
 	CTRIG_SpellCast,		//+Char is casting a spell.
@@ -3937,6 +3947,8 @@ public:
 		ASSERT(((WORD)i)<STAT_QTY );
 		return m_Stat[i];
 	}
+
+	short HitManaStam_Get(STAT_TYPE i) const;
 
 	// Location and movement ------------------------------------
 private:
@@ -4928,8 +4940,8 @@ public:
 
 	void Speak( const CObjBaseTemplate * pSrc, const TCHAR * pText, COLOR_TYPE color = COLOR_TEXT_DEF, TALKMODE_TYPE mode = TALKMODE_SAY, FONT_TYPE font = FONT_BOLD );
 	void SpeakUNICODE( const CObjBaseTemplate * pSrc, const NCHAR * pText, COLOR_TYPE color = COLOR_TEXT_DEF, TALKMODE_TYPE mode = TALKMODE_SAY, FONT_TYPE font = FONT_BOLD, const char * pszLanguage = NULL );
-	void OverHeadMessage(const CObjBaseTemplate* pSrc, const TCHAR* pText, COLOR_TYPE color = COLOR_TEXT_DEF, FONT_TYPE font = FONT_BOLD);
-    void OverHeadMessageUNICODE(const CObjBaseTemplate* pSrc, const NCHAR * pText, COLOR_TYPE color = COLOR_TEXT_DEF, FONT_TYPE font = FONT_BOLD);
+	void OverHeadMessage(const CObjBaseTemplate* pSrc, const TCHAR* pText, COLOR_TYPE color = COLOR_TEXT_DEF, FONT_TYPE font = FONT_BOLD, bool sendtoself = true);
+    void OverHeadMessageUNICODE(const CObjBaseTemplate* pSrc, const NCHAR * pText, COLOR_TYPE color = COLOR_TEXT_DEF, FONT_TYPE font = FONT_BOLD, bool sendtoself = true);
 	void Broadcast( const TCHAR * pMsg );
 	CItem * Explode( CChar * pSrc, CPointMap pt, int iDist, int iDamage, WORD wFlags = DAMAGE_GENERAL | DAMAGE_HIT );
 
@@ -5055,14 +5067,15 @@ public:
 	SOUND_TYPE m_sound;			// What noise does it make when done.
 	CGString m_sRunes;	// Letter Runes for Words of power.
 	CGString m_sReags;	// What reagents does it take ?
-	ITEMID_TYPE m_SpellID;		// The rune graphic for this.
-	ITEMID_TYPE m_ScrollID;		// The scroll graphic item for this.
-	ITEMID_TYPE m_wEffectID;	// Animation effect ID
-	WORD m_wEffectLo;	// Damage or time or effect based on skill of caster.
-	WORD m_wEffectHi;	// Damage or time of effect based on 100% magery
-	WORD m_wCastTime;	// In tenths.
-	WORD m_wDurationTimeLo;
-	WORD m_wDurationTimeHi;
+	ITEMID_TYPE m_SpellID = ITEMID_NOTHING;		// The rune graphic for this.
+	ITEMID_TYPE m_ScrollID = ITEMID_NOTHING;		// The scroll graphic item for this.
+	ITEMID_TYPE m_wEffectID = ITEMID_NOTHING;	// Animation effect ID
+	WORD m_wEffectLo = 0;	// Damage or effect based on skill of caster.
+	WORD m_wEffectHi = 0;	// Damage or effect based on 100% magery
+	WORD m_wCastTime = 0;	// In tenths.
+	WORD m_wDurationTimeLo = 0;//Time of effect, minimum, this is not affected by skill - must be lower than "DURATION_HI" (m_wDurationTimeHi)
+	WORD m_wDurationTimeHi = 0;//Time of effect, maximum, this is not affected by skill - leaving this to zero (0) will use the hardcoded defaults
+	WORD m_wManaUse = 0;//Mana used for the cast - leaving to zero will use the hardcoded defaults
 public:
 	bool IsSpellType( WORD wFlags ) const
 	{
@@ -5674,6 +5687,8 @@ public:
 	bool m_fAutoResurrect;     // allow instaress as an option in config file, false per default
 	int  m_iWhisperColor;	// default whisper color - pre-set to 0x03b1 - set to ZERO to allow players to select it from clients
 	bool m_fEnableChat;			//false per default, enables chat use in game
+	float m_iPlayerStatMod[STAT_BASE_QTY];// percentage of the stat vs the HITSMAX - eg. 200% -> 1 str == 2 hits
+	int  m_iPickUpSpeed;
 
 private:
 	// Web status pages.
@@ -5707,6 +5722,10 @@ public:
 	CGObArray< const CSpellDef* > m_SpellDefs;	// Defined Spells
 	CGTypedArray<CValStr,CValStr&> m_SkillKeySort;
 	CGObArray< const CSkillDef* > m_SkillDefs;	// Defined Skills
+	/// <summary>
+	/// Max skill usable inside this specific server, they can range from 0 to the maximum currently available in original client, (57 Throwing)
+	/// </summary>
+	static SKILL_TYPE SKILL_MAX;
 
 	CGObArray< const CSkillClassDef* > m_SkillClassDefs;	// Defined Skill classes
 	CAdvanceDef m_StatAdv[STAT_BASE_QTY]; // OSI defined "skill curve"
@@ -5855,10 +5874,6 @@ public:
 
 // extern const CWeaponBase Item_Weapons[]; // ???
 
-/// <summary>
-/// Max skill usable inside this specific server, they can range from 0 to the maximum currently available in original client, (57 Throwing)
-/// </summary>
-static SKILL_TYPE SKILL_MAX = SKILL_NONE;
 extern const TCHAR * g_szServerDescription;
 extern const TCHAR * g_Stat_Name[STAT_QTY];
 extern const CPointMap g_pntLBThrone; // This is OSI's origin for degree, sextant minute coordinates

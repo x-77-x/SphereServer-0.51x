@@ -72,9 +72,9 @@ void CChar::Action_StartSpecial( CREID_TYPE id )
 
 SKILL_TYPE CChar::Skill_GetBest() const // Which skill is the highest for character p
 {
-	SKILL_TYPE best_skill = SKILL_MAX;
+	SKILL_TYPE best_skill = g_Serv.SKILL_MAX;
 	int best_value=-1;
-	for ( int i=0;i< SKILL_MAX;i++)
+	for ( int i=0;i< g_Serv.SKILL_MAX;i++)
 	{
 		int iVal = Skill_GetBase( (SKILL_TYPE)i );
 		if ( iVal > best_value )
@@ -127,9 +127,9 @@ short CChar::Skill_GetAdjusted( SKILL_TYPE skill ) const
 
 	ASSERT( IsSkillBase( skill ));
 	int iPureBonus =
-		( g_Serv.m_SkillDefs[skill]->m_StatBonus[STAT_STR] * m_Stat[STAT_STR] ) +
-		( g_Serv.m_SkillDefs[skill]->m_StatBonus[STAT_INT] * m_Stat[STAT_INT] ) +
-		( g_Serv.m_SkillDefs[skill]->m_StatBonus[STAT_DEX] * m_Stat[STAT_DEX] );
+		( g_Serv.m_SkillDefs[skill]->m_StatBonus[STAT_STR] * Stat_Get(STAT_STR) ) +
+		( g_Serv.m_SkillDefs[skill]->m_StatBonus[STAT_INT] * Stat_Get(STAT_INT) ) +
+		( g_Serv.m_SkillDefs[skill]->m_StatBonus[STAT_DEX] * Stat_Get(STAT_DEX) );
 
 	int iAdjSkill = IMULDIV( 100 - g_Serv.m_SkillDefs[skill]->m_SkillStat, iPureBonus, 10000 );
 	return( Skill_GetBase( (SKILL_TYPE) skill ) + iAdjSkill );
@@ -326,7 +326,7 @@ void CChar::Skill_Experience( SKILL_TYPE skill, int difficulty )
 				}
 			}
 
-			int iStatVal = m_Stat[imin];
+			int iStatVal = Stat_Get((STAT_TYPE)imin);
 			if ( iStatVal > 10 )
 			{
 				Stat_Set( (STAT_TYPE)imin, iStatVal-1 );
@@ -880,6 +880,11 @@ bool CChar::Skill_Done()
 	// or stuff that never really fails.
 	switch ( skill )
 	{
+	/*case SKILL_MEDITATION:
+	{
+		g_Serv
+		break;
+	}*/
 	case SKILL_ALCHEMY:
 		//  OK, we know potion being attempted and the bottle
 		//  it's going in....do a loop for each reagent
@@ -1658,7 +1663,7 @@ makeit:
 
 	case SKILL_MEDITATION:
 		// Try to regen your mana even faster than normal.
-		if ( m_StatMana >= Stat_Get(STAT_INT))
+		if ( m_StatMana >= HitManaStam_Get(STAT_INT))
 			return( false );
 		UpdateStats( STAT_INT, 1 );
 		// next update. (depends on skill)
@@ -1812,7 +1817,7 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 	ASSERT( sk == SKILL_NONE || IsSkillBase(sk) || IsSkillNPC(sk));
 
 	bool ret = true;
-	if (sk > SKILL_NONE && sk < SKILL_MAX)
+	if (sk > SKILL_NONE && sk < g_Serv.SKILL_MAX)
 		if (OnTrigger(CTRIG_SkillStart, this, sk))
 			return false;
 	// Some skill can start right away. Need no targetting.
@@ -2401,7 +2406,7 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 				ret = (false);
 				break;
 			}
-			if ( pChar->m_StatHealth >= pChar->Stat_Get(STAT_STR) )
+			if ( pChar->m_StatHealth >= pChar->HitManaStam_Get(STAT_STR) )
 			{
 				SysMessage("Your target is already fully healed");	
 				ret = (false);
@@ -2429,7 +2434,7 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 
 	case SKILL_MEDITATION:
 		// Might depend on creatures in the area ?
-		if ( m_StatMana >= Stat_Get(STAT_INT))
+		if ( m_StatMana >= HitManaStam_Get(STAT_INT))
 		{
 			SysMessage( "You are at peace." );
 			ret = (false);
@@ -2492,7 +2497,7 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 
 	}
 	
-	if (sk > SKILL_NONE && sk < SKILL_MAX)
+	if (sk > SKILL_NONE && sk < g_Serv.SKILL_MAX)
 	{
 		if (!ret)
 		{
@@ -2541,6 +2546,10 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 
 int CChar::Spell_GetBaseDifficulty( SPELL_TYPE spell ) // static
 {
+	if (g_Serv.m_SpellDefs[spell]->m_wCastTime > 0)
+	{
+		return g_Serv.m_SpellDefs[spell]->m_wCastTime;
+	}
 	// RETURN 0-100.
 	if ( spell > SPELL_Water_Elem )
 	{
@@ -2814,7 +2823,7 @@ bool CChar::Spell_Resurrection( int iSkillLossPercent )
 	SetID( m_prev_id );
 	ClearStat( STATF_DEAD | STATF_Insubstantial );
 	SetColor( m_prev_color );
-	m_StatHealth = IMULDIV( Stat_Get(STAT_STR), g_Serv.m_iHitpointPercentOnRez, 100 );
+	m_StatHealth = IMULDIV( HitManaStam_Get(STAT_STR), g_Serv.m_iHitpointPercentOnRez, 100 );
 
 	if ( m_pPlayer )
 	{
@@ -2846,7 +2855,7 @@ bool CChar::Spell_Resurrection( int iSkillLossPercent )
 	{
 		// Remove some skills / stats as a percent.
 		int i=0;
-		for ( ; i< SKILL_MAX; i++ )
+		for ( ; i< g_Serv.SKILL_MAX; i++ )
 		{
 			int iVal = Skill_GetBase( (SKILL_TYPE) i );
 			if ( iVal <= 250 )
@@ -2910,7 +2919,7 @@ void CChar::Spell_Effect_Remove( CItem * pSpell )
 		{
 			for ( int i=STAT_STR; i<STAT_BASE_QTY; i++ )
 			{
-				Stat_Set( (STAT_TYPE) i, m_Stat[i] - pSpell->m_itSpell.m_skilllevel );
+				Stat_Set( (STAT_TYPE) i, Stat_Get((STAT_TYPE)i) - pSpell->m_itSpell.m_skilllevel );
 			}
 		}
 		break;
@@ -2919,7 +2928,7 @@ void CChar::Spell_Effect_Remove( CItem * pSpell )
 		{
 			for ( int i=STAT_STR; i<STAT_BASE_QTY; i++ )
 			{
-				Stat_Set( (STAT_TYPE) i, m_Stat[i] + pSpell->m_itSpell.m_skilllevel );
+				Stat_Set( (STAT_TYPE) i, Stat_Get((STAT_TYPE)i) + pSpell->m_itSpell.m_skilllevel );
 			}
 		}
 		break;
@@ -2968,10 +2977,10 @@ void CChar::Spell_Effect_Remove( CItem * pSpell )
 			// poly back to orig form.
 			SetID( m_prev_id );
 			// set back to original stats as well.
-			Stat_Set( STAT_STR, Stat_Get(STAT_STR) - pSpell->m_itSpell.m_PolyStr );
-			Stat_Set( STAT_DEX, Stat_Get(STAT_DEX) - pSpell->m_itSpell.m_PolyDex );
-			m_StatHealth = min( m_StatHealth, Stat_Get(STAT_STR));
-			m_StatStam = min( m_StatStam, Stat_Get(STAT_DEX));
+			Stat_Set(STAT_STR, Stat_Get(STAT_STR) -pSpell->m_itSpell.m_PolyStr );
+			Stat_Set(STAT_DEX, Stat_Get(STAT_DEX) -pSpell->m_itSpell.m_PolyDex );
+			m_StatHealth = min( m_StatHealth, HitManaStam_Get(STAT_STR));
+			m_StatStam = min( m_StatStam, HitManaStam_Get(STAT_DEX));
 			Update();
 			ClearStat( STATF_Polymorph );
 		}
@@ -3068,7 +3077,7 @@ void CChar::Spell_Effect_Add( CItem * pSpell )
 		{
 			for ( int i=STAT_STR; i<STAT_BASE_QTY; i++ )
 			{
-				Stat_Set( (STAT_TYPE) i, m_Stat[i] + pSpell->m_itSpell.m_skilllevel );
+				Stat_Set( (STAT_TYPE) i, Stat_Get((STAT_TYPE)i) + pSpell->m_itSpell.m_skilllevel );
 			}
 		}
 		break;
@@ -3147,6 +3156,13 @@ CItem * CChar::Spell_Effect_Create( SPELL_TYPE spell, LAYER_TYPE layer, int iLev
 	pSpell->m_itSpell.m_spell = spell;
 	pSpell->m_itSpell.m_skilllevel = iLevel;	// 0 - 1000
 	pSpell->m_itSpell.m_charges = 1;
+	pSpell->m_itSpell.m_Ticks = 0;
+	WORD ldur = g_Serv.m_SpellDefs[spell]->m_wDurationTimeLo;
+	WORD hdur = g_Serv.m_SpellDefs[spell]->m_wDurationTimeHi;
+	if (hdur > 0 && ldur <= hdur)
+	{
+		iDuration = (GetRandVal((hdur - ldur) + 1) + ldur)*TICK_PER_SEC;
+	}
 	pSpell->SetDecayTime( iDuration );
 	if ( pSrc )
 	{
@@ -3259,6 +3275,7 @@ void CChar::Spell_Field( CPointMap pntTarg, ITEMID_TYPE idEW, ITEMID_TYPE idNS, 
 		pSpell->m_itSpell.m_skilllevel = 15 + iSkill/25;
 		pSpell->m_itSpell.m_charges = 1;
 		pSpell->m_uidLink = GetUID();	// Link it back to you
+		pSpell->m_itSpell.m_Ticks = 0;
 		pSpell->SetDecayTime( pSpell->m_itSpell.m_skilllevel*TICK_PER_SEC + GetRandVal(60*TICK_PER_SEC) );
 		pSpell->MoveTo( pg );
 		}
@@ -3294,7 +3311,9 @@ bool CChar::Spell_CanCast( SPELL_TYPE spell, bool fTest, CObjBase * pSrc, bool f
 		}
 	}
 
-	int mana = Spell_ManaReq[ (spell-SPELL_Clumsy)/8 ];
+	int mana = g_Serv.m_SpellDefs[spell]->m_wManaUse;
+	if(mana <= 0)
+		mana = Spell_ManaReq[ (spell-SPELL_Clumsy)/8 ];
 
 	// The magic item must be on your person to use.
 	if ( pSrc != this )
@@ -4141,7 +4160,8 @@ reflectit:
 			}
 			return false;
 		}
-		if ( ! OnAttackedBy( pCharSrc, false ))
+		
+		if (!OnAttackedBy( pCharSrc, false ))
 			return false;
 	}
 

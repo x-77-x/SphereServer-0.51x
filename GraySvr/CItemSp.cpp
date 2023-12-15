@@ -303,7 +303,7 @@ void CItemMulti::MultiRemoveRegion()
 	delete pRegion;
 }
 
-bool CItemMulti::Multi_CreateComponent( ITEMID_TYPE id, int dx, int dy, int dz )
+bool CItemMulti::Multi_CreateComponent( ITEMID_TYPE id, int dx, int dy, int dz, COLOR_TYPE color )
 {
 	CItem * pItem = CreateTemplate( id );
 	ASSERT(pItem);
@@ -314,7 +314,7 @@ bool CItemMulti::Multi_CreateComponent( ITEMID_TYPE id, int dx, int dy, int dz )
 	pt.m_z += dz;
 
 	pItem->m_Attr |= ATTR_MOVE_NEVER | (m_Attr&(ATTR_MAGIC|ATTR_INVIS));
-	pItem->SetColor( GetColor());
+	pItem->SetColor( color );
 	pItem->m_uidLink = GetUID();	// lock it down with the house.
 
 	bool fLocked = false;
@@ -363,12 +363,13 @@ void CItemMulti::Multi_Create( CChar * pChar )
 	// ??? SetTimeout( GetDecayTime()); house decay ?
 
 	bool fNeedKey = false;
+	COLOR_TYPE color = GetColor();
 	for ( int i=0; i<pMulti->m_Components.GetCount(); i++ )
 	{
 		fNeedKey |= Multi_CreateComponent( (ITEMID_TYPE) pMulti->m_Components[i].m_id, 
 			pMulti->m_Components[i].m_dx,
 			pMulti->m_Components[i].m_dy,
-			pMulti->m_Components[i].m_dz );
+			pMulti->m_Components[i].m_dz, color );
 	}
 
 #if 0

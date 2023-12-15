@@ -1184,6 +1184,19 @@ bool CScriptObj::r_GetRef( const TCHAR * & pszKey, CScriptObj * & pRef, CTextCon
 		pRef = uid.ObjFind();
 		return( true );
 	}
+
+	if (!strnicmp(pszKey, "ARGO.", 5))
+	{
+		CObjUID uid = CObjUID(pRef->sm_iTrigArg);
+		if (uid.IsChar())
+			pRef = uid.CharFind();
+		else if (uid.IsItem())
+			pRef = uid.ItemFind();
+		if (pRef == NULL)
+			return false;
+		pszKey += 5;
+		return(true);
+	}
 #endif
 
 	if ( ! strnicmp( pszKey, "I.", 2 ))	// just talking about myself.

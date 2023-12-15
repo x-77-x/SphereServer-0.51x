@@ -1213,7 +1213,7 @@ void CWorld::SpeakUNICODE( const CObjBaseTemplate * pSrc, const NCHAR * pText, C
 	}
 }
 
-void CWorld::OverHeadMessage(const CObjBaseTemplate* pSrc, const TCHAR* pText, COLOR_TYPE color, FONT_TYPE font)
+void CWorld::OverHeadMessage(const CObjBaseTemplate* pSrc, const TCHAR* pText, COLOR_TYPE color, FONT_TYPE font, bool sendtoself)
 {
 	if (pSrc == NULL)
 		return;
@@ -1232,7 +1232,7 @@ void CWorld::OverHeadMessage(const CObjBaseTemplate* pSrc, const TCHAR* pText, C
 			if (pChar == NULL)
 				continue;	// not logged in.
 			int iDist = pChar->GetTopDist3D(pSrc);
-			if (iDist > UO_MAP_VIEW_SIZE)	// Must label the text.
+			if (iDist > UO_MAP_VIEW_SIZE || (!sendtoself && pChar == pSrc))	// Must label the text.
 			{
 				continue;
 			}
@@ -1242,7 +1242,7 @@ void CWorld::OverHeadMessage(const CObjBaseTemplate* pSrc, const TCHAR* pText, C
 	}
 }
 
-void CWorld::OverHeadMessageUNICODE(const CObjBaseTemplate* pSrc, const NCHAR* pText, COLOR_TYPE color, FONT_TYPE font)
+void CWorld::OverHeadMessageUNICODE(const CObjBaseTemplate* pSrc, const NCHAR* pText, COLOR_TYPE color, FONT_TYPE font, bool sendtoself)
 {
 	if (pSrc == NULL)
 		return;
@@ -1261,7 +1261,7 @@ void CWorld::OverHeadMessageUNICODE(const CObjBaseTemplate* pSrc, const NCHAR* p
 			if (pChar == NULL)
 				continue;	// not logged in.
 			int iDist = pChar->GetTopDist3D(pSrc);
-			if (iDist > UO_MAP_VIEW_SIZE)	// Must label the text.
+			if (iDist > UO_MAP_VIEW_SIZE || (!sendtoself && pChar == pSrc))	// Must label the text.
 			{
 				continue;
 			}
