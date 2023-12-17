@@ -1145,7 +1145,7 @@ TRIGRET_TYPE CScriptObj::OnTriggerScript( CScript & s, const TCHAR * pTrigName, 
 		// Is it the right trigger ?
 		if ( ! s.IsKeyHead( "ON", 2 ))
 			continue;
-		if ( strcmpi( s.GetArgStr(), pTrigName )) 
+		if ( strcmpi( s.GetArgStr(), pTrigName ))
 			continue;
 		return OnTriggerRun( s, TRIGRUN_SECTION_TRUE, pSrc, iArg );
 	}

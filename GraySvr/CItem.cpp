@@ -2170,8 +2170,7 @@ bool CItem::OnTrigger( const TCHAR * pszTrigName, CTextConsole * pSrc, int iArg 
 		pSrc = &g_Serv;
 	}
 
-	// Is the CChar sesative to actions on all items ?
-
+	// Is the CChar sensitive to actions on all items ?
 	CChar * pChar = pSrc->GetChar();
 	if ( pChar && pChar->m_pPlayer && pChar->m_pPlayer->m_Plot1 )
 	{
