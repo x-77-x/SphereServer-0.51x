@@ -2402,7 +2402,7 @@ bool CChar::NPC_OnFoodTick( int nFoodLevel )
 		{
 			// How happy are we with being a pet ?
 			CChar * pCharOwn = NPC_GetOwner();
-			if ( pCharOwn && ! pCharOwn->CanSee(this))
+			if ( pCharOwn && pCharOwn->m_pClient && ! pCharOwn->CanSee(this))
 			{
 				pCharOwn->SysMessagef( "You sense that %s has deserted you.", GetName());
 			}
