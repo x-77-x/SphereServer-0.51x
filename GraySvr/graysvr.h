@@ -31,10 +31,10 @@ extern size_t DEBUG_ValidateAlloc( const void * pThis );
 
 #define GRAY_TITLE			"Sphere"	// "Sphere"
 #define GRAY_VERSION		"0.51a"
-#define GRAY_MAIN_SERVER	"www.uoitalia.net"
+#define GRAY_MAIN_SERVER	""
 #define GRAY_GAME_SERVER
 #define GRAY_LOG_SERVER
-#define GRAY_URL			"www.uoitalia.net"	// default url.
+#define GRAY_URL			"https://github.com/SaschaKP/SphereServer-0.51x/"	// default url.
 
 class CCharBase;
 class CClient;

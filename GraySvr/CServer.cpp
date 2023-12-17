@@ -3637,8 +3637,10 @@ bool CServer::IsValidEmailAddressFormat( const TCHAR * pszEmail ) // static
 		return( false );
 	if ( ! strchr( pszAt, '.' ))
 		return( false );
-	if ( strstr( pszAt, "@here.com" ))	// don't allow this domain.
-		return( false );
+	//this is now of a company, no need to block them
+	//TODO: maybe use the spamhaus.org reported bad reputation list? and update them from time to time? also strstr compares with case sensitive, so we should to a strlower before the check!
+	/*if (strstr(pszAt, "@here.com"))	// don't allow this domain.
+		return( false );*/
 	return( true );
 }
 
