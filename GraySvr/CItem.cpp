@@ -1295,12 +1295,12 @@ int CItem::GetBasePrice( bool fBuyFromVendor ) const
 	if ( fBuyFromVendor )
 	{
 		iPrice = m_pDef->m_buyvaluemin;
-		if ( ! iPrice && m_pDef->m_sellvaluemin ) iPrice = m_pDef->m_sellvaluemin * 2;
+		if ( ! iPrice && m_pDef->m_sellvaluemin ) iPrice = m_pDef->m_sellvaluemin << 1;
 	}
 	else
 	{
 		iPrice = m_pDef->m_sellvaluemin;
-		if ( ! iPrice && m_pDef->m_buyvaluemin) iPrice = m_pDef->m_buyvaluemin / 2;
+		if ( ! iPrice && m_pDef->m_buyvaluemin) iPrice = m_pDef->m_buyvaluemin >> 1;
 	}
 
 	// ??? factor in magic and quality values.
@@ -3165,7 +3165,7 @@ bool CItem::OnSpellEffect( SPELL_TYPE spell, CChar * pCharSrc, int iLevel )
 			}
 
 			int ispellbase = CChar::Spell_GetBaseDifficulty(spell);
-			if ( ! GetRandVal( GW_GetBellCurve( m_itWeapon.m_charges+3+ispellbase/10, 2 ) / 2 ))
+			if ( ! GetRandVal( GW_GetBellCurve( m_itWeapon.m_charges+3+ispellbase/10, 2 ) >> 1 ))
 			{
 				// Overcharge will explode !
 				Emote( "the overcharged wand explodes" );
@@ -3322,7 +3322,7 @@ const TCHAR * CItem::Armor_GetRepairDesc() const
 	{
 		return  "in full repair";
 	}
-	else if ( m_itArmor.m_Hits_Cur > m_itArmor.m_Hits_Max / 2 )
+	else if ( m_itArmor.m_Hits_Cur > (m_itArmor.m_Hits_Max >> 1) )
 	{
 		return  "a bit worn";
 	}
@@ -3414,7 +3414,7 @@ forcedamage:
 		{
 			// Tell target they got damaged.
 			CGString sMsg;
-			if ( m_itArmor.m_Hits_Cur < m_itArmor.m_Hits_Max / 2 )
+			if ( m_itArmor.m_Hits_Cur < (m_itArmor.m_Hits_Max >> 1) )
 			{
 				int iPercent = Armor_GetRepairPercent();
 				if ( pChar->Skill_GetAdjusted( SKILL_ARMSLORE ) / 10 > iPercent )

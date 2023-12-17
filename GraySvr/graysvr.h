@@ -276,6 +276,7 @@ public:
 #define CAN_I_FLIP			0x0400	// will flip by default.
 #define CAN_I_LIGHT			0x0800	// UFLAG3_LIGHT
 #define CAN_I_REPAIR		0x1000	// Is it repairable (difficulty based on value)
+#define CAN_I_SHOOT			0x2000  // can I shoot throu it?
 
 	// CCharBase specific defs.
 #define CAN_C_EQUIP			0x0100	// Can equip stuff. (humanoid)
@@ -3732,7 +3733,7 @@ public:
 
 	union	// arg specific to the action type.(m_Act_SkillCurrent)
 	{
-		struct
+		struct //ActTarget
 		{
 			UINT		m_Arg1;	// "ACTARG1"
 			UINT		m_Arg2;	// "ACTARG2"
@@ -3741,14 +3742,14 @@ public:
 
 		// SKILL_MAGERY
 		// SKILL_INSCRIPTION
-		struct
+		struct //SkillMageryInscript
 		{
 			SPELL_TYPE	m_Spell;		// Currently casting spell.
 			CREID_TYPE	m_SummonID;		// A sub arg of the skill. (summoned type ?)
 		} m_atMagery;
 
 		// SKILL_ALCHEMY
-		struct
+		struct //SkillAlchemy
 		{
 			POTION_TYPE m_Potion;	// Potion being attempted.
 			WORD m_Stroke_Count;
@@ -3760,7 +3761,7 @@ public:
 		// SKILL_LUMBERJACKING,
 		// SKILL_MINING
 		// SKILL_TINKERING,
-		struct	// creation type skill.
+		struct //SkillCrafting// creation type skill.
 		{
 			ITEMID_TYPE m_ItemID;		// Making this item.
 			WORD m_Stroke_Count;		// For mining, smithing, tinkering, lumberjacking, etc. all requiring multi strokes.
@@ -3770,7 +3771,7 @@ public:
 
 		// SKILL_TAMING
 		// SKILL_MEDITATION
-		struct
+		struct //SkillMediTame
 		{
 			UINT m_junk1;
 			WORD m_Stroke_Count;		// For mining, smithing, tinkering, lumberjacking, etc. all requiring multi strokes.
@@ -3780,26 +3781,27 @@ public:
 		// SKILL_MACEFIGHTING,
 		// SKILL_FENCING,
 		// SKILL_WRESTLING
-		struct
+		struct //SkillCombat
 		{
 			WAR_SWING_TYPE m_War_Swing_State;	// We are in the war mode swing.
+			short m_War_Swing_Time;
 			// m_Act_Targ = who are we currently attacking?
 		} m_atFight;
 
 		// SKILL_TRACKING
-		struct
+		struct //SkillTracking
 		{
 			DIR_TYPE	m_PrvDir; // Previous direction of tracking target, used for when to notify player
 		} m_atTracking;
 
 		// SKILL_CARTOGRAPHY
-		struct
+		struct //SkillCartography
 		{
 			int	m_Dist;
 		} m_atCartography;
 
 		// NPCACT_FOLLOW_TARG
-		struct
+		struct //NPCFollowTarg
 		{
 			int	m_DistMin;		// Try to force this distance.
 			int	m_DistMax;		// Try to force this distance.
@@ -3807,14 +3809,14 @@ public:
 		} m_atFollowTarg;
 
 		// NPCACT_RIDDEN
-		struct	
+		struct //NPCActRidden
 		{
 			CObjUIDBase m_FigurineUID;	// This creature is being ridden by this object link. ITEM_FIGURINE ITEM_EQ_HORSE
 		} m_atRidden;
 
 		// NPCACT_TALK
 		// NPCACT_TALK_FOLLOW
-		struct	
+		struct //NPCTalkFollow
 		{
 			int	 m_HearUnknown;	// Speaking NPC has no idea what u're saying.
 		} m_atTalk;
@@ -4643,8 +4645,8 @@ public:
 	CPointMap GetMid() const
 	{
 		CPointMap pt = GetBase();
-		pt.m_x += SECTOR_SIZE_X/2;	// East
-		pt.m_y += SECTOR_SIZE_Y/2;	// South
+		pt.m_x += (SECTOR_SIZE_X >> 1);	// East
+		pt.m_y += (SECTOR_SIZE_Y >> 1);	// South
 		return( pt );
 	}
 	CRectMap GetRect() const

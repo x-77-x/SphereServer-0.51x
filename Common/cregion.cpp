@@ -89,7 +89,7 @@ CPointBase CGRect::GetDirCorner( DIR_TYPE dir ) const
 	switch ( dir )
 	{
 	case DIR_N:
-		pt.m_x = ( m_left + m_right ) / 2;
+		pt.m_x = ( m_left + m_right ) >> 1;
 		pt.m_y = m_top;
 		break;
 	case DIR_NE:
@@ -98,14 +98,14 @@ CPointBase CGRect::GetDirCorner( DIR_TYPE dir ) const
 		break;
 	case DIR_E:
 		pt.m_x = m_right;
-		pt.m_y = ( m_top + m_bottom ) / 2;
+		pt.m_y = ( m_top + m_bottom ) >> 1;
 		break;
 	case DIR_SE:
 		pt.m_x = m_right; 
 		pt.m_y = m_bottom; 
 		break;
 	case DIR_S:
-		pt.m_x = ( m_left + m_right ) / 2;
+		pt.m_x = ( m_left + m_right ) >> 1;
 		pt.m_y = m_bottom;
 		break;
 	case DIR_SW:
@@ -114,7 +114,7 @@ CPointBase CGRect::GetDirCorner( DIR_TYPE dir ) const
 		break;
 	case DIR_W: 
 		pt.m_x = m_left;
-		pt.m_y = ( m_top + m_bottom ) / 2;
+		pt.m_y = ( m_top + m_bottom ) >> 1;
 		break;
 	case DIR_NW:
 		pt.m_x = m_left; 
@@ -242,8 +242,8 @@ bool CPointBase::IsInDungeon() const
 	if ( x1 < 0 )
 		return( false );
 
-	x1 /= 256;
-	switch ( m_y / 256 )
+	x1 >>= 8;
+	switch ( m_y >> 8 )
 	{
 	case 0:
 	case 5:

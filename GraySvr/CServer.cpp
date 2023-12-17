@@ -227,7 +227,7 @@ void CServersSortArray::QSort( int left, int right )
 	int j = left;
 	int i = right;
 
-	CServRef * pServRef = GetAt( (left+right) / 2 );
+	CServRef * pServRef = GetAt( (left+right) >> 1 );
 
 	do 
 	{

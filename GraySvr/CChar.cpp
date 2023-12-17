@@ -4558,7 +4558,7 @@ bool CChar::CheckLocation( bool fStanding )
 
 
 	//we disabled this to avoid that at any step the monster shoots an arrow
-	/*if (!fStanding)
+	if (!fStanding)
 	{
 		// If we moved and are wielding are in combat and are using a
 		// crossbow/bow kind of weapon, then reset the weaponswingtimer.
@@ -4566,7 +4566,7 @@ bool CChar::CheckLocation( bool fStanding )
 		{
 			SetWeaponSwingTimer();
 		}
-	}*/
+	}
 
 	CWorldSearch AreaItems( GetTopPoint());
 	while (true)
@@ -5015,12 +5015,25 @@ bool CChar::OnTick()
 	}
 
 	DEBUG_CHECK( IsTopLevel());	// not deleted or off line.
-
+	
+	SKILL_TYPE iSkillPrv = GetActiveSkill();
 	if ( IsTimerExpired())
 	{
+		switch (iSkillPrv)
+		{
+			case SKILL_ARCHERY:
+			case SKILL_FENCING:
+			case SKILL_MACEFIGHTING:
+			case SKILL_SWORDSMANSHIP:
+			case SKILL_WRESTLING:
+			{
+				if (m_atFight.m_War_Swing_Time > 0)
+				{
+					m_atFight.m_War_Swing_Time -= iTimeDiff;
+				}
+			}
+		}
 		// My turn to do some action.
-
-		SKILL_TYPE iSkillPrv = GetActiveSkill();
 		if ( ! Skill_Done())
 		{
 			Skill_Fail( false );
@@ -5040,16 +5053,22 @@ bool CChar::OnTick()
 	else
 	{
 		// Hit my current target. (i'm ready)
-		switch ( GetActiveSkill())
+		switch (iSkillPrv)
 		{
-		case SKILL_ARCHERY:
-		case SKILL_FENCING:
-		case SKILL_MACEFIGHTING:
-		case SKILL_SWORDSMANSHIP:
-		case SKILL_WRESTLING:
-			if ( m_atFight.m_War_Swing_State == WAR_SWING_READY )
+			case SKILL_ARCHERY:
+			case SKILL_FENCING:
+			case SKILL_MACEFIGHTING:
+			case SKILL_SWORDSMANSHIP:
+			case SKILL_WRESTLING:
 			{
-				HitTry();
+				if (m_atFight.m_War_Swing_Time > 0)
+				{
+					m_atFight.m_War_Swing_Time -= iTimeDiff;
+				}
+				if (m_atFight.m_War_Swing_State == WAR_SWING_READY)
+				{
+					HitTry();
+				}
 			}
 		}
 	}

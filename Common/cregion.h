@@ -302,8 +302,8 @@ public:
 	CPointBase GetCenter() const
 	{
 		CPointBase pt;
-		pt.m_x = ( m_left + m_right ) / 2;
-		pt.m_y = ( m_top + m_bottom ) / 2;
+		pt.m_x = ( m_left + m_right ) >> 1;
+		pt.m_y = ( m_top + m_bottom ) >> 1;
 		pt.m_z = 0;
 		return( pt );
 	}

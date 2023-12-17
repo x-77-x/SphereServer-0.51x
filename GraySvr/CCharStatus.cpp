@@ -367,7 +367,13 @@ bool CChar::CanSeeLOS( const CPointMap & ptDst, CPointMap * pptBlock, int iMaxDi
 		return( true );
 
 	CPointMap ptSrc = GetTopPoint();
-	ptSrc.m_z += PLAYER_HEIGHT/2;
+	//raise point to player eye
+	ptSrc.m_z += (PLAYER_HEIGHT >> 1);
+
+	int count = abs(ptSrc.m_z - ptDst.m_z);
+	//the height is higher than maxdist, don't allow
+	if ((count >> 2) > iMaxDist)
+		return false;
 
 	int iDist = ptSrc.GetDist( ptDst );
 
@@ -382,7 +388,7 @@ bool CChar::CanSeeLOS( const CPointMap & ptDst, CPointMap * pptBlock, int iMaxDi
 
 		WORD wBlockFlags = CAN_C_SWIM | CAN_C_WALK | CAN_C_FLY;
 		signed char z = g_World.GetHeight( ptSrc, wBlockFlags, ptSrc.GetRegion( REGION_TYPE_MULTI ));
-		if ( wBlockFlags & ( CAN_I_BLOCK | CAN_I_DOOR ))
+		if ( wBlockFlags & ( CAN_I_BLOCK | CAN_I_DOOR | CAN_I_SHOOT ))
 		{
 blocked:
 			if ( pptBlock != NULL )

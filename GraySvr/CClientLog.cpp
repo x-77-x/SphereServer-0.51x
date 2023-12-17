@@ -83,7 +83,7 @@ void CClient::xSendReady( const void *pData, int length ) // We could send the p
 		xFlush();
 	}
 	xSend( pData, length );
-	if ( m_bout_len >= MAX_BUFFER / 2 )	// send only if we have a bunch.
+	if ( m_bout_len >= (MAX_BUFFER >> 1) )	// send only if we have a bunch.
 	{
 		xFlush();
 	}

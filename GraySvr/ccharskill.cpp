@@ -167,7 +167,7 @@ void CChar::Skill_Experience( SKILL_TYPE skill, int difficulty )
 		// failure. Give a little experience for failure at low levels.
 		if ( iSkillVal < 300 )
 		{
-			difficulty = (( min( -difficulty, iSkillVal/10 )) / 2 ) - 8;
+			difficulty = (( min( -difficulty, iSkillVal/10 )) >> 1 ) - 8;
 		}
 		else
 		{
@@ -298,7 +298,7 @@ void CChar::Skill_Experience( SKILL_TYPE skill, int difficulty )
 			DEBUG_MSG(( "0%x '%s' Exceeds stat max %d\n", GetUID(), GetName(), iSumOfStats ));
 		}
 
-		int iChanceForLoss = GW_GetSCurve( g_Serv.m_iMaxSumOfStats - iSumOfStats, ( g_Serv.m_iMaxSumOfStats - g_Serv.m_iAvgSumOfStats ) / 4 );
+		int iChanceForLoss = GW_GetSCurve( g_Serv.m_iMaxSumOfStats - iSumOfStats, ( g_Serv.m_iMaxSumOfStats - g_Serv.m_iAvgSumOfStats ) >> 2 );
 		int iRoll = GetRandVal(1000);
 
 #ifdef _DEBUG
@@ -710,7 +710,7 @@ bool CChar::Skill_MiningSmelt( CItem * pItemOre, CItem * pItemTarg )
 	{
 		SysMessage( "You smelt the ore but are left with nothing useful." );
 		// Lose up to half the resources.
-		Use_Consume( pItemOre, GetRandVal( pItemOre->GetAmount() / 2 ) + 1 );
+		Use_Consume( pItemOre, GetRandVal( pItemOre->GetAmount() >> 1 ) + 1 );
 		return( false );
 	}
 
@@ -970,7 +970,7 @@ bool CChar::Skill_Done()
 		// Detect them based on skill diff.
 		// ??? Hidden objects ?
 		{
-			CWorldSearch Area( GetTopPoint(), ( Skill_GetAdjusted(SKILL_DETECTINGHIDDEN) / 8 ) + 1 );
+			CWorldSearch Area( GetTopPoint(), ( Skill_GetAdjusted(SKILL_DETECTINGHIDDEN) >> 3 ) + 1 );
 			bool fFound = false;
 			while (true)
 			{
@@ -1041,7 +1041,7 @@ bool CChar::Skill_Done()
 	case SKILL_PEACEMAKING:
 		// make peace if possible. depends on who is listening/fighting.
 		{
-			CWorldSearch Area( GetTopPoint(), ( Skill_GetAdjusted(SKILL_PEACEMAKING) / 8 ) + 1 );
+			CWorldSearch Area( GetTopPoint(), ( Skill_GetAdjusted(SKILL_PEACEMAKING) >> 3 ) + 1 );
 			while (true)
 			{
 				CChar * pChar = Area.GetChar();
@@ -1119,13 +1119,20 @@ bool CChar::Skill_Done()
 	case SKILL_SWORDSMANSHIP:
 	case SKILL_WRESTLING:
 		// Hit or miss my current target.
-		if ( IsStat( STATF_War ))
+		if ( IsStat( STATF_War ) )
 		{
-			if ( m_atFight.m_War_Swing_State <= WAR_SWING_EQUIPPING ||
-				m_atFight.m_War_Swing_State > WAR_SWING_SWINGING )
-				m_atFight.m_War_Swing_State = WAR_SWING_READY;  // Waited my recoil time. So I'm ready.
-			if ( HitTry())
-				return true;	// Stay in the skill till we hit.
+			if (m_atFight.m_War_Swing_Time < 1)
+			{
+				if (m_atFight.m_War_Swing_State <= WAR_SWING_EQUIPPING ||
+					m_atFight.m_War_Swing_State > WAR_SWING_SWINGING)
+				{
+					m_atFight.m_War_Swing_State = WAR_SWING_READY;  // Waited my recoil time. So I'm ready.
+				}
+				if (HitTry())
+					return true; // Stay in the skill till we hit.
+			}
+			else
+				return true; // Stay in the skill till we finish the remaining time
 		}
 		break;
 	}
@@ -2375,7 +2382,7 @@ bool CChar::Skill_Start( SKILL_TYPE sk, int iDifficulty )
 		{
 			m_atFight.m_War_Swing_State = WAR_SWING_EQUIPPING;
 			iDifficulty = GetTargetHitDifficulty(sk);
-			wWaitTime = SetWeaponSwingTimer();
+			m_atFight.m_War_Swing_Time = wWaitTime = SetWeaponSwingTimer();
 		}
 		break;
 
@@ -3177,7 +3184,7 @@ int CChar::Spell_Linearity( SPELL_TYPE spell, int iSkillVal ) const
 {
 	int iLow = g_Serv.m_SpellDefs[spell]->m_wEffectLo;
 	int iHigh = g_Serv.m_SpellDefs[spell]->m_wEffectHi;
-	iHigh = ( iHigh - iLow ) / 2;
+	iHigh = ( iHigh - iLow ) >> 1;
 	iHigh = iHigh + GetRandVal( iHigh );	// Half random effect.
 	return( iLow + IMULDIV( iHigh, iSkillVal, 1000 ));
 }
@@ -3693,13 +3700,13 @@ simple_effect:
 		{
 			CChar * pChar = dynamic_cast <CChar*> ( pObj );
 			ASSERT( pChar );
-			int iDiff = ( Stat_Get(STAT_INT) - pChar->Stat_Get(STAT_INT) ) / 2;
+			int iDiff = ( Stat_Get(STAT_INT) - pChar->Stat_Get(STAT_INT) ) >> 1;
 			if ( iDiff < 0 )
 			{
 				pChar = this;	// spell revereses !
 				iDiff = -iDiff;
 			}
-			int iMax = pChar->Stat_Get(STAT_STR) / 4;
+			int iMax = pChar->Stat_Get(STAT_STR) >> 2;
 			pChar->OnSpellEffect( m_atMagery.m_Spell, this, min( iDiff, iMax ));
 		}
 		break;
@@ -4024,7 +4031,7 @@ int CChar::Spell_StartCast()
 		else
 		{
 			// Scroll
-			iDifficulty = Spell_GetBaseDifficulty( m_atMagery.m_Spell ) / 2;
+			iDifficulty = Spell_GetBaseDifficulty( m_atMagery.m_Spell ) >> 1;
 		}
 	}
 	else

@@ -1299,8 +1299,8 @@ int CChar::GetTargetHitDifficulty( SKILL_TYPE skill ) const
 
 	// Offensive value mostly based on your skill and TACTICS.
 	// 0 - 1000
-	int iSkillAttack = ( iSkillVal + Skill_GetAdjusted( SKILL_TACTICS )) / 2;
-	// int iSkillAttack = ( iSkillVal * 3 + Skill_GetAdjusted( SKILL_TACTICS )) / 4;
+	int iSkillAttack = ( iSkillVal + Skill_GetAdjusted( SKILL_TACTICS )) >> 1;
+	// int iSkillAttack = ( iSkillVal * 3 + Skill_GetAdjusted( SKILL_TACTICS )) >> 2;
 
 	// Defensive value mostly based on your tactics value and random DEX,
 	// 0 - 1000
@@ -1810,7 +1810,7 @@ int CChar::OnTakeDamageHitPoint( int iDmg, CChar * pSrc, DAMAGE_TYPE uType )
 		{
 			// Damage the shield.
 			// Let through some damage.
-			int iDefense = GetRandVal( pShield->Armor_GetDefense() / 2 );
+			int iDefense = GetRandVal( pShield->Armor_GetDefense() >> 1 );
 			if ( pShield->OnTakeDamage( min( iDmg, iDefense ), pSrc, uType ))
 			{
 				SysMessage( "You parry the blow" );

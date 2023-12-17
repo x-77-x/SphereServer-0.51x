@@ -66,7 +66,7 @@ void CServRef::ClientsResetAvg()
 	int iClientsNew = StatGet(SERV_STAT_CLIENTS);
 	if ( iClientsNew < m_iClientsAvg )
 	{
-		iClientsNew += ( m_iClientsAvg - iClientsNew ) / 2;
+		iClientsNew += (( m_iClientsAvg - iClientsNew ) >> 1);
 	}
 	m_iClientsAvg = iClientsNew;
 #endif

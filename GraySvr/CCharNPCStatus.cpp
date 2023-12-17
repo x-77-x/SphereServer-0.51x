@@ -554,7 +554,7 @@ int CChar::NPC_GetAttackContinueMotivation( CChar * pChar, int iMotivation ) con
 		iMotivation += 50;
 
 	// I'm smart and therefore more cowardly. (if injured)
-	iMotivation -= Stat_Get(STAT_INT) / 16;
+	iMotivation -= (Stat_Get(STAT_INT) >> 4);
 
 	return( iMotivation );
 }

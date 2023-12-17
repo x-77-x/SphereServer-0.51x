@@ -368,13 +368,13 @@ BYTE CSector::GetLightCalc( bool fQuickSet ) const
 static const BYTE TrammelPhaseBrightness[] =
 {
 	0, // New Moon
-	TRAMMEL_FULL_BRIGHTNESS / 4,	// Crescent Moon
-	TRAMMEL_FULL_BRIGHTNESS / 2, 	// Quarter Moon
-	( TRAMMEL_FULL_BRIGHTNESS * 3) / 4, // Gibbous Moon
+	TRAMMEL_FULL_BRIGHTNESS >> 2,	// Crescent Moon
+	TRAMMEL_FULL_BRIGHTNESS >> 1, 	// Quarter Moon
+	( TRAMMEL_FULL_BRIGHTNESS * 3) >> 2, // Gibbous Moon
 	TRAMMEL_FULL_BRIGHTNESS,		// Full Moon
-	( TRAMMEL_FULL_BRIGHTNESS * 3) / 4, // Gibbous Moon
-	TRAMMEL_FULL_BRIGHTNESS / 2, 	// Quarter Moon
-	TRAMMEL_FULL_BRIGHTNESS / 4,	// Crescent Moon
+	( TRAMMEL_FULL_BRIGHTNESS * 3) >> 2, // Gibbous Moon
+	TRAMMEL_FULL_BRIGHTNESS >> 1, 	// Quarter Moon
+	TRAMMEL_FULL_BRIGHTNESS >> 2,	// Crescent Moon
 };
 			ASSERT( iTrammelPhase < COUNTOF(TrammelPhaseBrightness));
 			iTargLight -= TrammelPhaseBrightness[iTrammelPhase];
@@ -387,13 +387,13 @@ static const BYTE TrammelPhaseBrightness[] =
 static const BYTE FeluccaPhaseBrightness[] =
 {
 	0, // New Moon
-	FELUCCA_FULL_BRIGHTNESS / 4,	// Crescent Moon
-	FELUCCA_FULL_BRIGHTNESS / 2, 	// Quarter Moon
-	( FELUCCA_FULL_BRIGHTNESS * 3) / 4, // Gibbous Moon
+	FELUCCA_FULL_BRIGHTNESS >> 2,	// Crescent Moon
+	FELUCCA_FULL_BRIGHTNESS >> 1, 	// Quarter Moon
+	( FELUCCA_FULL_BRIGHTNESS * 3) >> 2, // Gibbous Moon
 	FELUCCA_FULL_BRIGHTNESS,		// Full Moon
-	( FELUCCA_FULL_BRIGHTNESS * 3) / 4, // Gibbous Moon
-	FELUCCA_FULL_BRIGHTNESS / 2, 	// Quarter Moon
-	FELUCCA_FULL_BRIGHTNESS / 4,	// Crescent Moon
+	( FELUCCA_FULL_BRIGHTNESS * 3) >> 2, // Gibbous Moon
+	FELUCCA_FULL_BRIGHTNESS >> 1, 	// Quarter Moon
+	FELUCCA_FULL_BRIGHTNESS >> 2,	// Crescent Moon
 };
 			ASSERT( iFeluccaPhase < COUNTOF(FeluccaPhaseBrightness));
 			iTargLight -= FeluccaPhaseBrightness[iFeluccaPhase];

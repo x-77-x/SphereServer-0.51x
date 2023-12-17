@@ -852,6 +852,8 @@ int CChar::NPC_WalkToPoint( bool fRun )
 	CheckLocation( false );	// Look for teleports etc.
 
 	// How fast can they move.
+	// this way it accelerates also the shoot and attack value, split those two things!
+    // NOW there is an extra value attached to swing action that contains the current remaining time!
 	if ( fRun )
 	{
 		SetTimeout( TICK_PER_SEC/4 + GetRandVal( (100-Stat_Get(STAT_DEX))/4 ) * TICK_PER_SEC / 10 );
@@ -1514,7 +1516,7 @@ bool CChar::NPC_LookAround()
 
 #if 0
 	// Lower the number of chars we look at if complex.
-	if ( GetTopPoint().GetSector()->GetComplexity() > g_Serv.m_iMaxComplexity / 4 )
+	if ( GetTopPoint().GetSector()->GetComplexity() > (g_Serv.m_iMaxComplexity >> 2) )
 		iRange /= 4;
 #endif
 
@@ -1684,7 +1686,7 @@ bool CChar::NPC_FightCast( CChar * pChar )
 	int iStatInt = Stat_Get(STAT_INT);
 	int iSkillVal = Skill_GetBase(SKILL_MAGERY);
 	int iChance = iSkillVal +
-		(( m_StatMana >= ( iStatInt / 2 )) ? m_StatMana : ( iStatInt - m_StatMana ));
+		(( m_StatMana >= ( iStatInt >> 1 )) ? m_StatMana : ( iStatInt - m_StatMana ));
 	if ( GetRandVal( iChance ) < 400 )
 	{
 		// we failed this test, but we could be casting next time

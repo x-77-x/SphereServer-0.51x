@@ -529,8 +529,8 @@ bool CClient::OnTarg_Tile( const CPointMap & pt )
 		CRectMap rect;
 		rect.SetRect( m_Targ_p.m_x, m_Targ_p.m_y, pt.m_x, pt.m_y );
 		CPointMap pt = rect.GetCenter();
-		int rx = abs( rect.m_right - rect.m_left ) / 2;
-		int ry = abs( rect.m_bottom - rect.m_top ) / 2;
+		int rx = abs( rect.m_right - rect.m_left ) >> 1;
+		int ry = abs( rect.m_bottom - rect.m_top ) >> 1;
 
 		if ( m_tmTile.m_Code == 254 )
 		{
