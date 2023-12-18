@@ -382,11 +382,11 @@ bool CChar::CanSeeLOS(const CPointMap& ptDsta, CPointMap* pptBlock, int iMaxDist
 	//the max height of a step unit, but also an arbitrary size to check for height obstacles or ignore them
 	ptSrc.m_z += PLAYER_PLATFORM_STEP;
 
-	//the height is higher than maxdist, don't allow (calco is height distance divided by 4, so with a 18 * 4 = 72 distance in height, that's pretty a lot
+	//the height is higher than maxdist, don't allow (calc is height distance divided by 4, so with a 18 * 4 = 72 distance in height, that's pretty a lot
 	if ((abs(ptSrc.m_z - ptDst.m_z) >> 2) > iMaxDist)
 		return false;
 
-	// Walk backwards from the destination to the origin. If any spot is too far or if it blocks our heads
+	// Walk towards the origin to the destination. If any spot is too far or if it blocks our heads
 	// then we can not see what's behind it.
 	int iDist = ptSrc.GetDist(ptDst);
 	int iDistTry = 0;
@@ -399,7 +399,7 @@ bool CChar::CanSeeLOS(const CPointMap& ptDsta, CPointMap* pptBlock, int iMaxDist
 
 		wBlockFlags = CAN_C_SWIM | CAN_C_WALK | CAN_C_FLY;
 		ptSrc.m_z = g_World.GetHeight(ptSrc, wBlockFlags, ptSrc.GetRegion(REGION_TYPE_MULTI));//move our z towards target too
-		if (wBlockFlags & (CAN_I_BLOCK | CAN_I_DOOR))
+		if (iDist > 1 && wBlockFlags & (CAN_I_BLOCK | CAN_I_DOOR))
 		{
 		blocked:
 			if (pptBlock != NULL)
