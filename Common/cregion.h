@@ -66,6 +66,12 @@ public:
 		return( true );
 	}
 
+	bool InRangeZ(const signed char z, const int range) const
+	{
+		return (z >= (m_z - range))
+			&& (z <= (m_z + range));
+	}
+
 	void Validate()
 	{
 		if ( m_x < 0 ) m_x = 0;

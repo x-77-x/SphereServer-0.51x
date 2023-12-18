@@ -2949,13 +2949,13 @@ void CClient::Event_Target()
 	}
 	else if (pt.IsValid() && !IsPriv(PRIV_GM))//GM can target anywhere
 	{
-		CPointMap* ppt = &CPointMap::CPointMap();
-		if (!m_pChar->CanSeeLOS(pt, ppt, UO_MAP_VIEW_SIZE))
+		CPointMap ppt;
+		if (!m_pChar->CanSeeLOS(pt, &ppt, UO_MAP_VIEW_SIZE))
 		{
 			//LOS or see should be used inside scripts, this is just to avoid targeting hack with targets outside the max view range or with los blocked,
 			//eg: bandage cleaning in water in the other part of the world, this will be valid in case of special tools for players or something similar,
 			//the object los blocked should be at a max 1 tile range behind the choosen point, so the obstacle can be dealt internally (eg: using fountain)
-			if (ppt->GetDist(pt) > 1)
+			if (ppt.GetDist(pt) > 1)
 			{
 				SysMessage("Target is not in line of sight");
 				return;

@@ -210,7 +210,7 @@ signed char CWorld::GetHeight( const CPointBase & pt, WORD & wBlockFlags, const 
 	bool fRoof = false;
 
 	// ??? NOTE: some creatures should be taller than others !!!
-	signed char zmyhead = pt.m_z + PLAYER_HEIGHT/2;	// what height is my head at ?
+	signed char zmyhead = pt.m_z + (PLAYER_HEIGHT >> 1);	// what height is my head at ?
 
 	// Height of statics at/above given coordinates
 	// do gravity here for the z.

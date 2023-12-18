@@ -358,49 +358,66 @@ bool CChar::CanSee( const CObjBaseTemplate * pObj ) const
 	return( GetDist( pObj ) <= pObj->GetVisualRange());
 }
 
-bool CChar::CanSeeLOS( const CPointMap & ptDst, CPointMap * pptBlock, int iMaxDist ) const
+//this is roughly an hack, it need REAL obstacles evaluation, not a marginal one! THIS WILL NEED A MAJOR REWRITE
+bool CChar::CanSeeLOS(const CPointMap& ptDsta, CPointMap* pptBlock, int iMaxDist) const
 {
 	// Max distance of iMaxDist
 	// Line of sight check
 	// NOTE: if not blocked. pptBlock is undefined.
-	if ( IsPriv( PRIV_GM ))
-		return( true );
+	if (IsPriv(PRIV_GM))
+		return(true);
 
 	CPointMap ptSrc = GetTopPoint();
-	//raise point to player eye
-	ptSrc.m_z += (PLAYER_HEIGHT >> 1);
+	//are we in the middle of nothing? check it! the calculation must be made as is we are on ground! (flying creature, as an example!)
+	WORD wBlockFlags = CAN_C_SWIM | CAN_C_WALK | CAN_C_FLY;
+	ptSrc.m_z = g_World.GetHeight(ptSrc, wBlockFlags, ptSrc.GetRegion(REGION_TYPE_MULTI));
+	wBlockFlags = CAN_C_SWIM | CAN_C_WALK | CAN_C_FLY;
+	CPointMap ptDst = ptDsta;
+	wBlockFlags = CAN_C_SWIM | CAN_C_WALK | CAN_C_FLY;
+	ptDst.m_z = g_World.GetHeight(ptDst, wBlockFlags, ptSrc.GetRegion(REGION_TYPE_MULTI));
 
-	int count = abs(ptSrc.m_z - ptDst.m_z);
-	//the height is higher than maxdist, don't allow
-	if ((count >> 2) > iMaxDist)
+	if (ptSrc.IsSame2D(ptDst) && !ptSrc.InRangeZ(ptDst.m_z, PLAYER_HEIGHT))//same2D, but NOT in eye range, no movement calc possible, not reachable!
 		return false;
 
-	int iDist = ptSrc.GetDist( ptDst );
+	//the max height of a step unit, but also an arbitrary size to check for height obstacles or ignore them
+	ptSrc.m_z += PLAYER_PLATFORM_STEP;
 
-	// Walk towards the object. If any spot is too far above our heads
+	//the height is higher than maxdist, don't allow (calco is height distance divided by 4, so with a 18 * 4 = 72 distance in height, that's pretty a lot
+	if ((abs(ptSrc.m_z - ptDst.m_z) >> 2) > iMaxDist)
+		return false;
+
+	// Walk backwards from the destination to the origin. If any spot is too far or if it blocks our heads
 	// then we can not see what's behind it.
-
+	int iDist = ptSrc.GetDist(ptDst);
 	int iDistTry = 0;
-	while ( --iDist > 0 )
+	int iBad = (iDist >> 1) + 1; //half the distance + 1, if we are at 3, at least 2 points must be ok with height also
+	
+	while (iDist > 0)
 	{
-		DIR_TYPE dir = ptSrc.GetDir( ptDst );
-		ptSrc.Move( dir );	// NOTE: The dir is very coarse and can change slightly.
+		DIR_TYPE dir = ptSrc.GetDir(ptDst);
+		ptSrc.Move(dir);	// NOTE: The dir is very coarse and can change slightly.
 
-		WORD wBlockFlags = CAN_C_SWIM | CAN_C_WALK | CAN_C_FLY;
-		signed char z = g_World.GetHeight( ptSrc, wBlockFlags, ptSrc.GetRegion( REGION_TYPE_MULTI ));
-		if ( wBlockFlags & ( CAN_I_BLOCK | CAN_I_DOOR | CAN_I_SHOOT ))
+		wBlockFlags = CAN_C_SWIM | CAN_C_WALK | CAN_C_FLY;
+		ptSrc.m_z = g_World.GetHeight(ptSrc, wBlockFlags, ptSrc.GetRegion(REGION_TYPE_MULTI));//move our z towards target too
+		if (wBlockFlags & (CAN_I_BLOCK | CAN_I_DOOR))
 		{
-blocked:
-			if ( pptBlock != NULL )
-				* pptBlock = ptSrc;
+		blocked:
+			if (pptBlock != NULL)
+				*pptBlock = ptSrc;//report the actual blocking point
 			return false; // blocked
 		}
-		if ( iDistTry > iMaxDist && ! IsPriv( PRIV_GM ))
+		else if (!ptSrc.InRangeZ(ptDst.m_z, PLAYER_HEIGHT))//not in range of eye sight? as long as half of the points are NOT out of range, it's OK
+		{
+			if (--iBad == 0)//if more than 50% of the route is covered, we are not able to see through
+				goto blocked;
+		}
+		if (iDistTry > iMaxDist)
 		{
 			// just went too far.
 			goto blocked;
 		}
-		iDistTry ++;
+		++iDistTry;
+        --iDist;
 	}
 
 	return true; // made it all the way to the object with no obstructions.
