@@ -35,11 +35,6 @@ nice to be able to change the color of NPCs name when single clicked
 but half accuracy and less range when moving?   <B>50% less accurate and only 8 range  ???</b>
 
 
-<b>[ISSUE 11]</b><BR>
--no shooting arrows through multis floors!
-example... put a npc on the roof of a tower, you can shoot him from the 1st floor,<BR>
-<b>maybe check LOS for Z ?</b>
-
 	
 <b>[ISSUE 12]</b><BR>
 -Provocation - you can use provoc on player in guarded area, then call guards on them after it makes you attack them
@@ -205,7 +200,13 @@ CLASSICUO WILL DISPLAY COLORED MULTIS! ORION AND ORIGINAL CLIENT WILL NOT!<BR>
 <b>[ISSUE 10]</b><BR>
 -when you run from an npc with a bow, he shoots a LOT of arrow animations,  you get hit multiple times!
 one arrow per step, so when a npc runs at you, its like a machine gun<BR>
-[DONE?]
+<b>[ DONE! ]</b>  
+
+<b>[ISSUE 11]</b><BR>
+-no shooting arrows through multis floors!
+example... put a npc on the roof of a tower, you can shoot him from the 1st floor,<BR>
+<b>maybe check LOS for Z ?</b>
+<b>[ DONE! ]</b> 
 
 <b>[ISSUE 13]</b><BR>
 -TRACKING - make sure "tracking players" actually track players only, ect... (i remember something wrong with tracking)<BR>
