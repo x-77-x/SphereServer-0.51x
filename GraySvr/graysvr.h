@@ -4448,6 +4448,7 @@ private:
 	void NPC_Act_Idle();
 	void NPC_Act_Looting();
 	void NPC_Act_Eating();
+	void NPC_Act_WarAccellerate();
 
 	void NPC_ActStart_SpeakTo( CChar * pSrc );
 

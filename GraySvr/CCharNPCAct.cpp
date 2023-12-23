@@ -856,11 +856,11 @@ int CChar::NPC_WalkToPoint( bool fRun )
     // NOW there is an extra value attached to swing action that contains the current remaining time!
 	if ( fRun )
 	{
-		SetTimeout( TICK_PER_SEC/4 + GetRandVal( (100-Stat_Get(STAT_DEX))/4 ) * TICK_PER_SEC / 10 );
+		NPC_Act_WarAccellerate();
 	}
 	else
 	{
-		SetTimeout( TICK_PER_SEC/2 + GetRandVal( (150- Stat_Get(STAT_DEX))/2 ) * TICK_PER_SEC / 10 );
+		SetTimeout( (TICK_PER_SEC >> 1) + GetRandVal( (150 - Stat_Get(STAT_DEX)) >> 1 ) * TICK_PER_SEC / 10 );
 	}
 
 	return( 1 );
@@ -2467,6 +2467,11 @@ bool CChar::NPC_OnFoodTick( int nFoodLevel )
 	return( true );
 #endif
 
+}
+
+void CChar::NPC_Act_WarAccellerate()
+{
+	SetTimeout( (TICK_PER_SEC >> 2) + GetRandVal( (100 - Stat_Get(STAT_DEX)) >> 2 ) * TICK_PER_SEC / 10 );
 }
 
 void CChar::NPC_OnTickAction()

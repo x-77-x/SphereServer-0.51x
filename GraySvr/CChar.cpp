@@ -5031,6 +5031,7 @@ bool CChar::OnTick()
 				{
 					m_atFight.m_War_Swing_Time -= iTimeDiff;
 				}
+				break;
 			}
 		}
 		// My turn to do some action.
@@ -5046,8 +5047,10 @@ bool CChar::OnTick()
 		}
 		if ( IsTimerExpired())	// Was not reset ?
 		{
-			// default next tick
-			SetTimeout( TICK_PER_SEC/3 + GetRandVal( (150-Stat_Get(STAT_DEX))/2 ) * TICK_PER_SEC / 10 );
+			if (m_pNPC && IsStat(STATF_War))//accellerate NPC in war mode
+				NPC_Act_WarAccellerate();
+			else// default next tick
+				SetTimeout( TICK_PER_SEC/3 + GetRandVal( (150-Stat_Get(STAT_DEX))/2 ) * TICK_PER_SEC / 10 );
 		}
 	}
 	else
@@ -5069,8 +5072,11 @@ bool CChar::OnTick()
 				{
 					HitTry();
 				}
+				break;
 			}
 		}
+		if (m_pNPC && IsStat(STATF_War))//accellerate NPC in war mode
+			NPC_Act_WarAccellerate();
 	}
 
 	if ( iTimeDiff >= TICK_PER_SEC )
