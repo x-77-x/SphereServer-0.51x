@@ -28,6 +28,7 @@ extern size_t DEBUG_ValidateAlloc( const void * pThis );
 #include "../common/cgrayinst.h"
 #include "../common/cregion.h"
 #include "../common/cgraymap.h"
+#include "CParty.h"
 
 #define GRAY_TITLE			"Sphere"	// "Sphere"
 #define GRAY_VERSION		"0.51a"
@@ -3565,6 +3566,7 @@ public:
 
 	static const TCHAR * sm_KeyTable[];
 	time_t m_LastWalk;
+	//CPartyDef* m_pParty;
 
 public:
 	CCharPlayer( CAccount * pAccount );
@@ -5897,5 +5899,58 @@ inline CChar * CObjUIDBase::CharFind() const
 {
 	return( dynamic_cast <CChar *>( ObjFind()));
 }
+
+///////////////////////////////////////////////////////////
+// CCharRefArray
+
+class CCharRefArray
+{
+	// List of Players and NPC's involved in the quest/party/account etc..
+
+public:
+	static const char* m_sClassName;
+
+	CCharRefArray() { };
+
+private:
+	CGTypedArray<CObjUID, CObjUID> m_uidCharArray;
+
+public:
+	size_t FindChar(const CChar* pChar) const;
+	size_t AttachChar(const CChar* pChar);
+	size_t InsertChar(const CChar* pChar, size_t i);
+	void DetachChar(size_t i);
+	size_t DetachChar(const CChar* pChar);
+	void DeleteChars();
+	void WritePartyChars(CScript& s);
+
+	CObjUID GetChar(size_t i) const
+	{
+		return m_uidCharArray[i];
+	}
+	size_t GetCharCount() const
+	{
+		return m_uidCharArray.GetCount();
+	}
+
+	bool IsCharIn(const CChar* pChar) const
+	{
+		return (FindChar(pChar) != m_uidCharArray.BadIndex());
+	}
+
+	bool IsValidIndex(size_t i) const
+	{
+		return m_uidCharArray.IsValidIndex(i);
+	}
+	inline size_t BadIndex() const
+	{
+		return m_uidCharArray.BadIndex();
+	}
+
+private:
+	CCharRefArray(const CCharRefArray& copy);
+	CCharRefArray& operator=(const CCharRefArray& other);
+};
+
 
 #endif	// _GRAYSVR_H_

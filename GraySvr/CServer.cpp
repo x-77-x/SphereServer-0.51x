@@ -3,13 +3,7 @@
 // Copyright Menace Software (www.menasoft.com).
 //
 
-#ifdef VISUAL_SPHERE
-	#include "..\Visual Sphere\stdafx.h"
-	#include "..\Visual Sphere\Visual Sphere.h"
-	#include "..\Visual Sphere\ServerObject.h"
-#else
-	#include "graysvr.h"	// predef header.
-#endif
+#include "graysvr.h"	// predef header.
 
 #include <signal.h>
 
@@ -1003,7 +997,7 @@ CServer::CServer() : CServRef( GRAY_TITLE, SOCKET_LOCAL_ADDRESS )
 	m_fAutoResurrect = false;
 	m_iWhisperColor = 0x03b1;
 	m_fEnableChat = false;
-	for (int i = 0; i < STAT_BASE_QTY; ++i)
+	for (int i = 0; i < STAT_BASE_QTY; ++i)//1 is the default multiplier, 1 means 100% default hits for players from their stats
 	{
 		m_iPlayerStatMod[i] = 1;
 	}
@@ -2673,13 +2667,6 @@ void CServer::SysMessage( const TCHAR * pStr ) const
 	// Print just to the console.
 #ifdef _WIN32
 	fputs( pStr, stdout );	// print out locally as well.
-#ifdef VISUAL_SPHERE
-	if ( g_pServerObject )
-	{
-		CComBSTR msg(pStr);
-		g_pServerObject->Fire_OnSysMessage(msg);
-	}
-#endif // VISUAL_SPHERE
 #endif
 }
 

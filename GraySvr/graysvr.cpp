@@ -221,7 +221,6 @@ void Debug_Assert_CheckFail( const TCHAR * pExp, const TCHAR *pFile, unsigned uL
 
 #endif
 
-#ifndef VISUAL_SPHERE
 void Assert_CheckFail( const TCHAR * pExp, const TCHAR *pFile, unsigned uLine )
 {
 	// These get left in in relesae code .
@@ -229,19 +228,16 @@ void Assert_CheckFail( const TCHAR * pExp, const TCHAR *pFile, unsigned uLine )
 	// if ( g_Serv.m_fSecure )	{}
 	throw( CGrayError( LOGL_CRIT, 0, pExp ));
 }
-#endif // VISUAL_SPHERE
 
 #ifdef _WIN32
 
 extern "C" {
 
-#ifndef VISUAL_SPHERE
 _CRTIMP void _cdecl _assert( void *pExp, void *pFile, unsigned uLine )
 {
 	// trap the system version of this just in case.
 	Assert_CheckFail((const char*) pExp, (const char*) pFile, uLine );
 }
-#endif // VISUAL_SPHERE
 
 class CGrayException : public CGrayError
 {
@@ -259,7 +255,6 @@ public:
 	}
 };
 
-#ifndef VISUAL_SPHERE
 void _cdecl Exception_Win32( unsigned int id, struct _EXCEPTION_POINTERS* pData )
 {
 	// id = 0xc0000094 for divide by zero.
@@ -270,7 +265,6 @@ void _cdecl Exception_Win32( unsigned int id, struct _EXCEPTION_POINTERS* pData 
 
 	throw( CGrayException( id, (uintptr_t)( pData->ExceptionRecord->ExceptionAddress ) - dwCodeStart ));
 }
-#endif // VISUAL_SPHERE
 
 int _cdecl _purecall()
 {
@@ -289,7 +283,7 @@ void _cdecl _amsg_exit( int iArg )
 
 }	// extern "C"
 
-#ifndef VISUAL_SPHERE
+
 BOOL WINAPI ConsoleHandlerRoutine( DWORD dwCtrlType )
 {
 	//  control signal type. CTRL_C_EVENT
@@ -324,7 +318,6 @@ BOOL WINAPI ConsoleHandlerRoutine( DWORD dwCtrlType )
 	}
 	return FALSE;	// process normally.
 }
-#endif // VISUAL_SPHERE
 
 #endif	// _WIN32
 
@@ -854,11 +847,8 @@ int _cdecl main(int argc, char * argv[])
 
 #ifdef _WIN32
 	SetConsoleTitle( GRAY_TITLE " V" GRAY_VERSION );
-#ifndef VISUAL_SPHERE
 	_set_se_translator( Exception_Win32 );
 	SetConsoleCtrlHandler( ConsoleHandlerRoutine, TRUE );
-#endif // VISUAL_SPHERE
- 	// NTWindowFind();
 #endif
 
 	g_Log.Event( LOGM_INIT, "\n%s\n"
@@ -922,9 +912,7 @@ world_bail:
 	g_World.Close();
 
 #ifdef _WIN32
-#ifndef VISUAL_SPHERE
 	SetConsoleCtrlHandler( ConsoleHandlerRoutine, FALSE );
-#endif // VISUAL_SPHERE
 #endif
 
 	if ( g_Serv.m_iExitCode )

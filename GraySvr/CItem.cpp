@@ -1183,7 +1183,7 @@ bool CItem::MoveTo( CPointMap pt ) // Put item on the ground here.
 		int iCount = pSector->m_Items_Timer.GetCount() + pSector->m_Items_Inert.GetCount();
 		if ( iCount > 1024 )
 		{
-			DEBUG_ERR(( "Warning: %d items at %s,too complex!\n", iCount, pt.Write()));
+			DEBUG_ERR(( "Warning: %d items at %s, too complex!\n", iCount, pt.Write()));
 		}
 	}
 

@@ -1480,6 +1480,27 @@ void CClient::Event_ExtData( EXTDATA_TYPE type, int len, BYTE * pData )
 		// break;
 	case EXTDATA_Party_Add:
 		SysMessage( "Sorry the party system is not working" );
+		if (len < 1)
+			return;
+		switch (pData[0])
+		{
+		case 0x01: //Party Add
+			break;
+		case 0x02: //Party Remove
+			break;
+		case 0x03: //Party Private Message
+			break;
+		case 0x04: //Party Public Message
+			break;
+		case 0x06: //party Set CAN LOOT
+			break;
+		case 0x08: //Party accept request
+			break;
+		case 0x09: //Party decline request
+			break;
+		default:
+			break;
+		}
 		break;
 	case EXTDATA_Arrow_Click:
 		SysMessage( "Follow the Arrow" );

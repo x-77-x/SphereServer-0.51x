@@ -2,13 +2,7 @@
 // CClient.cpp
 // Copyright Menace Software (www.menasoft.com).
 //
-#ifdef VISUAL_SPHERE
-	#include "..\Visual Sphere\stdafx.h"
-	#include "..\Visual Sphere\Visual Sphere.h"
-	#include "..\Visual Sphere\ServerObject.h"
-#else
-	#include "graysvr.h"	// predef header.
-#endif
+#include "graysvr.h"	// predef header.
 
 /////////////////////////////////////////////////////////////////
 // -CClient stuff.
@@ -117,9 +111,7 @@ CClient::~CClient()
 	{
 		g_Log.Event( LOGM_CLIENTS_LOG, "%x:Client disconnected [Total:%i]\n", GetSocket(), g_Serv.StatGet(SERV_STAT_CLIENTS));
 	}
-#ifdef VISUAL_SPHERE
-	g_pServerObject->Fire_ClientDetach(GetSocket());
-#endif
+
 	if ( GetTargMode() == TARGMODE_CONSOLE )
 	{
 		// unlink the admin client.

@@ -4143,7 +4143,7 @@ bool CChar::OnSpellEffect( SPELL_TYPE spell, CChar * pCharSrc, int iSkill )
 		if ( Skill_UseQuick( SKILL_MAGICRESISTANCE, Spell_GetBaseDifficulty( spell )))
 		{
 			SysMessage( "You feel yourself resisting magic" );
-			iSkill /= 2;	// ??? reduce effect of spell.
+			iSkill >>= 1;	// ??? reduce effect of spell.
 		}
 
 		if ( pCharSrc != NULL && GetPrivLevel() > PLEVEL_Guest )

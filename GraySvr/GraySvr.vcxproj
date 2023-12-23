@@ -184,6 +184,7 @@
     <ClCompile Include="CItemSp.cpp" />
     <ClCompile Include="CItemStone.cpp" />
     <ClCompile Include="CMail.cpp" />
+    <ClCompile Include="CParty.cpp" />
     <ClCompile Include="csector.cpp" />
     <ClCompile Include="CServer.cpp" />
     <ClCompile Include="cvendoritem.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="..\common\graycom.h" />
     <ClInclude Include="..\common\graymul.h" />
     <ClInclude Include="..\common\grayproto.h" />
+    <ClInclude Include="CParty.h" />
     <ClInclude Include="graysvr.h" />
   </ItemGroup>
   <ItemGroup>

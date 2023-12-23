@@ -3,14 +3,7 @@
 // Copyright Menace Software (www.menasoft.com).
 //
 
-#ifdef VISUAL_SPHERE
-	#include "..\Visual Sphere\stdafx.h"
-	#include "..\Visual Sphere\Visual Sphere.h"
-	#include "..\Visual Sphere\ServerObject.h"
-#else
-	#include "graysvr.h"	// predef header.
-#endif
-
+#include "graysvr.h"	// predef header.
 
 bool World_fDeleteCycle = false;
 
@@ -377,21 +370,14 @@ void CWorld::SaveForce() // Save world state
 {
 	m_fSaveForce = true;
 	Broadcast( "World save has been initiated." );
-#ifdef VISUAL_SPHERE
-	g_pServerObject->Fire_SaveBegin();
-#endif
+
 	while ( SaveStage())
 	{
 		if (! ( m_iSaveStage & 0xFF ))
 		{
-#ifndef VISUAL_SPHERE
 			g_Serv.PrintPercent( m_iSaveStage, SECTOR_QTY+3 );
-#endif
 #ifdef _WIN32
 			// Linux doesn't need to know about this
-#ifdef VISUAL_SPHERE
-			g_pServerObject->Fire_SavePercent(MulDiv( m_iSaveStage, 100, SECTOR_QTY+3 ));
-#endif
 			if ( g_Service.IsServiceStopPending())
 			{
 				g_Service.ReportStatusToSCMgr(SERVICE_STOP_PENDING, NO_ERROR, 5000);
@@ -399,9 +385,6 @@ void CWorld::SaveForce() // Save world state
 #endif
 		}
 	}
-#ifdef VISUAL_SPHERE
-	g_pServerObject->Fire_SaveEnd();
-#endif
 	DEBUG_MSG(( "Save Done\n" ));
 }
 
@@ -539,11 +522,7 @@ bool CWorld::LoadSection()
 
 	if (! ( ++m_iSaveStage & 0xFF ))	// don't update too often
 	{
-#ifdef VISUAL_SPHERE
-	   g_pServerObject->Fire_LoadPercent(MulDiv( m_File.GetPosition(), 100, m_lLoadSize ));
-#else
 		int iPercent = g_Serv.PrintPercent( m_File.GetPosition(), m_lLoadSize );
-#endif
 	}
 
 	if ( m_File.IsSectionType( "SECTOR" ))
@@ -583,9 +562,6 @@ bool CWorld::LoadSection()
 
 bool CWorld::Load() // Load world from script
 {
-#ifdef VISUAL_SPHERE
-	g_pServerObject->Fire_LoadBegin();
-#endif
 	DEBUG_CHECK( g_Serv.IsLoading());
 
 	// The world has just started.
@@ -678,9 +654,6 @@ bool CWorld::Load() // Load world from script
 
 	// Set the current version now.
 	r_SetVal( "VERSION", GRAY_VERSION );	// Set m_iSaveVersion
-#ifdef VISUAL_SPHERE
-	g_pServerObject->Fire_LoadEnd();
-#endif
 	return( true );
 }
 
@@ -977,11 +950,7 @@ void CWorld::GarbageCollection()
 
 		if (!(iCount & 0xFF))
 		{
-#ifdef VISUAL_SPHERE
-			g_pServerObject->Fire_LoadPercent(MulDiv( iCount, 100, GetUIDCount() ));
-#else
 			g_Serv.PrintPercent(iCount, rCount);
-#endif
 		}
 		iCount ++;
 	}

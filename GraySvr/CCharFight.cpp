@@ -71,72 +71,75 @@ const TCHAR * CChar::Guild_Abbrev( MEMORY_TYPE MemType ) const
 NOTO_TYPE CChar::GetNotoFlag( const CChar * pCharViewer, bool fAllowIncog ) const
 {
 	// This allows the noto attack check in the client.
-
-	if ( fAllowIncog && IsStat( STATF_Incognito ))
+	if (fAllowIncog && IsStat(STATF_Incognito))
 	{
 		return NOTO_NEUTRAL;
 	}
 
-	if ( IsEvil())
-		return( NOTO_EVIL );
-
-	if ( this != pCharViewer ) // Am I checking myself?
+	if (this != pCharViewer) // Am I checking myself?
 	{
+		//if (m_pPlayer && m_pPlayer->m_pParty && m_pPlayer->m_pParty->IsInParty(pCharViewer))// Same Party?
+		//{
+		//	return NOTO_GUILD_SAME;// return green
+		//}
 		// Check the guild stuff
 		CItemStone * pMyTown = Guild_Find(MEMORY_TOWN);
 		CItemStone * pMyGuild = Guild_Find(MEMORY_GUILD);
-		if ( pMyGuild || pMyTown )
+		if (pMyGuild || pMyTown)
 		{
-			CItemStone * pTheirGuild = pCharViewer->Guild_Find(MEMORY_GUILD);
-			CItemStone * pTheirTown = pCharViewer->Guild_Find(MEMORY_TOWN);
+			CItemStone* pTheirGuild = pCharViewer->Guild_Find(MEMORY_GUILD);
+			CItemStone* pTheirTown = pCharViewer->Guild_Find(MEMORY_TOWN);
 			// Are we both in a guild?
-			if ( pTheirGuild || pTheirTown )
+			if (pTheirGuild || pTheirTown)
 			{
-				if ( pMyGuild )
+				if (pMyGuild)
 				{
-					if ( pTheirGuild == pMyGuild ) // Same guild?
+					if (pTheirGuild == pMyGuild) // Same guild?
 						return NOTO_GUILD_SAME; // return green
-					if ( pMyGuild->IsSameAlignType( pTheirGuild ))
+					if (pMyGuild->IsSameAlignType(pTheirGuild))
 						return NOTO_GUILD_SAME;
 					// Are we at in different guilds but at war? (not actually a crime right?)
-					if ( pMyGuild->IsAtWarWith(pTheirGuild))
+					if (pMyGuild->IsAtWarWith(pTheirGuild))
 						return NOTO_GUILD_WAR; // return orange
-					if ( pMyGuild->IsAtWarWith(pTheirTown))
+					if (pMyGuild->IsAtWarWith(pTheirTown))
 						return NOTO_GUILD_WAR; // return orange
 				}
-				if ( pMyTown)
+				if (pMyTown)
 				{
-					if ( pMyTown->IsAtWarWith(pTheirGuild))
+					if (pMyTown->IsAtWarWith(pTheirGuild))
 						return NOTO_GUILD_WAR; // return orange
-					if ( pMyTown->IsAtWarWith(pTheirTown))
+					if (pMyTown->IsAtWarWith(pTheirTown))
 						return NOTO_GUILD_WAR; // return orange
 				}
 			}
 		}
 	}
 
-	if ( IsStat( STATF_Criminal ))	// criminal to everyone.
-		return( NOTO_CRIMINAL );
+	if (IsEvil())
+		return(NOTO_EVIL);
 
-	if ( this != pCharViewer ) // Am I checking myself?
+	if (IsStat(STATF_Criminal))	// criminal to everyone.
+		return(NOTO_CRIMINAL);
+
+	if (this != pCharViewer) // Am I checking myself?
 	{
-		if ( NPC_IsOwnedBy( pCharViewer, false ))	// All pets are neutral to their owners.
-			return( NOTO_NEUTRAL );
+		if (NPC_IsOwnedBy(pCharViewer, false))	// All pets are neutral to their owners.
+			return(NOTO_NEUTRAL);
 
 		// If they saw me commit a crime or I am their aggressor then
 		// criminal to just them.
-		CItemMemory * pMemory = pCharViewer->Memory_FindObjTypes( this, MEMORY_SAWCRIME );
-		if ( pMemory != NULL )
+		CItemMemory* pMemory = pCharViewer->Memory_FindObjTypes(this, MEMORY_SAWCRIME);
+		if (pMemory != NULL)
 		{
-			return( NOTO_CRIMINAL );
+			return(NOTO_CRIMINAL);
 		}
 	}
 
-	if ( IsNeutral())
+	if (IsNeutral())
 	{
-		return( NOTO_NEUTRAL );
+		return(NOTO_NEUTRAL);
 	}
-	return( NOTO_GOOD );
+	return(NOTO_GOOD);
 }
 
 bool CChar::IsEvil() const
@@ -1694,7 +1697,7 @@ int CChar::OnTakeDamage( int iDmg, CChar * pSrc, DAMAGE_TYPE uType )
 			// reflect some damage back.
 			if ( pSrc != NULL && GetTopDist3D( pSrc ) <= 2 )
 			{
-				int iRefDam = iDmg / 2;
+				int iRefDam = iDmg >> 1;
 				int iMaxRefDam = Skill_GetAdjusted(SKILL_MAGERY)/75;
 				iRefDam = min( iRefDam, iMaxRefDam );
 				iDmg -= iRefDam;

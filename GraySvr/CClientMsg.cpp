@@ -5,13 +5,7 @@
 // Game server messages. (No login stuff)
 //
 
-#ifdef VISUAL_SPHERE
-	#include "..\Visual Sphere\stdafx.h"
-	#include "..\Visual Sphere\Visual Sphere.h"
-	#include "..\Visual Sphere\ServerObject.h"
-#else
-	#include "graysvr.h"	// predef header.
-#endif
+#include "graysvr.h"	// predef header.
 
 /////////////////////////////////////////////////////////////////
 // -CClient stuff.
@@ -1128,17 +1122,6 @@ void CClient::addCharName( const CChar * pChar ) // Singleclick text for a chara
 	ASSERT( pChar );
 
 	WORD color = pChar->GetNotoColor(m_pChar, true);
-
-	/*switch (pChar->GetNotoFlag(m_pChar, true))
-	{
-	case NOTO_GOOD:			color = 0x0063;	break;	// Blue
-	case NOTO_GUILD_SAME:	color = 0x0044;	break;	// Green (same guild)
-	case NOTO_NEUTRAL:		color = 0x03b2;	break;	// Grey 1 (someone that can be attacked)
-	case NOTO_CRIMINAL:		color = 0x03b2;	break;	// Grey 2 (criminal)
-	case NOTO_GUILD_WAR:	color = 0x002b;	break;	// Orange (enemy guild)
-	case NOTO_EVIL:			color = 0x0026;	break;	// Red
-	default: color = COLOR_TEXT_DEF;	break;	// ?Grey
-	}*/
 
 	TCHAR szTemp[ MAX_SCRIPT_LINE_LEN ];
 
@@ -3455,9 +3438,7 @@ LOGIN_ERR_TYPE CClient::LogIn( const TCHAR * pszName, const TCHAR * pPassword, C
 	m_pAccount->CheckStart();
 
 	g_Log.Event( LOGM_CLIENTS_LOG, "%x:Login '%s'\n", GetSocket(), m_pAccount->GetName());
-#ifdef VISUAL_SPHERE
-	g_pServerObject->Fire_ClientAttach(GetSocket());
-#endif
+
 	return( LOGIN_SUCCESS );
 }
 

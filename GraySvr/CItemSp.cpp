@@ -141,7 +141,7 @@ void CItem::Spawn_OnTick( bool fExec )
 
 	if ( GetTopSector()->GetComplexity() > g_Serv.m_iMaxComplexity )
 	{
-		DEBUG_MSG(( "Spawn point uid=0%lx too complex (%d)\n", GetUID(), g_Serv.m_iMaxComplexity ));
+		DEBUG_MSG(( "Spawn point uid=0%lx too complex (max %d cur %d)\n", GetUID(), g_Serv.m_iMaxComplexity, GetTopSector()->GetComplexity()));
 		return;
 	}
 

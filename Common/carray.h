@@ -185,6 +185,11 @@ public:
 	{
 		return( i>=0 && i<m_nCount );
 	}
+	inline size_t BadIndex() const
+	{
+		return SIZE_MAX;
+	}
+
 	void SetCount( int nNewCount );
 	void RemoveAll()
 	{ 
