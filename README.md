@@ -29,11 +29,9 @@ nice to be able to change the color of NPCs name when single clicked
 ![alt text](http://dragonsoftime.com/junk/coloreditems.png)	
 
 
-
 <b>[ISSUE 07]</b><BR>
 -walk and shoot would be nice, shoot and run,<BR>
 but half accuracy and less range when moving?   <B>50% less accurate and only 8 range  ???</b>
-
 
 	
 <b>[ISSUE 12]</b><BR>
@@ -86,7 +84,7 @@ https://web.archive.org/web/20000306034831fw_/http://uo.stratics.com/resistance.
 
 
 <b>[ISSUE 25]</b><BR>
--multi and/or custom maps?
+-multi and/or custom maps? seasons?
 
 
 <b>[ISSUE 26]</b><BR>
@@ -96,7 +94,7 @@ https://web.archive.org/web/20000306034831fw_/http://uo.stratics.com/resistance.
 
 <b>[ISSUE 27]</b><BR>
 -spell interupt? in 51a there is no spell interupt,<BR>
-maybe added a SMALL chance (25% or less) of fizzling a spell when taking damage while casting
+maybe added a SMALL chance (25% or less) of fizzling a spell when taking MELE damage (not archery) while casting
 
 
 <b>[ISSUE 29]</b><BR>
@@ -200,17 +198,17 @@ CLASSICUO WILL DISPLAY COLORED MULTIS! ORION AND ORIGINAL CLIENT WILL NOT!<BR>
 <b>[ISSUE 10]</b><BR>
 -when you run from an npc with a bow, he shoots a LOT of arrow animations,  you get hit multiple times!
 one arrow per step, so when a npc runs at you, its like a machine gun<BR>
-<b>[ DONE! ]</b>  
+<b>[ DONE! ]</b>   
 
 <b>[ISSUE 11]</b><BR>
 -no shooting arrows through multis floors!
 example... put a npc on the roof of a tower, you can shoot him from the 1st floor,<BR>
 <b>maybe check LOS for Z ?</b>
-<b>[ DONE! ]</b> 
+<b>[ DONE! ]</b>   
 
 <b>[ISSUE 13]</b><BR>
 -TRACKING - make sure "tracking players" actually track players only, ect... (i remember something wrong with tracking)<BR>
- [DONE!]
+<b>[ DONE! ]</b>   
 
 <b>[ISSUE 19]</b><BR>
 -books?  the books in SPHEREBook.scp never worked, the pages are empty when you add them in game
