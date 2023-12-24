@@ -1510,7 +1510,7 @@ usetitle:
 	{
 		if ( g_Serv.m_SpellDefs.IsValidIndex( m_itWeapon.m_spell ))
 		{
-			len += sprintf( pTemp+len, " of %s", g_Serv.m_SpellDefs[ m_itWeapon.m_spell ]->GetName());
+			len += sprintf( pTemp+len, "%s", g_Serv.m_SpellDefs[ m_itWeapon.m_spell ]->GetName());
 		}
 		if (m_itWeapon.m_charges)
 		{
