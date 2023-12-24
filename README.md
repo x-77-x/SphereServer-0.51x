@@ -101,6 +101,7 @@ maybe added a SMALL chance (25% or less) of fizzling a spell when taking MELE da
 -weapon speed in sphereitem.scp never worked<BR>
 SPEED=<BR>
 value no difference, BUT you could increase weight to adjust swing speed!
+so not really a problem i guess
 
 
 <b>[ISSUE 30]</b><BR>
