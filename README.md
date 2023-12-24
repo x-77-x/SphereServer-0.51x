@@ -29,23 +29,15 @@ nice to be able to change the color of NPCs name when single clicked
 ![alt text](http://dragonsoftime.com/junk/coloreditems.png)	
 
 
-
 <b>[ISSUE 07]</b><BR>
--walk and shoot would be nice, shoot and run,<BR>
+-walk / run and shoot would be nice,<BR>
 but half accuracy and less range when moving?   <B>50% less accurate and only 8 range  ???</b>
-
-
-<b>[ISSUE 11]</b><BR>
--no shooting arrows through multis floors!
-example... put a npc on the roof of a tower, you can shoot him from the 1st floor,<BR>
-<b>maybe check LOS for Z ?</b>
 
 	
 <b>[ISSUE 12]</b><BR>
 -Provocation - you can use provoc on player in guarded area, then call guards on them after it makes you attack them
 check area for guards?  maybe cant be used on other players?  not really sure how provoc is supposed to work,
 but i know i disabled it 18+ years ago for a reason, maybe provoc cant target a player?
-
 
 
 <b>[ISSUE 14]</b><BR>
@@ -91,7 +83,7 @@ https://web.archive.org/web/20000306034831fw_/http://uo.stratics.com/resistance.
 
 
 <b>[ISSUE 25]</b><BR>
--multi and/or custom maps?
+-multi and/or custom maps? seasons?
 
 
 <b>[ISSUE 26]</b><BR>
@@ -101,18 +93,20 @@ https://web.archive.org/web/20000306034831fw_/http://uo.stratics.com/resistance.
 
 <b>[ISSUE 27]</b><BR>
 -spell interupt? in 51a there is no spell interupt,<BR>
-maybe added a SMALL chance (25% or less) of fizzling a spell when taking damage while casting
+maybe added a SMALL chance (25% or less) of fizzling a spell when taking MELE damage (not archery) while casting
 
 
 <b>[ISSUE 29]</b><BR>
 -weapon speed in sphereitem.scp never worked<BR>
 SPEED=<BR>
 value no difference, BUT you could increase weight to adjust swing speed!
+so not really a problem
 
 
 <b>[ISSUE 30]</b><BR>
 NPC spell targets<BR>
-Add healing to self if a monster casts healing<BR>
+NPCs always target player with spells,
+if you add Greater Heal to monster spellbook, they should target themselves<BR>
 Monsters should be able to use greater heal, dispel, magic reflection, cure...<BR>
 
 <P><BR><P><BR>
@@ -207,9 +201,15 @@ CLASSICUO WILL DISPLAY COLORED MULTIS! ORION AND ORIGINAL CLIENT WILL NOT!<BR>
 one arrow per step, so when a npc runs at you, its like a machine gun<BR>
 [DONE?]
 
+<b>[ISSUE 11]</b><BR>
+-no shooting arrows through multis floors!
+example... put a npc on the roof of a tower, you can shoot him from the 1st floor,<BR>
+<b>maybe check LOS for Z ?</b><BR>
+<b>[ DONE! ]</b>
+
 <b>[ISSUE 13]</b><BR>
 -TRACKING - make sure "tracking players" actually track players only, ect... (i remember something wrong with tracking)<BR>
- [DONE!]
+<b>[ DONE! ]</b>
 
 <b>[ISSUE 19]</b><BR>
 -books?  the books in SPHEREBook.scp never worked, the pages are empty when you add them in game
