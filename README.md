@@ -105,8 +105,10 @@ value no difference, BUT you could increase weight to adjust swing speed!
 
 <b>[ISSUE 30]</b><BR>
 NPC spell targets<BR>
-Add healing to self if a monster casts healing<BR>
+NPCs always target player with spells...
+if you add Greater Heal to monster spellbook, they should target themselves<BR>
 Monsters should be able to use greater heal, dispel, magic reflection, cure...<BR>
+
 
 <P><BR><P><BR>
   
