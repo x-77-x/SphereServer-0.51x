@@ -132,7 +132,12 @@ new sphereX has this
 ON=@SpellCast
 tag.NPCNoCastTill = <eval <serv.time> + <argn3> + 70>
 ```
-
+maybe use the WAIT trigger from above? use an event...
+```
+ON=@SpellCast
+WAIT 7.0
+RETURN 0
+```
 
 <P><BR><P><BR>
   
