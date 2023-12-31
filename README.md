@@ -139,6 +139,10 @@ WAIT 7.0
 RETURN 0
 ```
 
+<b>[ISSUE 33]</b><BR>
+DE-Hardcode fishing items
+
+
 <P><BR><P><BR>
   
   SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add ALL those features
