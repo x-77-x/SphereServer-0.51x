@@ -62,6 +62,8 @@ and TAG.YOURMOM=1 same as VAR. i think, but permanent, great way to tag characte
 
 <b>[ISSUE 18]</b><BR>
 -tillerman, arent you supposed to pin a map and drop it on the tiller man and hes supposed to go there?
+https://www.uoguide.com/Map#:~:text=After%20plotting%20a%20course%2C%20you,to%20each%20point%20in%20order.
+MAYBE DO THE SAME FOR NPCS TO WALK A PATH!!!!???
 
 
 <b>[ISSUE 20]</b><BR>
@@ -76,6 +78,7 @@ NEW TRIGGERS !!!???
 a trigger so NPCS will look at eachother 
 
 ON=@SeeNewNPC ??  a way to get npcs to fight (besides berserker brain)
+ON=@Timer  a way to get them to start a script, soon as they are spawned/summoned
 
 
 <b>[ISSUE 24]</b><BR>
@@ -109,6 +112,26 @@ NPC spell targets<BR>
 NPCs always target player with spells...
 if you add Greater Heal to monster spellbook, they should target themselves<BR>
 Monsters should be able to use greater heal, dispel, magic reflection, cure...<BR>
+
+<b>[ISSUE 31]</b><BR>
+a wait timer? some way to have a DELAY before the next action
+```
+SAY Hello Friend
+WAIT 4.0
+SAY Why are you still standing there?
+WAIT 7.0
+SAY You are weirding me out, i'm leaving!
+HOME 1456,230,0
+```
+
+<b>[ISSUE 32]</b><BR>
+CAST DELAY for NPCs and MONSTERS?
+so npcs with magery wont keep spamming spells over and over, and actually try to mele fight,
+new sphereX has this
+```
+ON=@SpellCast
+tag.NPCNoCastTill = <eval <serv.time> + <argn3> + 70>
+```
 
 
 <P><BR><P><BR>
