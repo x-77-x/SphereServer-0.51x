@@ -2,7 +2,7 @@
 Potential Update to the Recovered 0.51a aka (0.52) Source given by Westy before he passed<BR>
 https://github.com/Sphereserver/Source-Archive/tree/main/0.52
 
-SPHERESERVER 0.51x  WISHLIST  (3/17/21)
+SPHERESERVER 0.51x  WISHLIST  (10/03/24)
 -----------------------------
 
 <b>[ISSUE 02]</b><BR>
@@ -27,11 +27,6 @@ nice to be able to change the color of NPCs name when single clicked
 -COLORED ITEM NAMES
 	
 ![alt text](http://dragonsoftime.com/junk/coloreditems.png)	
-
-
-<b>[ISSUE 07]</b><BR>
--walk and shoot would be nice, shoot and run,<BR>
-but half accuracy and less range when moving?   <B>50% less accurate and only 8 range  ???</b>
 
 	
 <b>[ISSUE 12]</b><BR>
@@ -143,6 +138,10 @@ RETURN 0
 DE-Hardcode fishing items
 
 
+<b>[ISSUE 34]</b><BR>
+VERY IMPORTANT!!!   after the server is online for awhile spawns lose their spawn memory item and a new spawn is created, so you have multiple chars by the same spawn bit!!!
+
+
 <P><BR><P><BR>
   
   SUMMARY - basically Lil Sphere by Fallout added some nice features to 0.51a, id like to add ALL those features
@@ -216,6 +215,10 @@ SRC.SAY #0033,3,I talk in color!
 ![alt text](http://dragonsoftime.com/junk/showdamage.png)<BR>
 (fix to match Lil Sphere)<BR>
 <b>[ DONE! ]</b>
+
+<b>[ISSUE 07]</b><BR>
+-walk and shoot was added<BR>
+but half accuracy and less range when moving?   <B>50% less accurate and only 8 range  ???</b>
 
 <b>[ISSUE 08]</b><BR>
 -colored multis??? new sphere you can go debug mode and set the color on a multi and it will change color in game
