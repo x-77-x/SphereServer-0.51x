@@ -12,8 +12,11 @@ https://github.com/SaschaKP/SphereServer-0.51x
 SPHERESERVER 0.51x  BUGS (12/31/24)
 ---------------------------------------
 -magic reflection crashes server when bounceback
+
 -spawned NPCs eventually lose spawn memory item, and a new spawn is produced resulting in multiples at the same location
+
 -cant use MAXSTAM= MAXMANA= somehow they adds to damage and players are 1 hit killed
+
 -npcs are still doing the machine gun bow thing
 
 
