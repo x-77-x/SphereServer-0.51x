@@ -4,7 +4,7 @@ https://github.com/Sphereserver/Source-Archive/tree/main/0.52
 
 
 
-USE THE LATESTEST VERISION HERE....
+USE THE LATEST VERISION HERE....
 
 https://github.com/SaschaKP/SphereServer-0.51x
 
