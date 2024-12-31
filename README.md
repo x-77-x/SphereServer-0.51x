@@ -2,7 +2,22 @@
 Potential Update to the Recovered 0.51a aka (0.52) Source given by Westy before he passed<BR>
 https://github.com/Sphereserver/Source-Archive/tree/main/0.52
 
-SPHERESERVER 0.51x  WISHLIST  (10/03/24)
+
+USE THE LATESTEST VERISION HERE....
+https://github.com/SaschaKP/SphereServer-0.51x
+(hopefully he comes back someday)
+
+
+SPHERESERVER 0.51x  BUGS (12/31/24)
+---------------------------------------
+-magic reflection crashes server when bounceback
+-spawned NPCs eventually lose spawn memory item, and a new spawn is produced resulting in multiples at the same location
+-cant use MAXSTAM= MAXMANA= somehow they adds to damage and players are 1 hit killed
+-npcs are still doing the machine gun bow thing
+
+
+
+MY SPHERESERVER 0.51x  WISHLIST  (10/03/24)
 -----------------------------
 
 <b>[ISSUE 02]</b><BR>
@@ -137,9 +152,8 @@ RETURN 0
 <b>[ISSUE 33]</b><BR>
 DE-Hardcode fishing items
 
-
 <b>[ISSUE 34]</b><BR>
-VERY IMPORTANT!!!   after the server is online for awhile spawns lose their spawn memory item and a new spawn is created, so you have multiple chars by the same spawn bit!!!
+change poison to a HI and LO range instead of percentage based, one poison cast on a NPCs with 10000HP will drop him huge amounts of damage
 
 
 <P><BR><P><BR>
