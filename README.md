@@ -162,6 +162,9 @@ DE-Hardcode fishing items
 <b>[ISSUE 34]</b><BR>
 change poison to a HI and LO range instead of percentage based, one poison cast on a NPCs with 10000HP will drop him huge amounts of damage
 
+<b>[ISSUE 35]</b><BR>
+add a command to force NPCs to run,  RUNTO in new sphere
+
 
 <P><BR><P><BR>
   
